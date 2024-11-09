@@ -1,6 +1,7 @@
 # jinahya-bcprov
 
 [![Java CI with Maven](https://github.com/jinahya/jinahya-bouncycastle-utils/actions/workflows/maven.yml/badge.svg)](https://github.com/jinahya/jinahya-bouncycastle-utils/actions/workflows/maven.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jinahya_jinahya-bcprov&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jinahya_jinahya-bcprov)
 
 Utilities, for [Bouncy Castle for Java](https://www.bouncycastle.org/documentation/documentation-java/), which based on and verified with both
 * [bcprov-jdk8on](https://central.sonatype.com/artifact/org.bouncycastle/bcprov-jdk18on)

@@ -68,7 +68,6 @@ public final class JinahyaStreamCipherUtils {
                 final var outlen = cipher.processBytes(in, inoff, inlen, out, 0);
                 return Arrays.copyOf(out, outlen);
             } catch (final DataLengthException dle) {
-                dle.printStackTrace();
                 System.err.println("doubling up out.length(" + out.length + ")");
                 out = new byte[out.length << 1];
             }
@@ -122,7 +121,6 @@ public final class JinahyaStreamCipherUtils {
                     bytes += outlen;
                     break;
                 } catch (final DataLengthException dle) {
-                    dle.printStackTrace();
                     System.err.println("doubling up outbuf.length(" + outbuf.length + ")");
                     Arrays.fill(outbuf, (byte) 0);
                     outbuf = new byte[outbuf.length << 1];
