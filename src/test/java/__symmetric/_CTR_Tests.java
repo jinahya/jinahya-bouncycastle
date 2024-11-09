@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.StreamBlockCipher;
 import org.bouncycastle.crypto.modes.SICBlockCipher;
+import org.bouncycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.function.Supplier;
@@ -14,7 +16,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
-public final class _CTR_TestUtils {
+public final class _CTR_Tests {
 
     public static final String MODE = "CTR";
 
@@ -25,7 +27,7 @@ public final class _CTR_TestUtils {
             final var cipher = SICBlockCipher.newInstance(cipherSupplier.get());
             final var key = _Random_TestUtils.newRandomBytes(ks >> 3);
             final var iv = _Random_TestUtils.newRandomBytes(cipher.getBlockSize());
-            final var params = _ParametersWithIV_TestUtils.newInstance(key, iv);
+            final var params = new ParametersWithIV(new KeyParameter(key), iv);
             return Arguments.of(
                     _StreamBlockCipher_TestUtils.named((StreamBlockCipher) cipher),
                     _ParametersWithIV_TestUtils.named(params)
@@ -34,7 +36,7 @@ public final class _CTR_TestUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CTR_TestUtils() {
+    private _CTR_Tests() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

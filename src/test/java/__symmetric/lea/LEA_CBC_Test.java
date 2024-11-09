@@ -1,6 +1,6 @@
 package __symmetric.lea;
 
-import __symmetric._CBC_TestUtils;
+import __symmetric._CBC_Tests;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.crypto.paddings._BlockCipherPadding_TestUtils;
@@ -26,6 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
@@ -60,7 +61,6 @@ class LEA_CBC_Test
             final CipherParameters params;
             {
                 final var key = _Random_TestUtils.newRandomBytes(keySize >>> 3);
-                // initialisation vector must be the same length as block size
                 final var iv = _Random_TestUtils.newRandomBytes(cipher.getBlockSize());
                 params = ThreadLocalRandom.current().nextBoolean()
                         ? new KeyParameter(key)
@@ -91,7 +91,7 @@ class LEA_CBC_Test
         @DisplayName("encrypt/decrypt file")
         @MethodSource({"getPaddingAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __(final BlockCipherPadding padding, final int keySize, @TempDir final File dir) throws Exception {
+        void __(final BlockCipherPadding padding, final int keySize, @TempDir final File dir) throws IOException {
             // --------------------------------------------------------------------------------------------------- given
             final var cipher = new PaddedBufferedBlockCipher(
                     CBCBlockCipher.newInstance(new LEAEngine()),
@@ -128,7 +128,7 @@ class LEA_CBC_Test
         }
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CBC_TestUtils.getCipherAndParamsArgumentsStream(
+            return _CBC_Tests.getCipherAndParamsArgumentsStream(
                     LEAEngine::new, LEA__Test::getKeySizeStream
             );
         }
@@ -137,7 +137,7 @@ class LEA_CBC_Test
         @DisplayName("encrypt/decrypt bytes")
         @MethodSource({"getCipherAndParamsArgumentsStream"})
         @ParameterizedTest
-        void __(final PaddedBufferedBlockCipher cipher, final CipherParameters params) throws Exception {
+        void __(final PaddedBufferedBlockCipher cipher, final CipherParameters params) {
             _BufferedBlockCipher_TestUtils.__(cipher, params);
         }
 
@@ -145,7 +145,7 @@ class LEA_CBC_Test
         @MethodSource({"getCipherAndParamsArgumentsStream"})
         @ParameterizedTest
         void __(final PaddedBufferedBlockCipher cipher, final CipherParameters params, @TempDir final File dir)
-                throws Exception {
+                throws IOException {
             _BufferedBlockCipher_TestUtils.__(cipher, params, dir);
         }
     }

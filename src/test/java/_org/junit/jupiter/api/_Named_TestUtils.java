@@ -32,11 +32,6 @@ public final class _Named_TestUtils {
         return cipherName(cipher, cipher.getBlockSize());
     }
 
-    @Deprecated
-    public static String cipherName(final BufferedBlockCipher cipher) {
-        return cipherName(Objects.requireNonNull(cipher, "cipher is null").getUnderlyingCipher());
-    }
-
     public static String cipherName(final StreamBlockCipher cipher) {
         return cipherName(Objects.requireNonNull(cipher, "cipher is null").getUnderlyingCipher());
     }
@@ -81,11 +76,11 @@ public final class _Named_TestUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static <T extends BlockCipher> Named<T> namedOf(final T cipher) {
+    public static <T extends BlockCipher> Named<T> named(final T cipher) {
         return Named.of(cipherName(cipher), cipher);
     }
 
-    public static <T extends CipherParameters> Named<T> namedOf(final T params) {
+    public static <T extends CipherParameters> Named<T> named(final T params) {
         return Named.of(_CipherParameters_TestUtils.paramsName(params), params);
     }
 

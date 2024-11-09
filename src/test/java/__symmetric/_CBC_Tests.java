@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 import static _org.bouncycastle.crypto.paddings._BlockCipherPadding_TestUtils.getBlockCipherPaddingStream;
 
 @Slf4j
-public final class _CBC_TestUtils {
+public final class _CBC_Tests {
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream(
             final Supplier<? extends BlockCipher> cipherSupplier,
@@ -50,7 +50,7 @@ public final class _CBC_TestUtils {
     public static final String MODE = "CBC";
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CBC_TestUtils() {
+    private _CBC_Tests() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

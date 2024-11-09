@@ -1,7 +1,7 @@
 package __symmetric.aes;
 
 import __symmetric._JCEProviderTest;
-import __symmetric._OFB_TestUtils;
+import __symmetric._OFB_Tests;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
@@ -38,7 +38,7 @@ class AES_OFB_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream_() {
-            return _OFB_TestUtils.getCipherAndParamsArgumentsStream(
+            return _OFB_Tests.getCipherAndParamsArgumentsStream(
                     AES__Test::getKeySizeStream,
                     AESEngine::newInstance
             );
@@ -65,7 +65,7 @@ class AES_OFB_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _OFB_TestUtils.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _OFB_Tests.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> {
                         return Arguments.of(t, ks);
                     }));
@@ -104,8 +104,8 @@ class AES_OFB_Test
         }
 
         private static Stream<Arguments> getTransformationWithBitWidthAndKeySizeArgumentsStream() {
-            return _OFB_TestUtils.getBitWidthStream()
-                    .mapToObj(_OFB_TestUtils::mode)
+            return _OFB_Tests.getBitWidthStream()
+                    .mapToObj(_OFB_Tests::mode)
                     .flatMap(m -> {
                         return Stream.of("NoPadding")
                                 .map(p -> ALGORITHM + '/' + m + '/' + p);

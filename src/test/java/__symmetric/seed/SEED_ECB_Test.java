@@ -1,9 +1,9 @@
 package __symmetric.seed;
 
-import __symmetric._ECB_TestUtils;
+import __symmetric._ECB_Tests;
 import _javax.crypto._Cipher_TestUtils;
+import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
-import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
 import _org.bouncycastle.jce.provider._BouncyCastleProvider_TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BufferedBlockCipher;
@@ -28,7 +28,7 @@ class SEED_ECB_Test
         extends SEED__Test {
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _ECB_TestUtils.getArgumentsStream(
+        return _ECB_Tests.getArgumentsStream(
                 SEED__Test::getKeySizeStream,
                 SEEDEngine::new
         );
@@ -58,10 +58,10 @@ class SEED_ECB_Test
     @ParameterizedTest
     void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _ECB_TestUtils.MODE + "/PKCS5Padding";
+            final var transformation = ALGORITHM + '/' + _ECB_Tests.MODE + "/PKCS5Padding";
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(
-                    _KeyParameters_TestUtils.newRandomKey(null, keySize),
+                    _Random_TestUtils.newRandomBytes(keySize >> 3),
                     ALGORITHM
             );
             _Cipher_TestUtils.__(cipher, key, null, (byte[]) null);
@@ -74,10 +74,10 @@ class SEED_ECB_Test
     @ParameterizedTest
     void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _ECB_TestUtils.MODE + "/PKCS5Padding";
+            final var transformation = ALGORITHM + '/' + _ECB_Tests.MODE + "/PKCS5Padding";
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(
-                    _KeyParameters_TestUtils.newRandomKey(null, keySize),
+                    _Random_TestUtils.newRandomBytes(keySize >> 3),
                     ALGORITHM
             );
             _Cipher_TestUtils.__(cipher, key, null, (byte[]) null, dir);

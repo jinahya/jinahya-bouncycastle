@@ -1,6 +1,6 @@
 package __symmetric.aes;
 
-import __symmetric._GCM_TestUtils;
+import __symmetric._GCM_Tests;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -37,7 +37,7 @@ class AES_GCM_Test
     class LowLevelAPI_Test {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream_() {
-            return _GCM_TestUtils.getCipherAndParamsArgumentsStream(
+            return _GCM_Tests.getCipherAndParamsArgumentsStream(
                     AES__Test::getKeySizeStream,
                     AESEngine::newInstance
             );
@@ -65,9 +65,9 @@ class AES_GCM_Test
 
         private static Stream<Arguments> getTransformationKeySizeAndTLenArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _GCM_TestUtils.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _GCM_Tests.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> {
-                        return _GCM_TestUtils.getTLenStream().mapToObj(tl -> {
+                        return _GCM_Tests.getTLenStream().mapToObj(tl -> {
                             return Arguments.of(t, ks, tl);
                         });
                     })).flatMap(Function.identity());

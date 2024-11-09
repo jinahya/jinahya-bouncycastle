@@ -1,10 +1,9 @@
 package __symmetric.aria;
 
-import __symmetric._OFB_TestUtils;
+import __symmetric._OFB_Tests;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
-import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
 import _org.bouncycastle.jce.provider._BouncyCastleProvider_TestUtils;
 import io.github.jinahya.bouncycastle.jce.provider.BouncyCastleProviderUtils;
 import lombok.AccessLevel;
@@ -37,7 +36,7 @@ class ARIA_OFB_Test
         extends ARIA__Test {
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _OFB_TestUtils.getCipherAndParamsArgumentsStream(
+        return _OFB_Tests.getCipherAndParamsArgumentsStream(
                 ARIA__Test::getKeySizeStream,
                 ARIAEngine::new
         );
@@ -66,7 +65,7 @@ class ARIA_OFB_Test
     @ParameterizedTest
     void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _OFB_TestUtils.MODE + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _OFB_Tests.MODE + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -75,7 +74,7 @@ class ARIA_OFB_Test
                 return null;
             }
             final var key = new SecretKeySpec(
-                    _KeyParameters_TestUtils.newRandomKey(null, keySize),
+                    _Random_TestUtils.newRandomBytes(keySize >> 3),
                     ALGORITHM
             );
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
@@ -89,7 +88,7 @@ class ARIA_OFB_Test
     @ParameterizedTest
     void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _OFB_TestUtils.MODE + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _OFB_Tests.MODE + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -98,7 +97,7 @@ class ARIA_OFB_Test
                 return null;
             }
             final var key = new SecretKeySpec(
-                    _KeyParameters_TestUtils.newRandomKey(null, keySize),
+                    _Random_TestUtils.newRandomBytes(keySize >> 3),
                     ALGORITHM
             );
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
@@ -109,7 +108,7 @@ class ARIA_OFB_Test
 
     // -----------------------------------------------------------------------------------------------------------------
     private static Stream<Arguments> getBitWidthAndKeySizeArgumentsStream() {
-        return _OFB_TestUtils.getBitWidthStream().mapToObj(bw -> {
+        return _OFB_Tests.getBitWidthStream().mapToObj(bw -> {
             return getKeySizeStream()
                     .mapToObj(ks -> Arguments.of(
                             Named.of(String.format("bitWidth(%1$d)", bw), bw),
@@ -123,7 +122,7 @@ class ARIA_OFB_Test
     @ParameterizedTest
     void __(final int bitWidth, final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _OFB_TestUtils.mode(bitWidth) + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _OFB_Tests.mode(bitWidth) + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(
@@ -135,7 +134,7 @@ class ARIA_OFB_Test
                 return null;
             }
             final var key = new SecretKeySpec(
-                    _KeyParameters_TestUtils.newRandomKey(null, keySize),
+                    _Random_TestUtils.newRandomBytes(keySize >> 3),
                     ALGORITHM
             );
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
@@ -149,7 +148,7 @@ class ARIA_OFB_Test
     @ParameterizedTest
     void __(final int bitWidth, final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _OFB_TestUtils.mode(bitWidth) + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _OFB_Tests.mode(bitWidth) + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(
@@ -161,7 +160,7 @@ class ARIA_OFB_Test
                 return null;
             }
             final var key = new SecretKeySpec(
-                    _KeyParameters_TestUtils.newRandomKey(null, keySize),
+                    _Random_TestUtils.newRandomBytes(keySize >> 3),
                     ALGORITHM
             );
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));

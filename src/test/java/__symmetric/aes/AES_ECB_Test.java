@@ -1,6 +1,6 @@
 package __symmetric.aes;
 
-import __symmetric._ECB_TestUtils;
+import __symmetric._ECB_Tests;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -33,7 +33,7 @@ class AES_ECB_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _ECB_TestUtils.getArgumentsStream(
+            return _ECB_Tests.getArgumentsStream(
                     AES__Test::getKeySizeStream,
                     AESEngine::newInstance
             );
@@ -41,7 +41,7 @@ class AES_ECB_Test
 
         @MethodSource({"getCipherAndParamsArgumentsStream"})
         @ParameterizedTest
-        void __(final BufferedBlockCipher cipher, final CipherParameters params) throws Exception {
+        void __(final BufferedBlockCipher cipher, final CipherParameters params) {
             _BufferedBlockCipher_TestUtils.__(cipher, params);
         }
 
@@ -61,7 +61,7 @@ class AES_ECB_Test
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return getKeySizeStream().mapToObj(ks -> {
                 return Stream.of("PKCS5Padding")
-                        .map(p -> ALGORITHM + '/' + _ECB_TestUtils.MODE + '/' + p)
+                        .map(p -> ALGORITHM + '/' + _ECB_Tests.MODE + '/' + p)
                         .map(t -> Arguments.of(t, ks));
             }).flatMap(Function.identity());
         }

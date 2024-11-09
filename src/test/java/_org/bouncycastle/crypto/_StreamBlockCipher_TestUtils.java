@@ -13,7 +13,7 @@ public final class _StreamBlockCipher_TestUtils {
                 + '/' + _BlockCipher_TestUtils.cipherName(cipher.getUnderlyingCipher());
     }
 
-    public static Named named(final StreamBlockCipher cipher) {
+    public static <T extends StreamBlockCipher> Named<T> named(final T cipher) {
         return Named.of(cipherName(cipher), cipher);
     }
 

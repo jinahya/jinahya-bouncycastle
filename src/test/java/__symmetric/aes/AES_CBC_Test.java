@@ -1,6 +1,6 @@
 package __symmetric.aes;
 
-import __symmetric._CBC_TestUtils;
+import __symmetric._CBC_Tests;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -42,7 +42,7 @@ class AES_CBC_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CBC_TestUtils.getCipherAndParamsArgumentsStream(
+            return _CBC_Tests.getCipherAndParamsArgumentsStream(
                     AESEngine::newInstance, AES__Test::getKeySizeStream
             );
         }
@@ -50,7 +50,7 @@ class AES_CBC_Test
         @DisplayName("encrypt/decrypt bytes")
         @MethodSource({"getCipherAndParamsArgumentsStream"})
         @ParameterizedTest
-        void __(final BufferedBlockCipher cipher, final CipherParameters params) throws Exception {
+        void __(final BufferedBlockCipher cipher, final CipherParameters params) {
             _BufferedBlockCipher_TestUtils.__(cipher, params);
         }
 
@@ -70,7 +70,7 @@ class AES_CBC_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("PKCS5Padding")
-                    .map(p -> ALGORITHM + '/' + _CBC_TestUtils.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _CBC_Tests.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 

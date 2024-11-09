@@ -4,6 +4,7 @@ import _javax.security._Random_TestUtils;
 import io.github.jinahya.bouncycastle.crypto.JinahyaStreamCipherCrypto;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.StreamCipher;
+import org.junit.jupiter.api.Named;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +20,10 @@ public final class _StreamCipher_TestUtils {
     public static String cipherName(final StreamCipher cipher) {
         Objects.requireNonNull(cipher, "cipher is null");
         return String.format("%1$s", cipher.getAlgorithmName());
+    }
+
+    public static <T extends StreamCipher> Named<T> named(final T cipher) {
+        return Named.named(cipherName(cipher), cipher);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -50,21 +55,19 @@ public final class _StreamCipher_TestUtils {
             throws Exception {
         final var crypto = new JinahyaStreamCipherCrypto(cipher, params);
         // ----------------------------------------------------------------------------------------------------- encrypt
-//        cipher.init(true, params);
         final var encrypted = File.createTempFile("tmp", null, dir);
         try (var in = new FileInputStream(plain);
              var out = new FileOutputStream(encrypted)) {
-//            final var bytes = StreamCipherUtils.processAllBytes(cipher, in, out, new byte[1]);
             final var bytes = crypto.encrypt(in, out, new byte[ThreadLocalRandom.current().nextInt(1024) + 1]);
+            assert bytes >= 0;
             out.flush();
         }
         // ----------------------------------------------------------------------------------------------------- decrypt
-//        cipher.init(false, params);
         final var decrypted = File.createTempFile("tmp", null, dir);
         try (var in = new FileInputStream(encrypted);
              var out = new FileOutputStream(decrypted)) {
-//            final var bytes = StreamCipherUtils.processAllBytes(cipher, in, out, new byte[1]);
             final var bytes = crypto.decrypt(in, out, new byte[ThreadLocalRandom.current().nextInt(1024) + 1]);
+            assert bytes >= 0;
             out.flush();
         }
         // ------------------------------------------------------------------------------------------------------ verify

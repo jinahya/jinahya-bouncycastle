@@ -1,6 +1,6 @@
 package __symmetric.seed;
 
-import __symmetric._CBC_TestUtils;
+import __symmetric._CBC_Tests;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -116,6 +116,7 @@ class SEED_CBC_Test
                 cipher.init(true, params);
                 try (var out = new CipherOutputStream(new FileOutputStream(encrypted), cipher)) {
                     final var bytes = Files.copy(plain.toPath(), out);
+                    assert bytes >= 0;
                     out.flush();
                 }
             }
@@ -125,6 +126,7 @@ class SEED_CBC_Test
                 cipher.init(false, params);
                 try (var in = new CipherInputStream(new FileInputStream(encrypted), cipher)) {
                     final var bytes = Files.copy(in, decrypted.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    assert bytes >= 0;
                 }
             }
             // -------------------------------------------------------------------------------------------------- verify
@@ -132,8 +134,9 @@ class SEED_CBC_Test
         }
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CBC_TestUtils.getCipherAndParamsArgumentsStream(
-                    SEEDEngine::new, SEED__Test::getKeySizeStream
+            return _CBC_Tests.getCipherAndParamsArgumentsStream(
+                    SEEDEngine::new,
+                    SEED__Test::getKeySizeStream
             );
         }
 
@@ -141,7 +144,7 @@ class SEED_CBC_Test
         @DisplayName("encrypt/decrypt bytes")
         @MethodSource({"getCipherAndParamsArgumentsStream"})
         @ParameterizedTest
-        void __(final PaddedBufferedBlockCipher cipher, final CipherParameters params) throws Exception {
+        void __(final PaddedBufferedBlockCipher cipher, final CipherParameters params) {
             _BufferedBlockCipher_TestUtils.__(cipher, params);
         }
 
@@ -162,7 +165,7 @@ class SEED_CBC_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("PKCS5Padding")
-                    .map(p -> ALGORITHM + '/' + _CBC_TestUtils.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _CBC_Tests.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 

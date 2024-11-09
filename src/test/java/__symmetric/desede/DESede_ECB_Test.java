@@ -1,6 +1,6 @@
 package __symmetric.desede;
 
-import __symmetric._ECB_TestUtils;
+import __symmetric._ECB_Tests;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -35,7 +35,7 @@ class DESede_ECB_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _ECB_TestUtils.getArgumentsStream(
+            return _ECB_Tests.getArgumentsStream(
                     DESede__Test::getKeySizeStream,
                     DESedeEngine::new
             );
@@ -64,7 +64,7 @@ class DESede_ECB_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("PKCS5Padding")
-                    .map(p -> ALGORITHM + '/' + _ECB_TestUtils.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _ECB_Tests.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 

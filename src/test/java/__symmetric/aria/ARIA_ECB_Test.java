@@ -1,9 +1,9 @@
 package __symmetric.aria;
 
-import __symmetric._ECB_TestUtils;
+import __symmetric._ECB_Tests;
 import _javax.crypto._Cipher_TestUtils;
+import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
-import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
 import _org.bouncycastle.jce.provider._BouncyCastleProvider_TestUtils;
 import io.github.jinahya.bouncycastle.jce.provider.BouncyCastleProviderUtils;
 import lombok.AccessLevel;
@@ -33,7 +33,7 @@ class ARIA_ECB_Test
         extends ARIA__Test {
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _ECB_TestUtils.getArgumentsStream(
+        return _ECB_Tests.getArgumentsStream(
                 ARIA__Test::getKeySizeStream,
                 ARIAEngine::new
         );
@@ -63,7 +63,7 @@ class ARIA_ECB_Test
                                 "PKCS5Padding"
                         )
                         .map(p -> {
-                            return ALGORITHM + '/' + _ECB_TestUtils.MODE + '/' + p;
+                            return ALGORITHM + '/' + _ECB_Tests.MODE + '/' + p;
                         })
                         .map(t -> {
                             return Arguments.of(
@@ -80,7 +80,7 @@ class ARIA_ECB_Test
             _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
                 final var cipher = Cipher.getInstance(transformation);
                 final var key = new SecretKeySpec(
-                        _KeyParameters_TestUtils.newRandomKey(null, keySize),
+                        _Random_TestUtils.newRandomBytes(keySize >> 3),
                         ALGORITHM
                 );
                 _Cipher_TestUtils.__(cipher, key, (AlgorithmParameterSpec) null, (byte[]) null);
@@ -95,7 +95,7 @@ class ARIA_ECB_Test
                 BouncyCastleProviderUtils.addBouncyCastleProvider();
                 final var cipher = Cipher.getInstance(transformation);
                 final var key = new SecretKeySpec(
-                        _KeyParameters_TestUtils.newRandomKey(null, keySize),
+                        _Random_TestUtils.newRandomBytes(keySize >> 3),
                         ALGORITHM
                 );
                 _Cipher_TestUtils.__(cipher, key, null, (byte[]) null, dir);

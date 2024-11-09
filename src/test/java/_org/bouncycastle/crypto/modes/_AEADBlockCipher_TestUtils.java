@@ -12,7 +12,7 @@ public final class _AEADBlockCipher_TestUtils {
                 _BlockCipher_TestUtils.cipherName(cipher.getUnderlyingCipher());
     }
 
-    public static Named named(final AEADBlockCipher cipher) {
+    public static <T extends AEADBlockCipher> Named<T> named(final T cipher) {
         return Named.of(cipherName(cipher), cipher);
     }
 

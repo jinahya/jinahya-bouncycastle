@@ -1,6 +1,6 @@
 package __symmetric.aes;
 
-import __symmetric._CCM_TestUtils;
+import __symmetric._CCM_Tests;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -36,7 +36,7 @@ class AES_CCM_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CCM_TestUtils.getCipherAndParamsArgumentsStream(
+            return _CCM_Tests.getCipherAndParamsArgumentsStream(
                     AES__Test::getKeySizeStream,
                     AESEngine::newInstance
             );
@@ -45,7 +45,7 @@ class AES_CCM_Test
         @DisplayName("encrypt/decrypt bytes")
         @MethodSource({"getCipherAndParamsArgumentsStream"})
         @ParameterizedTest
-        void __(final AEADCipher cipher, final CipherParameters params) throws Exception {
+        void __(final AEADCipher cipher, final CipherParameters params) {
             _AEADCipher_TestUtils.__(cipher, params);
         }
 
@@ -64,7 +64,7 @@ class AES_CCM_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _CCM_TestUtils.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _CCM_Tests.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 
@@ -73,7 +73,7 @@ class AES_CCM_Test
         void __(final String transformation, final int keySize) throws Exception {
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
-            final var params = new IvParameterSpec(_CCM_TestUtils.newBouncyCastleNonce());
+            final var params = new IvParameterSpec(_CCM_Tests.newBouncyCastleNonce());
             _Cipher_TestUtils.__(cipher, key, params, null);
         }
 
@@ -82,7 +82,7 @@ class AES_CCM_Test
         void __(final String transformation, final int keySize, @TempDir final Path dir) throws Exception {
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
-            final var params = new IvParameterSpec(_CCM_TestUtils.newBouncyCastleNonce());
+            final var params = new IvParameterSpec(_CCM_Tests.newBouncyCastleNonce());
             _Cipher_TestUtils.__(cipher, key, params, null, dir);
         }
     }

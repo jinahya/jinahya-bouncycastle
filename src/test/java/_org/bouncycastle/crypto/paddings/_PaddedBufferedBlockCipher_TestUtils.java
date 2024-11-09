@@ -17,7 +17,7 @@ public final class _PaddedBufferedBlockCipher_TestUtils {
                 _BlockCipherPadding_TestUtils.paddingName(JinahyaPaddedBufferedBlockCipherUtils.getPadding(cipher));
     }
 
-    public static Named named(final PaddedBufferedBlockCipher cipher) {
+    public static <T extends PaddedBufferedBlockCipher> Named<T> named(final T cipher) {
         return Named.of(cipherName(cipher), cipher);
     }
 

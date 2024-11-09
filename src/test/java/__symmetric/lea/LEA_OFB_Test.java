@@ -1,6 +1,6 @@
 package __symmetric.lea;
 
-import __symmetric._OFB_TestUtils;
+import __symmetric._OFB_Tests;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -23,8 +23,8 @@ class LEA_OFB_Test
         extends LEA__Test {
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _OFB_TestUtils.getCipherAndParamsArgumentsStream(
-                () -> getKeySizeStream(),
+        return _OFB_Tests.getCipherAndParamsArgumentsStream(
+                LEA__Test::getKeySizeStream,
                 LEAEngine::new
         );
     }
