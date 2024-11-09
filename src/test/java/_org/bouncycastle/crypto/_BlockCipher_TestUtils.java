@@ -8,6 +8,7 @@ import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.paddings.BlockCipherPadding;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
+import org.junit.jupiter.api.Named;
 
 import java.util.Objects;
 
@@ -41,6 +42,10 @@ public final class _BlockCipher_TestUtils {
     public static String cipherName(final BlockCipher cipher) {
         Objects.requireNonNull(cipher, "cipher is null");
         return String.format("%1$s", cipher.getAlgorithmName());
+    }
+
+    public static Named named(final BlockCipher cipher) {
+        return Named.of(cipherName(cipher), cipher);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

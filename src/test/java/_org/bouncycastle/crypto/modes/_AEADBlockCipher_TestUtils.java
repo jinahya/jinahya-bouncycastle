@@ -2,6 +2,7 @@ package _org.bouncycastle.crypto.modes;
 
 import _org.bouncycastle.crypto._BlockCipher_TestUtils;
 import org.bouncycastle.crypto.modes.AEADBlockCipher;
+import org.junit.jupiter.api.Named;
 
 public final class _AEADBlockCipher_TestUtils {
 
@@ -9,6 +10,10 @@ public final class _AEADBlockCipher_TestUtils {
         return cipher.getAlgorithmName() +
                 '/' +
                 _BlockCipher_TestUtils.cipherName(cipher.getUnderlyingCipher());
+    }
+
+    public static Named named(final AEADBlockCipher cipher) {
+        return Named.of(cipherName(cipher), cipher);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -115,7 +115,7 @@
     <dependency>
       <groupId>nl.jqno.equalsverifier</groupId>
       <artifactId>equalsverifier-nodep</artifactId>
-      <version>3.17.2</version>
+      <version>3.17.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -272,8 +272,8 @@
             <phase>generate-test-resources</phase>
             <configuration>
               <target>
-                <unzip src="${project.basedir}/src/test/resources/symmetric/aes/KAT_AES.zip"
-                       dest="${project.basedir}/src/test/resources/symmetric/aes/KAT_AES">
+                <unzip src="${project.basedir}/src/test/resources/__symmetric/aes/KAT_AES.zip"
+                       dest="${project.basedir}/src/test/resources/__symmetric/aes/KAT_AES">
                 </unzip>
               </target>
             </configuration>
@@ -503,7 +503,8 @@
       <properties>
         <!-- https://repo1.maven.org/maven2/org/bouncycastle/ -->
         <!-- https://central.sonatype.com/artifact/org.bouncycastle/bcprov-lts8on -->
-        <version.org.bouncycastle>2.73.6</version.org.bouncycastle>
+<!--        <version.org.bouncycastle>2.73.6</version.org.bouncycastle>-->
+        <version.org.bouncycastle>2.73.7</version.org.bouncycastle>
       </properties>
       <dependencies>
         <dependency>

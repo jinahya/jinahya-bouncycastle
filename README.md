@@ -2,7 +2,9 @@
 
 [![Java CI with Maven](https://github.com/jinahya/jinahya-bouncycastle-utils/actions/workflows/maven.yml/badge.svg)](https://github.com/jinahya/jinahya-bouncycastle-utils/actions/workflows/maven.yml)
 
-Utilities for [Bouncy Castle for Java](https://www.bouncycastle.org/documentation/documentation-java/).
+Utilities, for [Bouncy Castle for Java](https://www.bouncycastle.org/documentation/documentation-java/), which based on and verified with both
+* [bcprov-jdk8on](https://central.sonatype.com/artifact/org.bouncycastle/bcprov-jdk18on)
+* [bcprov-lts8on](https://central.sonatype.com/artifact/org.bouncycastle/bcprov-lts8on) 
 
 ## Links
 

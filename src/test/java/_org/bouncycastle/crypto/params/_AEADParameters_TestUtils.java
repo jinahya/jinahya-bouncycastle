@@ -1,6 +1,7 @@
 package _org.bouncycastle.crypto.params;
 
 import org.bouncycastle.crypto.params.AEADParameters;
+import org.junit.jupiter.api.Named;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -20,6 +21,10 @@ public final class _AEADParameters_TestUtils {
         return _KeyParameters_TestUtils.paramsName(params.getKey()) +
                 " with " +
                 associatedTextName(params.getAssociatedText());
+    }
+
+    public static Named<AEADParameters> named(final AEADParameters params) {
+        return Named.of(paramsName(params), params);
     }
 
     private _AEADParameters_TestUtils() {

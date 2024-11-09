@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
+import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
+import org.junit.jupiter.api.Named;
 
 import java.util.Objects;
 import java.util.Random;
@@ -66,6 +68,14 @@ public final class _ParametersWithIV_TestUtils {
         );
     }
 
+    public static ParametersWithIV newInstance(final KeyParameter parameters, final byte[] iv) {
+        return new ParametersWithIV(parameters, iv);
+    }
+
+    public static ParametersWithIV newInstance(final byte[] key, final byte[] iv) {
+        return newInstance(new KeyParameter(key), iv);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     static String ivName(final byte[] iv) {
         return String.format("%1$d-bit iv(%2$02x, ...)", iv.length << 3, iv[0]);
@@ -77,6 +87,10 @@ public final class _ParametersWithIV_TestUtils {
         return _CipherParameters_TestUtils.paramsName(params.getParameters())
                 + " / "
                 + ivName(iv);
+    }
+
+    public static Named named(final ParametersWithIV params) {
+        return Named.of(paramsName(params), params);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
