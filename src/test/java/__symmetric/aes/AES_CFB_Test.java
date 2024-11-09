@@ -14,7 +14,6 @@ import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.modes.CFBModeCipher;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -79,7 +78,7 @@ class AES_CFB_Test
 
         @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __(final String transformation, final int keySize) throws Throwable {
+        void __(final String transformation, final int keySize) throws Exception {
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -94,7 +93,7 @@ class AES_CFB_Test
 
         @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __(final String transformation, final int keySize, @TempDir final Path dir) throws Throwable {
+        void __(final String transformation, final int keySize, @TempDir final Path dir) throws Exception {
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -121,7 +120,7 @@ class AES_CFB_Test
 
         @MethodSource({"getTransformationWithBitWidthAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __bitWidth(final String transformation, final int keySize) throws Throwable {
+        void __bitWidth(final String transformation, final int keySize) throws Exception {
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -136,7 +135,7 @@ class AES_CFB_Test
 
         @MethodSource({"getTransformationWithBitWidthAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __bitWidth(final String transformation, final int keySize, @TempDir final Path dir) throws Throwable {
+        void __bitWidth(final String transformation, final int keySize, @TempDir final Path dir) throws Exception {
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);

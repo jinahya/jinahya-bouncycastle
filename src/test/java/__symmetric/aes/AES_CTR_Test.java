@@ -77,7 +77,7 @@ class AES_CTR_Test
 
         @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __(final String transformation, final int keySize) throws Throwable {
+        void __(final String transformation, final int keySize) throws Exception {
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
@@ -86,7 +86,7 @@ class AES_CTR_Test
 
         @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __(final String transformation, final int keySize, @TempDir final Path dir) throws Throwable {
+        void __(final String transformation, final int keySize, @TempDir final Path dir) throws Exception {
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));

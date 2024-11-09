@@ -1,5 +1,6 @@
 package __symmetric.aria;
 
+import __symmetric._ECB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import __symmetric._ECB_TestUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -76,7 +76,7 @@ class ARIA_ECB_Test
 
         @MethodSource({"getKeySizeAndTransformationArgumentsStream"})
         @ParameterizedTest
-        void __(final int keySize, final String transformation) throws Throwable {
+        void __(final int keySize, final String transformation) throws Exception {
             _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
                 final var cipher = Cipher.getInstance(transformation);
                 final var key = new SecretKeySpec(
@@ -90,7 +90,7 @@ class ARIA_ECB_Test
 
         @MethodSource({"getKeySizeAndTransformationArgumentsStream"})
         @ParameterizedTest
-        void __(final int keySize, final String transformation, @TempDir final Path dir) throws Throwable {
+        void __(final int keySize, final String transformation, @TempDir final Path dir) throws Exception {
             _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
                 BouncyCastleProviderUtils.addBouncyCastleProvider();
                 final var cipher = Cipher.getInstance(transformation);

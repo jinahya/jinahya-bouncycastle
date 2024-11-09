@@ -4,6 +4,7 @@ import _javax.security._Random_TestUtils;
 import io.github.jinahya.bouncycastle.crypto.params.JinahyaKeyParametersUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.junit.jupiter.api.Named;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -41,6 +42,10 @@ public final class _KeyParameters_TestUtils {
         Objects.requireNonNull(params, "params is null");
         final var key = JinahyaKeyParametersUtils.getKey(params);
         return keyName(key);
+    }
+
+    public static Named named(final KeyParameter params) {
+        return Named.of(paramsName(params), params);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

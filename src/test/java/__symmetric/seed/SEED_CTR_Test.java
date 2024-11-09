@@ -1,5 +1,6 @@
 package __symmetric.seed;
 
+import __symmetric._CTR_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import __symmetric._CTR_TestUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -62,7 +62,7 @@ class SEED_CTR_Test
     @DisplayName("SEED/CTR/NoPadding")
     @MethodSource({"getKeySizeStream_"})
     @ParameterizedTest
-    void __(final int keySize) throws Throwable {
+    void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
             final var transformation = ALGORITHM + '/' + _CTR_TestUtils.MODE + "/NoPadding";
             final Cipher cipher;
@@ -84,7 +84,7 @@ class SEED_CTR_Test
     @DisplayName("SEED/CTR/NoPadding")
     @MethodSource({"getKeySizeStream_"})
     @ParameterizedTest
-    void __(final int keySize, @TempDir final Path dir) throws Throwable {
+    void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
             final var transformation = ALGORITHM + '/' + _CTR_TestUtils.MODE + "/NoPadding";
             final Cipher cipher;

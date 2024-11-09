@@ -1,5 +1,6 @@
 package __symmetric.lea;
 
+import __symmetric._CBC_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.crypto.paddings._BlockCipherPadding_TestUtils;
@@ -21,7 +22,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import __symmetric._CBC_TestUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

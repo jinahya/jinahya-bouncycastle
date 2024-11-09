@@ -1,5 +1,6 @@
 package __symmetric.seed;
 
+import __symmetric._ECB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import __symmetric._ECB_TestUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -56,7 +56,7 @@ class SEED_ECB_Test
     @DisplayName("SEED/ECB/PKCS5Padding")
     @MethodSource({"getKeySizeStream_"})
     @ParameterizedTest
-    void __(final int keySize) throws Throwable {
+    void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
             final var transformation = ALGORITHM + '/' + _ECB_TestUtils.MODE + "/PKCS5Padding";
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -72,7 +72,7 @@ class SEED_ECB_Test
     @DisplayName("SEED/ECB/PKCS5Padding")
     @MethodSource({"getKeySizeStream_"})
     @ParameterizedTest
-    void __(final int keySize, @TempDir final Path dir) throws Throwable {
+    void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
             final var transformation = ALGORITHM + '/' + _ECB_TestUtils.MODE + "/PKCS5Padding";
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
