@@ -20,36 +20,6 @@ import java.util.Objects;
  */
 public final class JinahyaStreamCipherUtils {
 
-    // -----------------------------------------------------------------------------------------------------------------
-//    private static int processBytes_(final StreamCipher cipher, final byte[] in, final int inoff, final int inlen,
-//                                     final byte[] out, final int outoff) {
-//        return cipher.processBytes(in, inoff, inlen, out, outoff);
-//    }
-//
-//    public static int processBytes(final StreamCipher cipher, final byte[] in, final int inoff, final int inlen,
-//                                   final byte[] out, final int outoff) {
-//        Objects.requireNonNull(cipher, "cipher is null");
-//        Objects.requireNonNull(in, "in is null");
-//        if (inoff < 0) {
-//            throw new IllegalArgumentException("inoff(" + inoff + ") is negative");
-//        }
-//        if (inlen < 0) {
-//            throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
-//        }
-//        if (inoff + inlen > in.length) {
-//            throw new IllegalArgumentException(
-//                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")");
-//        }
-//        Objects.requireNonNull(out, "out is null");
-//        if (outoff < 0) {
-//            throw new IllegalArgumentException("outoff(" + inoff + ") is negative");
-//        }
-//        if (outoff > out.length) {
-//            throw new IllegalArgumentException("outoff(" + outoff + ") > out.length(" + out.length + ")");
-//        }
-//        return processBytes_(cipher, in, inoff, inlen, out, outoff);
-//    }
-
     public static byte[] processBytes(final StreamCipher cipher, final byte[] in, final int inoff, final int inlen) {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(in, "in is null");
@@ -100,47 +70,6 @@ public final class JinahyaStreamCipherUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static long processAllBytes_(final StreamCipher cipher, final InputStream in, final OutputStream out,
-                                 final byte[] inbuf, final int inoff, final int inlen, byte[] outbuf)
-            throws IOException {
-        Objects.requireNonNull(cipher, "cipher is null");
-        Objects.requireNonNull(in, "in is null");
-        Objects.requireNonNull(out, "out is null");
-        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
-            throw new IllegalArgumentException("inbuf.length is zero");
-        }
-        if (inoff < 0) {
-            throw new IllegalArgumentException("inoff(" + inoff + ") < 0");
-        }
-        if (inlen <= 0) {
-            throw new IllegalArgumentException("inlen(" + inlen + ") <= 0");
-        }
-        if (inoff + inlen > inbuf.length) {
-            throw new IllegalArgumentException(
-                    "inoff(" + inoff + ") + inlen(" + inlen + ") > inbuf.length(" + inbuf.length + ")"
-            );
-        }
-        if (outbuf == null || outbuf.length == 0) {
-            outbuf = new byte[inbuf.length];
-        }
-        var bytes = 0L;
-        for (int outlen, r; (r = in.read(inbuf)) != -1; ) {
-            while (true) {
-                try {
-                    outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
-                    out.write(outbuf, 0, outlen);
-                    bytes += outlen;
-                    break;
-                } catch (final DataLengthException dle) {
-                    System.err.println("doubling up outbuf.length(" + outbuf.length + ")");
-                    Arrays.fill(outbuf, (byte) 0);
-                    outbuf = new byte[outbuf.length << 1];
-                }
-            }
-        }
-        return bytes;
-    }
-
     public static long processAllBytes(final StreamCipher cipher, final InputStream in, final OutputStream out,
                                        final byte[] inbuf, byte[] outbuf)
             throws IOException {

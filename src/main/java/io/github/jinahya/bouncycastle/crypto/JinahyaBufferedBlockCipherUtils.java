@@ -16,6 +16,9 @@ import java.util.Objects;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see JinahyaBufferedBlockCipherCrypto
+ * @see <a
+ * href="https://downloads.bouncycastle.org/java/docs/bcprov-jdk18on-javadoc/org/bouncycastle/crypto/BufferedBlockCipher.html">org.bouncycastle.crypto.BufferedBlockCipher</a>
+ * (bcprov-jdk18on-javadoc)
  */
 public final class JinahyaBufferedBlockCipherUtils {
 
