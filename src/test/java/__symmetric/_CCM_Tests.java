@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
-public final class _CCM_TestUtils {
+public final class _CCM_Tests {
 
     public static final String MODE = "CCM";
 
@@ -82,7 +82,7 @@ public final class _CCM_TestUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CCM_TestUtils() {
+    private _CCM_Tests() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

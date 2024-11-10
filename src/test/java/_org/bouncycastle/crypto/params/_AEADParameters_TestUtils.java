@@ -23,7 +23,7 @@ public final class _AEADParameters_TestUtils {
                 associatedTextName(params.getAssociatedText());
     }
 
-    public static Named<AEADParameters> named(final AEADParameters params) {
+    public static <T extends AEADParameters> Named<T> named(final T params) {
         return Named.of(paramsName(params), params);
     }
 

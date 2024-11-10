@@ -1,5 +1,6 @@
 package __symmetric.lea;
 
+import __symmetric._OFB_Tests;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import __symmetric._OFB_TestUtils;
 
 import java.io.File;
 import java.util.stream.Stream;
@@ -23,8 +23,8 @@ class LEA_OFB_Test
         extends LEA__Test {
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _OFB_TestUtils.getCipherAndParamsArgumentsStream(
-                () -> getKeySizeStream(),
+        return _OFB_Tests.getCipherAndParamsArgumentsStream(
+                LEA__Test::getKeySizeStream,
                 LEAEngine::new
         );
     }

@@ -1,6 +1,6 @@
 package __symmetric.aes;
 
-import __symmetric._CTR_TestUtils;
+import __symmetric._CTR_Tests;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -42,7 +42,7 @@ class AES_CTR_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CTR_TestUtils.getCipherAndParamsArgumentsStream(
+            return _CTR_Tests.getCipherAndParamsArgumentsStream(
                     AES__Test::getKeySizeStream,
                     AESEngine::newInstance
             );
@@ -69,7 +69,7 @@ class AES_CTR_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _CTR_TestUtils.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _CTR_Tests.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> {
                         return Arguments.of(t, ks);
                     }));
@@ -77,7 +77,7 @@ class AES_CTR_Test
 
         @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __(final String transformation, final int keySize) throws Throwable {
+        void __(final String transformation, final int keySize) throws Exception {
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
@@ -86,7 +86,7 @@ class AES_CTR_Test
 
         @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
-        void __(final String transformation, final int keySize, @TempDir final Path dir) throws Throwable {
+        void __(final String transformation, final int keySize, @TempDir final Path dir) throws Exception {
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));

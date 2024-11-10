@@ -1,6 +1,5 @@
 package _org.junit.jupiter.params.provider;
 
-import _org.junit.jupiter.api._Named_TestUtils;
 import io.github.jinahya.bouncycastle.crypto.JinahyaCipherParametersUtils;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
@@ -10,7 +9,6 @@ import org.bouncycastle.crypto.StreamCipher;
 import org.bouncycastle.crypto.paddings.BlockCipherPadding;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
-import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Objects;
 
@@ -76,27 +74,6 @@ public class _Arguments_TestUtils {
         }
         throw new RuntimeException("failed to get key from " + params);
     }
-
-    public static Arguments argumentsOf(final BlockCipher cipher, final CipherParameters params) {
-        return Arguments.of(
-                _Named_TestUtils.namedOf(cipher),
-                _Named_TestUtils.namedOf(params)
-        );
-    }
-
-    public static Arguments argumentsOf(final BufferedBlockCipher cipher, final CipherParameters params) {
-        return argumentsOf(
-                Objects.requireNonNull(cipher, "cipher is null").getUnderlyingCipher(),
-                params
-        );
-    }
-
-//    public static Arguments argumentsOf(final StreamBlockCipher cipher, final CipherParameters params) {
-//        return argumentsOf(
-//                Objects.requireNonNull(cipher, "cipher is null").getUnderlyingCipher(),
-//                params
-//        );
-//    }
 
     // -----------------------------------------------------------------------------------------------------------------
     private _Arguments_TestUtils() {

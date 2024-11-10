@@ -3,7 +3,6 @@ package __symmetric.aria;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.crypto._CipherParameters_TestUtils;
-import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +10,7 @@ import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.engines.ARIAEngine;
 import org.bouncycastle.crypto.modes.CTSBlockCipher;
+import org.bouncycastle.crypto.params.KeyParameter;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +30,8 @@ class ARIA_CTS_Test
         return getKeySizeStream().mapToObj(ks -> {
             final var engine = new ARIAEngine();
             final var cipher = new CTSBlockCipher(engine);
-            final var params = _KeyParameters_TestUtils.newRandomInstanceOfKeyParameter(null, ks);
+            final var key = _Random_TestUtils.newRandomBytes(ks >> 3);
+            final var params = new KeyParameter(key);
             return Arguments.of(
                     Named.of(_BufferedBlockCipher_TestUtils.cipherName(cipher), cipher),
                     Named.of(_CipherParameters_TestUtils.paramsName(params), params)
@@ -41,7 +42,7 @@ class ARIA_CTS_Test
     // -----------------------------------------------------------------------------------------------------------------
     @MethodSource({"getArgumentsStream"})
     @ParameterizedTest
-    void __(final BufferedBlockCipher cipher, final CipherParameters params) throws Exception {
+    void __(final BufferedBlockCipher cipher, final CipherParameters params) {
         final var plain = new byte[ThreadLocalRandom.current().nextInt(16) + cipher.getBlockSize()];
         ThreadLocalRandom.current().nextBytes(plain);
         _BufferedBlockCipher_TestUtils.__(cipher, params, plain);

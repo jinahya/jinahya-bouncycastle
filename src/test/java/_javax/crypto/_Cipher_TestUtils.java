@@ -204,6 +204,7 @@ public final class _Cipher_TestUtils {
         });
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     private _Cipher_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }

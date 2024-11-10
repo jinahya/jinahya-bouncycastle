@@ -44,7 +44,7 @@ public final class _BlockCipher_TestUtils {
         return String.format("%1$s", cipher.getAlgorithmName());
     }
 
-    public static Named named(final BlockCipher cipher) {
+    public static <T extends BlockCipher> Named<T> named(final T cipher) {
         return Named.of(cipherName(cipher), cipher);
     }
 

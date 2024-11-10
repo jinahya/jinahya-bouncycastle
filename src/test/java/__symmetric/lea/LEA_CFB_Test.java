@@ -1,5 +1,6 @@
 package __symmetric.lea;
 
+import __symmetric._CFB_Tests;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import __symmetric._CFB_TestUtils;
 
 import java.io.File;
 import java.util.stream.IntStream;
@@ -32,7 +32,7 @@ class LEA_CFB_Test
     }
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _CFB_TestUtils.getCipherAndParamsArgumentsStream(
+        return _CFB_Tests.getCipherAndParamsArgumentsStream(
                 LEA__Test::getKeySizeStream,
                 LEAEngine::new
         );

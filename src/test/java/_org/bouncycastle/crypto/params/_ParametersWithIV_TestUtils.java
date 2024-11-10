@@ -1,80 +1,14 @@
 package _org.bouncycastle.crypto.params;
 
 import _org.bouncycastle.crypto._CipherParameters_TestUtils;
-import io.github.jinahya.bouncycastle.crypto.JinahyaBlockCipherUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.crypto.BlockCipher;
-import org.bouncycastle.crypto.BufferedBlockCipher;
-import org.bouncycastle.crypto.CipherParameters;
-import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.junit.jupiter.api.Named;
 
 import java.util.Objects;
-import java.util.Random;
 
 @Slf4j
 public final class _ParametersWithIV_TestUtils {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    public static byte[] newRandomIv(Random random, final int length) {
-        if (random == null) {
-            random = _KeyParameters_TestUtils.random();
-        }
-        if (length < 0) {
-            throw new IllegalArgumentException("negative length: " + length);
-        }
-        final var iv = new byte[length >> 3];
-        random.nextBytes(iv);
-        return iv;
-    }
-
-    public static byte[] newRandomIv(Random random, final BlockCipher cipher) {
-        return newRandomIv(random, JinahyaBlockCipherUtils.getBlockSizeInBits(cipher));
-    }
-
-    /**
-     * Returns a new instance of {@link ParametersWithIV} with specified arguments.
-     *
-     * @param random        a random.
-     * @param keySizeInBits a key size in bits.
-     * @param ivSizeInBits  a block size in bits.
-     * @return a new instance of {@link ParametersWithIV}.
-     * @see _ParametersWithIV_TestUtils#newRandomIv(Random, int)
-     */
-    public static CipherParameters newRandomInstanceOfParametersWithIV(final Random random, final int keySizeInBits,
-                                                                       final int ivSizeInBits) {
-        return new ParametersWithIV(
-                _KeyParameters_TestUtils.newRandomInstanceOfKeyParameter(random, keySizeInBits),
-                newRandomIv(random, ivSizeInBits)
-        );
-    }
-
-    public static CipherParameters newRandomInstanceOfParametersWithIV(final Random random, final int keySizeInBits,
-                                                                       final BlockCipher cipher) {
-        return newRandomInstanceOfParametersWithIV(
-                random,
-                keySizeInBits,
-                JinahyaBlockCipherUtils.getBlockSizeInBits(cipher)
-        );
-    }
-
-    public static CipherParameters newRandomInstanceOfParametersWithIV(final Random random, final int keySizeInBits,
-                                                                       final BufferedBlockCipher cipher) {
-        return newRandomInstanceOfParametersWithIV(
-                random,
-                keySizeInBits,
-                Objects.requireNonNull(cipher, "cipher is null").getUnderlyingCipher()
-        );
-    }
-
-    public static ParametersWithIV newInstance(final KeyParameter parameters, final byte[] iv) {
-        return new ParametersWithIV(parameters, iv);
-    }
-
-    public static ParametersWithIV newInstance(final byte[] key, final byte[] iv) {
-        return newInstance(new KeyParameter(key), iv);
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
     static String ivName(final byte[] iv) {
@@ -89,7 +23,7 @@ public final class _ParametersWithIV_TestUtils {
                 + ivName(iv);
     }
 
-    public static Named named(final ParametersWithIV params) {
+    public static Named<ParametersWithIV> named(final ParametersWithIV params) {
         return Named.of(paramsName(params), params);
     }
 
