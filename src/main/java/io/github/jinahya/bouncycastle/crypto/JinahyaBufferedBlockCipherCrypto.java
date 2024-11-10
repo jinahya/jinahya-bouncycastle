@@ -37,7 +37,7 @@ public class JinahyaBufferedBlockCipherCrypto
         initForEncryption();
         final var out = new byte[cipher.getOutputSize(in.length)];
         try {
-            final var outlen = JinahyaBufferedBlockCipherUtils.processBytesAndDoFinal(
+            final var outlen = JinahyaBufferedBlockCipherUtils.processBytesAndDoFinal_(
                     cipher,
                     in,
                     0,
@@ -53,9 +53,11 @@ public class JinahyaBufferedBlockCipherCrypto
 
     @Override
     public int encrypt(final ByteBuffer input, final ByteBuffer output) {
+        Objects.requireNonNull(input, "input is null");
+        Objects.requireNonNull(output, "output is null");
         initForEncryption();
         try {
-            return JinahyaBufferedBlockCipherUtils.processBytesAndDoFinal(
+            return JinahyaBufferedBlockCipherUtils.processBytesAndDoFinal_(
                     cipher,
                     input,
                     output
@@ -72,7 +74,7 @@ public class JinahyaBufferedBlockCipherCrypto
         initForDecryption();
         final var out = new byte[cipher.getOutputSize(in.length)];
         try {
-            final var outlen = JinahyaBufferedBlockCipherUtils.processBytesAndDoFinal(
+            final var outlen = JinahyaBufferedBlockCipherUtils.processBytesAndDoFinal_(
                     cipher,
                     in,
                     0,
@@ -90,7 +92,7 @@ public class JinahyaBufferedBlockCipherCrypto
     public int decrypt(final ByteBuffer input, final ByteBuffer output) {
         initForDecryption();
         try {
-            return JinahyaBufferedBlockCipherUtils.processBytesAndDoFinal(
+            return JinahyaBufferedBlockCipherUtils.processBytesAndDoFinal_(
                     cipher,
                     input,
                     output
@@ -103,9 +105,14 @@ public class JinahyaBufferedBlockCipherCrypto
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+        Objects.requireNonNull(in, "in is null");
+        Objects.requireNonNull(out, "out is null");
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+            throw new IllegalArgumentException("inbuf.length is zero");
+        }
         initForEncryption();
         try {
-            return JinahyaBufferedBlockCipherUtils.processAllBytesAndDoFinal(
+            return JinahyaBufferedBlockCipherUtils.processAllBytesAndDoFinal_(
                     cipher,
                     in,
                     out,
@@ -120,9 +127,14 @@ public class JinahyaBufferedBlockCipherCrypto
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+        Objects.requireNonNull(in, "in is null");
+        Objects.requireNonNull(out, "out is null");
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+            throw new IllegalArgumentException("inbuf.length is zero");
+        }
         initForDecryption();
         try {
-            return JinahyaBufferedBlockCipherUtils.processAllBytesAndDoFinal(
+            return JinahyaBufferedBlockCipherUtils.processAllBytesAndDoFinal_(
                     cipher,
                     in,
                     out,

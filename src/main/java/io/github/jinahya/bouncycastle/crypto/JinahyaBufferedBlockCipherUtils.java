@@ -1,6 +1,7 @@
 package io.github.jinahya.bouncycastle.crypto;
 
 import org.bouncycastle.crypto.BufferedBlockCipher;
+import org.bouncycastle.crypto.DataLengthException;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 
 import java.io.IOException;
@@ -18,6 +19,34 @@ import java.util.Objects;
  */
 public final class JinahyaBufferedBlockCipherUtils {
 
+    private static int processBytes_(final BufferedBlockCipher cipher, final byte[] in, final int inoff,
+                                     final int inlen, final byte[] out, final int outoff) {
+        assert cipher != null;
+        assert in != null;
+        assert inlen >= 0;
+        assert inoff + inlen <= in.length;
+        assert out != null;
+        assert outoff >= 0;
+        assert outoff <= out.length;
+        return cipher.processBytes(in, inoff, inlen, out, outoff); // DataLengthException
+    }
+
+    static int processBytesAndDoFinal_(final BufferedBlockCipher cipher, final byte[] in, final int inoff,
+                                       final int inlen, final byte[] out, final int outoff)
+            throws InvalidCipherTextException {
+        assert cipher != null;
+        assert in != null;
+        assert inlen >= 0;
+        assert inoff + inlen <= in.length;
+        assert out != null;
+        assert outoff >= 0;
+        assert outoff <= out.length;
+//        var outlen = cipher.processBytes(in, inoff, inlen, out, outoff); // DataLengthException
+        var outlen = processBytes_(cipher, in, inoff, inlen, out, outoff); // DataLengthException
+        outlen += cipher.doFinal(out, outlen); // InvalidCipherTextException
+        return outlen;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -31,6 +60,7 @@ public final class JinahyaBufferedBlockCipherUtils {
      * @param out    the output array.
      * @param outoff the starting index of {@code out} on which processed bytes are set.
      * @return the number of bytes set on the {@code out}.
+     * @throws DataLengthException        if there isn't enough space in {@code out}.
      * @throws InvalidCipherTextException if padding is expected and not found.
      * @see BufferedBlockCipher#processBytes(byte[], int, int, byte[], int)
      * @see BufferedBlockCipher#doFinal(byte[], int)
@@ -57,28 +87,22 @@ public final class JinahyaBufferedBlockCipherUtils {
         if (outoff > out.length) {
             throw new IllegalArgumentException("outoff(" + outoff + ") > out.length(" + out.length + ")");
         }
-        var outlen = cipher.processBytes(in, inoff, inlen, out, outoff); // DataLengthException
+        if (true) {
+            return processBytesAndDoFinal_(cipher, in, inoff, inlen, out, outoff);
+        }
+//        var outlen = cipher.processBytes(in, inoff, inlen, out, outoff); // DataLengthException
+        var outlen = processBytes_(cipher, in, inoff, inlen, out, outoff); // DataLengthException
         outlen += cipher.doFinal(out, outlen); // InvalidCipherTextException
         return outlen;
     }
 
-    /**
-     * Processes and finalizes, using specified cipher, all remaining bytes of specified input buffer, and put process
-     * bytes to specified output buffer.
-     *
-     * @param cipher the cipher.
-     * @param input  the input buffer whose remaining bytes are processed.
-     * @param output the output buffer onto which processed bytes are put.
-     * @return the number of bytes put on the output buffer.
-     * @throws InvalidCipherTextException if padding is expected and not found.
-     * @see #processBytesAndDoFinal(BufferedBlockCipher, byte[], int, int, byte[], int)
-     */
-    public static int processBytesAndDoFinal(final BufferedBlockCipher cipher, final ByteBuffer input,
-                                             final ByteBuffer output)
+    // -----------------------------------------------------------------------------------------------------------------
+    static int processBytesAndDoFinal_(final BufferedBlockCipher cipher, final ByteBuffer input,
+                                       final ByteBuffer output)
             throws InvalidCipherTextException {
-        Objects.requireNonNull(cipher, "cipher is null");
-        Objects.requireNonNull(input, "input is null");
-        Objects.requireNonNull(output, "output is null");
+        assert cipher != null;
+        assert input != null;
+        assert output != null;
         final byte[] in;
         final int inoff;
         final int inlen = input.remaining();
@@ -102,7 +126,7 @@ public final class JinahyaBufferedBlockCipherUtils {
             out = new byte[output.remaining()];
             outoff = 0;
         }
-        final var outlen = processBytesAndDoFinal(cipher, in, inoff, inlen, out, outoff);
+        final var outlen = processBytesAndDoFinal_(cipher, in, inoff, inlen, out, outoff);
         input.position(input.position() + inlen);
         if (output.hasArray()) {
             output.position(output.position() + outlen);
@@ -112,7 +136,95 @@ public final class JinahyaBufferedBlockCipherUtils {
         return outlen;
     }
 
+    /**
+     * Processes and finalizes, using specified cipher, all remaining bytes of specified input buffer, and put process
+     * bytes to specified output buffer.
+     *
+     * @param cipher the cipher.
+     * @param input  the input buffer whose remaining bytes are processed.
+     * @param output the output buffer onto which processed bytes are put.
+     * @return the number of bytes put on the output buffer.
+     * @throws DataLengthException        if there isn't enough space in {@code out}.
+     * @throws InvalidCipherTextException if padding is expected and not found.
+     * @see #processBytesAndDoFinal(BufferedBlockCipher, byte[], int, int, byte[], int)
+     */
+    public static int processBytesAndDoFinal(final BufferedBlockCipher cipher, final ByteBuffer input,
+                                             final ByteBuffer output)
+            throws InvalidCipherTextException {
+        Objects.requireNonNull(cipher, "cipher is null");
+        Objects.requireNonNull(input, "input is null");
+        Objects.requireNonNull(output, "output is null");
+        return processBytesAndDoFinal_(cipher, input, output);
+//        final byte[] in;
+//        final int inoff;
+//        final int inlen = input.remaining();
+//        if (input.hasArray()) {
+//            in = input.array();
+//            inoff = input.arrayOffset() + input.position();
+//        } else {
+//            in = new byte[inlen];
+////            input.get(0, in); // Java 13
+//            for (int p = input.position(), i = 0; i < in.length; p++, i++) {
+//                in[i] = input.get(p);
+//            }
+//            inoff = 0;
+//        }
+//        final byte[] out;
+//        final int outoff;
+//        if (output.hasArray()) {
+//            out = output.array();
+//            outoff = output.arrayOffset() + output.position();
+//        } else {
+//            out = new byte[output.remaining()];
+//            outoff = 0;
+//        }
+//        final var outlen = processBytesAndDoFinal_(cipher, in, inoff, inlen, out, outoff);
+//        input.position(input.position() + inlen);
+//        if (output.hasArray()) {
+//            output.position(output.position() + outlen);
+//        } else {
+//            output.put(out, outoff, outlen);
+//        }
+//        return outlen;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
+    static long processAllBytesAndDoFinal_(final BufferedBlockCipher cipher, final InputStream in,
+                                           final OutputStream out, final byte[] inbuf, byte[] outbuf)
+            throws IOException, InvalidCipherTextException {
+        assert cipher != null;
+        assert in != null;
+        assert out != null;
+        assert inbuf != null && inbuf.length > 0;
+        if (outbuf == null || outbuf.length == 0) {
+            outbuf = new byte[cipher.getOutputSize(inbuf.length)];
+        }
+        var bytes = 0L;
+        int outlen;
+        for (int r; (r = in.read(inbuf)) != -1; ) {
+            for (final var uos = cipher.getUpdateOutputSize(r); outbuf.length < uos; ) {
+                System.err.println(
+                        "re-allocating outbuf(" + outbuf.length +
+                                ") for an intermediate update-output-size(" + uos + ")"
+                );
+                Arrays.fill(outbuf, (byte) 0);
+                outbuf = new byte[uos];
+            }
+//            outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
+            outlen = processBytes_(cipher, inbuf, 0, r, outbuf, 0);
+            out.write(outbuf, 0, outlen);
+            bytes += outlen;
+        }
+        for (final var os = cipher.getOutputSize(0); outbuf.length < os; ) {
+            System.err.println("re-allocating outbuf(" + outbuf.length + ") for the final output-size(" + os + ")");
+            Arrays.fill(outbuf, (byte) 0);
+            outbuf = new byte[os];
+        }
+        outlen = cipher.doFinal(outbuf, 0);
+        out.write(outbuf, 0, outlen);
+        bytes += outlen;
+        return bytes;
+    }
 
     /**
      * Processes and finalizes, using specified cipher, all bytes from specified input stream, and writes processed
@@ -138,6 +250,9 @@ public final class JinahyaBufferedBlockCipherUtils {
         if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
             throw new IllegalArgumentException("inbuf.length is zero");
         }
+        if (true) {
+            return processAllBytesAndDoFinal_(cipher, in, out, inbuf, outbuf);
+        }
         if (outbuf == null || outbuf.length == 0) {
             outbuf = new byte[cipher.getOutputSize(inbuf.length)];
         }
@@ -152,7 +267,8 @@ public final class JinahyaBufferedBlockCipherUtils {
                 Arrays.fill(outbuf, (byte) 0);
                 outbuf = new byte[uos];
             }
-            outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
+//            outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
+            outlen = processBytes_(cipher, inbuf, 0, r, outbuf, 0);
             out.write(outbuf, 0, outlen);
             bytes += outlen;
         }
