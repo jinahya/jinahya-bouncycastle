@@ -4,6 +4,7 @@ import __asymmetric._RSA_Tests;
 import __symmetric._ECB_Tests;
 import __symmetric._JCEProviderTest;
 import _javax.security._Random_TestUtils;
+import _javax.security._Signature_Tests;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -44,10 +45,13 @@ class RSA_ECB_Test
 
         private static void __(final Cipher cipher, final byte[] plain, final Key key1, final Key key2)
                 throws Exception {
+            // ------------------------------------------------------------------------------------------------- encrypt
             cipher.init(Cipher.ENCRYPT_MODE, key1);
             final var encrypted = cipher.doFinal(plain);
+            // ------------------------------------------------------------------------------------------------- decrypt
             cipher.init(Cipher.DECRYPT_MODE, key2);
             final var decrypted = cipher.doFinal(encrypted);
+            // -------------------------------------------------------------------------------------------------- verify
             assertThat(decrypted).isEqualTo(plain);
         }
 
@@ -72,6 +76,13 @@ class RSA_ECB_Test
                 put(2048, 245);
             }};
 
+            private static int mLen(final int keySize) {
+                // https://datatracker.ietf.org/doc/html/rfc8017#section-7.2.1
+                return M_LEN.computeIfAbsent(keySize, ks -> {
+                    return (ks >> 3) - 11; // mLen <= k - 11
+                });
+            }
+
             @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
             @ParameterizedTest
             void __(final String transformation, final int keySize) throws Exception {
@@ -82,11 +93,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final var mLen = M_LEN.computeIfAbsent(keySize, ks -> {
-                    // https://datatracker.ietf.org/doc/html/rfc8017#section-7.2.1
-                    final var k = ks >> 3;
-                    return k - 11; // mLen <= k - 11
-                });
+                final var mLen = mLen(keySize);
                 JCEProviderTest.__(cipher, new byte[0], keyPair);
                 JCEProviderTest.__(cipher, _Random_TestUtils.newRandomBytes(mLen), keyPair);
                 for (int i = 0; i < 16; i++) {
@@ -94,6 +101,7 @@ class RSA_ECB_Test
                             ThreadLocalRandom.current().nextInt(mLen + 1)
                     );
                     JCEProviderTest.__(cipher, plain, keyPair);
+                    _Signature_Tests.verifyRsa(plain, keyPair);
                 }
             }
         }
@@ -113,6 +121,15 @@ class RSA_ECB_Test
                 put(2048, 214);
             }};
 
+            private static final int H_LEN = 160 >> 3;
+
+            private static int mLen(final int keySize) {
+                return M_LEN.computeIfAbsent(keySize, ks -> {
+                    // https://datatracker.ietf.org/doc/html/rfc8017#section-7.1.1
+                    return (ks >> 3) - (H_LEN << 1) - 2; // mLen <= k - 2hLen - 2
+                });
+            }
+
             @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
             @ParameterizedTest
             void __(final String transformation, final int keySize) throws Exception {
@@ -123,12 +140,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final int mLen = M_LEN.computeIfAbsent(keySize, ks -> {
-                    // https://datatracker.ietf.org/doc/html/rfc8017#section-7.1.1
-                    final var k = ks >> 3;
-                    final var hLen = 160 >> 3;
-                    return k - (hLen << 1) - 2; // mLen <= k - 2hLen - 2
-                });
+                final int mLen = mLen(keySize);
                 JCEProviderTest.__(
                         cipher,
                         new byte[0],
@@ -170,6 +182,15 @@ class RSA_ECB_Test
                 put(2048, 190);
             }};
 
+            private static final int H_LEN = 256 >> 3;
+
+            private static int mLen(final int keySize) {
+                return M_LEN.computeIfAbsent(keySize, ks -> {
+                    // https://datatracker.ietf.org/doc/html/rfc8017#section-7.1.1
+                    return (ks >> 3) - (H_LEN << 1) - 2; // mLen <= k - 2hLen - 2
+                });
+            }
+
             @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
             @ParameterizedTest
             void __(final String transformation, final int keySize) throws Exception {
@@ -180,12 +201,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final int mLen = M_LEN.computeIfAbsent(keySize, ks -> {
-                    // https://datatracker.ietf.org/doc/html/rfc8017#section-7.1.1
-                    final var k = ks >> 3;
-                    final var hLen = 256 >> 3;
-                    return k - (hLen << 1) - 2; // mLen <= k - 2hLen - 2
-                });
+                final int mLen = mLen(keySize);
                 JCEProviderTest.__(
                         cipher,
                         new byte[0],

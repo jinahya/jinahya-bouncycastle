@@ -9,6 +9,8 @@ Utilities, for [Bouncy Castle for Java](https://www.bouncycastle.org/documentati
 
 ## Links
 
+* [docs.oracle.com](https://docs.oracle.com)
+    * [Java Platform, Standard Edition / Security Developer’s Guide](https://docs.oracle.com/en/java/javase/21/security/index.html) 
 * [Bouncy Castle – Open-source cryptographic APIs](https://www.bouncycastle.org/)
     * [Bouncy Castle Specification & Interoperability](https://www.bouncycastle.org/documentation/specification_interoperability/)
     * [Bouncy Castle for Java  Documentation](https://www.bouncycastle.org/documentation/documentation-java/)
@@ -23,6 +25,8 @@ Utilities, for [Bouncy Castle for Java](https://www.bouncycastle.org/documentati
       * [Cipher block chaining (CBC)](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_block_chaining_(CBC))
       * [CCM mode](https://en.wikipedia.org/wiki/CCM_mode)
       * [Cipher feedback (CFB)](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_(CFB))
+    * [RSA (cryptosystem)](https://en.wikipedia.org/wiki/RSA_(cryptosystem))
+      * [Operation](https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Operation) 
 * [KISA 암호이용활성화](https://seed.kisa.or.kr)
     * [LEA](https://seed.kisa.or.kr/kisa/algorithm/EgovLeaInfo.do)
 * GitHub

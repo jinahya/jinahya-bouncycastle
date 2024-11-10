@@ -4,6 +4,8 @@ import java.util.stream.IntStream;
 
 public final class _RSA_Tests {
 
+    public static final String ALGORITHM = "RSA";
+
     public static IntStream getKeySizeStream() {
         return IntStream.of(
                 1024,

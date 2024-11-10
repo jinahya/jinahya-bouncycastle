@@ -59,14 +59,12 @@ public final class BouncyCastleProviderUtils {
      * @see Security#addProvider(Provider)
      * @see #removeBouncyCastleProvider()
      */
-    public static void addBouncyCastleProvider() {
-        synchronized (BouncyCastleProviderUtils.class) {
-            if (added) {
-                return;
-            }
-            Security.addProvider(BOUNCY_CASTLE_PROVIDER);
-            added = true;
+    public static synchronized void addBouncyCastleProvider() {
+        if (added) {
+            return;
         }
+        Security.addProvider(BOUNCY_CASTLE_PROVIDER);
+        added = true;
     }
 
     /**
@@ -75,11 +73,9 @@ public final class BouncyCastleProviderUtils {
      * @see Security#removeProvider(String)
      * @see #addBouncyCastleProvider()
      */
-    public static void removeBouncyCastleProvider() {
-        synchronized (BouncyCastleProviderUtils.class) {
-            Security.removeProvider(BOUNCY_CASTLE_PROVIDER_NAME);
-            added = false;
-        }
+    public static synchronized void removeBouncyCastleProvider() {
+        Security.removeProvider(BOUNCY_CASTLE_PROVIDER_NAME);
+        added = false;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
