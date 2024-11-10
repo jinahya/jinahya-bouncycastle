@@ -1,7 +1,9 @@
 package _org.bouncycastle.crypto;
 
 import _javax.security._Random_TestUtils;
+import io.github.jinahya.bouncycastle.crypto.JinahyaBlockCipherUtilsTest;
 import io.github.jinahya.bouncycastle.crypto.JinahyaBufferedBlockCipherCrypto;
+import io.github.jinahya.bouncycastle.crypto.JinahyaBufferedBlockCipherUtilsTest;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
@@ -41,11 +43,13 @@ public final class _BufferedBlockCipher_TestUtils {
         assertThat(decrypted).isEqualTo(plain);
     }
 
-    public static void __(final BufferedBlockCipher cipher, final CipherParameters params) {
+    public static void __(final BufferedBlockCipher cipher, final CipherParameters params) throws Exception {
         __(cipher, params, new byte[0]); // empty
         __(cipher, params, new byte[1]); // single-zero
         __(cipher, params, _Random_TestUtils.newRandomBytes(1)); // single-random
         __(cipher, params, _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1024)));
+        JinahyaBufferedBlockCipherUtilsTest.__(cipher, params);
+        JinahyaBlockCipherUtilsTest.__(cipher.getUnderlyingCipher(), params);
     }
 
     public static void __(final BufferedBlockCipher cipher, final CipherParameters params, final File dir,
@@ -81,7 +85,7 @@ public final class _BufferedBlockCipher_TestUtils {
     }
 
     public static void __(final BufferedBlockCipher cipher, final CipherParameters params, final File dir)
-            throws IOException {
+            throws Exception {
         __(cipher, params, dir, File.createTempFile("tmp", null, dir)); // empty
         __(cipher, params, dir, _Random_TestUtils.createTempFileWithRandomBytesWritten(dir)); // random
     }

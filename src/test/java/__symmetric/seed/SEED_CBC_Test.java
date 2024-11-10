@@ -144,7 +144,7 @@ class SEED_CBC_Test
         @DisplayName("encrypt/decrypt bytes")
         @MethodSource({"getCipherAndParamsArgumentsStream"})
         @ParameterizedTest
-        void __(final PaddedBufferedBlockCipher cipher, final CipherParameters params) {
+        void __(final PaddedBufferedBlockCipher cipher, final CipherParameters params) throws Exception {
             _BufferedBlockCipher_TestUtils.__(cipher, params);
         }
 

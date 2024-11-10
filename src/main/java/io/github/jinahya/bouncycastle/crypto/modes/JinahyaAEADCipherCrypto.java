@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * A crypto for {@link AEADCipher}.
@@ -35,7 +34,6 @@ public class JinahyaAEADCipherCrypto
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public byte[] encrypt(final byte[] in) {
-        Objects.requireNonNull(in, "in is null");
         initForEncryption();
         final var out = new byte[Math.max(cipher.getOutputSize(in.length), 1)];
         try {
@@ -66,7 +64,6 @@ public class JinahyaAEADCipherCrypto
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public byte[] decrypt(byte[] in) {
-        Objects.requireNonNull(in, "in is null");
         initForDecryption();
         final var out = new byte[Math.max(cipher.getOutputSize(in.length), 1)];
         try {
@@ -97,6 +94,8 @@ public class JinahyaAEADCipherCrypto
                     in,
                     out,
                     inbuf,
+                    0,
+                    inbuf.length,
                     null
             );
         } catch (final InvalidCipherTextException icte) {
@@ -114,6 +113,8 @@ public class JinahyaAEADCipherCrypto
                     in,
                     out,
                     inbuf,
+                    0,
+                    inbuf.length,
                     null
             );
         } catch (final InvalidCipherTextException icte) {

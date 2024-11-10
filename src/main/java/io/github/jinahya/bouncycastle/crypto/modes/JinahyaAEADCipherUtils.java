@@ -1,5 +1,6 @@
 package io.github.jinahya.bouncycastle.crypto.modes;
 
+import org.bouncycastle.crypto.DataLengthException;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.modes.AEADCipher;
 
@@ -19,6 +20,23 @@ import java.util.Objects;
 public final class JinahyaAEADCipherUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Processes and finalizes, using specified cipher, bytes in specified range of specified input array, and set
+     * processed bytes on specified output array starting at specified output position.
+     *
+     * @param cipher the cipher.
+     * @param in     the input array.
+     * @param inoff  the starting position of {@code in}.
+     * @param inlen  the number of bytes to process.
+     * @param out    the output array.
+     * @param outoff the starting position of the {@code out}.
+     * @return the number of processed bytes set on the {@code out}.
+     * @throws DataLengthException        if the output array is too small.
+     * @throws InvalidCipherTextException if the MAC fails to match.
+     * @see AEADCipher#processBytes(byte[], int, int, byte[], int)
+     * @see AEADCipher#doFinal(byte[], int)
+     */
     public static int processBytesAndDoFinal(final AEADCipher cipher, final byte[] in, final int inoff, final int inlen,
                                              final byte[] out, final int outoff)
             throws InvalidCipherTextException {
@@ -41,11 +59,23 @@ public final class JinahyaAEADCipherUtils {
         if (outoff > out.length) {
             throw new IllegalArgumentException("outoff(" + outoff + ") > out.length(" + out.length + ")");
         }
-        final var processed = cipher.processBytes(in, inoff, inlen, out, outoff); // DataLengthException
-        final var finalized = cipher.doFinal(out, outoff + processed); // InvalidCipherTextException
-        return processed + finalized;
+        var outlen = cipher.processBytes(in, inoff, inlen, out, outoff); // DataLengthException
+        outlen += cipher.doFinal(out, outoff + outlen); // InvalidCipherTextException
+        return outlen;
     }
 
+    /**
+     * Processes and finalizes, using specified cipher, all remaining bytes of specified input buffer, and put processed
+     * bytes to specified output buffer.
+     *
+     * @param cipher the cipher.
+     * @param input  the input buffer whose remaining bytes are processed.
+     * @param output the output buffer onto which processed bytes are put.
+     * @return the number of bytes put on the {@code output}.
+     * @throws DataLengthException        if the output buffer is too small.
+     * @throws InvalidCipherTextException if the MAC fails to match.
+     * @see #processBytesAndDoFinal(AEADCipher, byte[], int, int, byte[], int)
+     */
     public static int processBytesAndDoFinal(final AEADCipher cipher, final ByteBuffer input, final ByteBuffer output)
             throws InvalidCipherTextException {
         Objects.requireNonNull(cipher, "cipher is null");
@@ -86,13 +116,24 @@ public final class JinahyaAEADCipherUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
     public static long processAllBytesAndDoFinal(final AEADCipher cipher, final InputStream in, final OutputStream out,
-                                                 final byte[] inbuf, byte[] outbuf)
+                                                 final byte[] inbuf, final int inoff, final int inlen, byte[] outbuf)
             throws IOException, InvalidCipherTextException {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
             throw new IllegalArgumentException("inbuf.length is zero");
+        }
+        if (inoff < 0) {
+            throw new IllegalArgumentException("inoff(" + inoff + ") < 0");
+        }
+        if (inlen <= 0) {
+            throw new IllegalArgumentException("inlen(" + inlen + ") <= 0");
+        }
+        if (inoff + inlen > inbuf.length) {
+            throw new IllegalArgumentException(
+                    "inoff(" + inoff + ") + inlen(" + inlen + ") > inbuf.length(" + inbuf.length + ")"
+            );
         }
         if (outbuf == null || outbuf.length == 0) {
             outbuf = new byte[cipher.getOutputSize(inbuf.length)];

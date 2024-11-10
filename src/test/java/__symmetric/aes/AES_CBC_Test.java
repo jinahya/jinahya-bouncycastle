@@ -50,7 +50,7 @@ class AES_CBC_Test
         @DisplayName("encrypt/decrypt bytes")
         @MethodSource({"getCipherAndParamsArgumentsStream"})
         @ParameterizedTest
-        void __(final BufferedBlockCipher cipher, final CipherParameters params) {
+        void __(final BufferedBlockCipher cipher, final CipherParameters params) throws Exception {
             _BufferedBlockCipher_TestUtils.__(cipher, params);
         }
 

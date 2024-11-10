@@ -100,6 +100,47 @@ public final class JinahyaStreamCipherUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    static long processAllBytes_(final StreamCipher cipher, final InputStream in, final OutputStream out,
+                                 final byte[] inbuf, final int inoff, final int inlen, byte[] outbuf)
+            throws IOException {
+        Objects.requireNonNull(cipher, "cipher is null");
+        Objects.requireNonNull(in, "in is null");
+        Objects.requireNonNull(out, "out is null");
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+            throw new IllegalArgumentException("inbuf.length is zero");
+        }
+        if (inoff < 0) {
+            throw new IllegalArgumentException("inoff(" + inoff + ") < 0");
+        }
+        if (inlen <= 0) {
+            throw new IllegalArgumentException("inlen(" + inlen + ") <= 0");
+        }
+        if (inoff + inlen > inbuf.length) {
+            throw new IllegalArgumentException(
+                    "inoff(" + inoff + ") + inlen(" + inlen + ") > inbuf.length(" + inbuf.length + ")"
+            );
+        }
+        if (outbuf == null || outbuf.length == 0) {
+            outbuf = new byte[inbuf.length];
+        }
+        var bytes = 0L;
+        for (int outlen, r; (r = in.read(inbuf)) != -1; ) {
+            while (true) {
+                try {
+                    outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
+                    out.write(outbuf, 0, outlen);
+                    bytes += outlen;
+                    break;
+                } catch (final DataLengthException dle) {
+                    System.err.println("doubling up outbuf.length(" + outbuf.length + ")");
+                    Arrays.fill(outbuf, (byte) 0);
+                    outbuf = new byte[outbuf.length << 1];
+                }
+            }
+        }
+        return bytes;
+    }
+
     public static long processAllBytes(final StreamCipher cipher, final InputStream in, final OutputStream out,
                                        final byte[] inbuf, byte[] outbuf)
             throws IOException {
