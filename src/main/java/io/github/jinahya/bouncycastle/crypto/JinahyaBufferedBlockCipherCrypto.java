@@ -90,6 +90,8 @@ public class JinahyaBufferedBlockCipherCrypto
 
     @Override
     public int decrypt(final ByteBuffer input, final ByteBuffer output) {
+        Objects.requireNonNull(input, "input is null");
+        Objects.requireNonNull(output, "output is null");
         initForDecryption();
         try {
             return JinahyaBufferedBlockCipherUtils_.processBytesAndDoFinal(
@@ -127,6 +129,11 @@ public class JinahyaBufferedBlockCipherCrypto
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+        Objects.requireNonNull(in, "in is null");
+        Objects.requireNonNull(out, "out is null");
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+            throw new IllegalArgumentException("inbuf.length is zero");
+        }
         initForDecryption();
         try {
             return JinahyaBufferedBlockCipherUtils_.processAllBytesAndDoFinal(

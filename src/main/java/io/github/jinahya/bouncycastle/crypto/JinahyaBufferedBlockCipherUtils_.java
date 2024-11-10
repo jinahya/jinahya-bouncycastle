@@ -2,6 +2,7 @@ package io.github.jinahya.bouncycastle.crypto;
 
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,6 +67,7 @@ final class JinahyaBufferedBlockCipherUtils_ {
         return outlen;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     static long processAllBytesAndDoFinal(final BufferedBlockCipher cipher, final InputStream in,
                                           final OutputStream out, final byte[] inbuf, byte[] outbuf)
             throws IOException, InvalidCipherTextException {
@@ -77,12 +79,16 @@ final class JinahyaBufferedBlockCipherUtils_ {
             outbuf = new byte[cipher.getOutputSize(inbuf.length)];
         }
         var bytes = 0L;
+        if (!(cipher instanceof PaddedBufferedBlockCipher) && in.markSupported()) {
+            final var blocks = JinahyaBlockCipherUtils_.processAllBlocks(cipher.getUnderlyingCipher(), in, out);
+            bytes += (blocks * cipher.getBlockSize());
+        }
         int outlen;
         for (int r; (r = in.read(inbuf)) != -1; ) {
             for (final var uos = cipher.getUpdateOutputSize(r); outbuf.length < uos; ) {
                 System.err.println(
-                        "re-allocating outbuf(" + outbuf.length +
-                                ") for an intermediate update-output-size(" + uos + ")"
+                        "re-allocating outbuf(" + outbuf.length + ")" +
+                                " for an intermediate update-output-size(" + uos + ")"
                 );
                 Arrays.fill(outbuf, (byte) 0);
                 outbuf = new byte[uos];
@@ -92,7 +98,10 @@ final class JinahyaBufferedBlockCipherUtils_ {
             bytes += outlen;
         }
         for (final var os = cipher.getOutputSize(0); outbuf.length < os; ) {
-            System.err.println("re-allocating outbuf(" + outbuf.length + ") for the final output-size(" + os + ")");
+            System.err.println(
+                    "re-allocating outbuf(" + outbuf.length + ")" +
+                            " for the final output-size(" + os + ")"
+            );
             Arrays.fill(outbuf, (byte) 0);
             outbuf = new byte[os];
         }
