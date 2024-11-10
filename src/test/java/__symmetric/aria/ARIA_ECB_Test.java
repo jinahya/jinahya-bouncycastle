@@ -32,21 +32,21 @@ import java.util.stream.Stream;
 class ARIA_ECB_Test
         extends ARIA__Test {
 
-    private static Stream<Arguments> getArgumentsStream() {
-        return _ECB_Tests.getArgumentsStream(
-                ARIA__Test::getKeySizeStream,
-                ARIAEngine::new
+    private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
+        return _ECB_Tests.getCipherAndParamsArgumentsStream(
+                ARIAEngine::new,
+                ARIA__Test::getKeySizeStream
         );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @MethodSource({"getArgumentsStream"})
+    @MethodSource({"getCipherAndParamsArgumentsStream"})
     @ParameterizedTest
     void __(final BufferedBlockCipher cipher, final CipherParameters params) throws Exception {
         _BufferedBlockCipher_TestUtils.__(cipher, params);
     }
 
-    @MethodSource({"getArgumentsStream"})
+    @MethodSource({"getCipherAndParamsArgumentsStream"})
     @ParameterizedTest
     void __(final BufferedBlockCipher cipher, final CipherParameters params, @TempDir final File dir)
             throws Exception {

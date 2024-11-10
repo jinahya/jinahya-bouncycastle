@@ -34,10 +34,17 @@ class DESede_ECB_Test
     @Nested
     class LowLevelApiTest {
 
+//        private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
+//            return _ECB_Tests.getArgumentsStream(
+//                    DESede__Test::getKeySizeStream,
+//                    DESedeEngine::new
+//            );
+//        }
+
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _ECB_Tests.getArgumentsStream(
-                    DESede__Test::getKeySizeStream,
-                    DESedeEngine::new
+            return _ECB_Tests.getCipherAndParamsArgumentsStream(
+                    DESedeEngine::new,
+                    DESede__Test::getKeySizeStream
             );
         }
 

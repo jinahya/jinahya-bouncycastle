@@ -21,21 +21,21 @@ import java.util.stream.Stream;
 class LEA_ECB_Test
         extends LEA__Test {
 
-    private static Stream<Arguments> getArgumentsStream() {
-        return _ECB_Tests.getArgumentsStream(
-                LEA__Test::getKeySizeStream,
-                LEAEngine::new
+    private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
+        return _ECB_Tests.getCipherAndParamsArgumentsStream(
+                LEAEngine::new,
+                LEA__Test::getKeySizeStream
         );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @MethodSource({"getArgumentsStream"})
+    @MethodSource({"getCipherAndParamsArgumentsStream"})
     @ParameterizedTest
     void __(final BufferedBlockCipher cipher, final CipherParameters params) throws Exception {
         _BufferedBlockCipher_TestUtils.__(cipher, params);
     }
 
-    @MethodSource({"getArgumentsStream"})
+    @MethodSource({"getCipherAndParamsArgumentsStream"})
     @ParameterizedTest
     void __(final BufferedBlockCipher cipher, final CipherParameters params, @TempDir final File dir) throws Exception {
         _BufferedBlockCipher_TestUtils.__(cipher, params, dir);

@@ -28,9 +28,9 @@ class SEED_ECB_Test
         extends SEED__Test {
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _ECB_Tests.getArgumentsStream(
-                SEED__Test::getKeySizeStream,
-                SEEDEngine::new
+        return _ECB_Tests.getCipherAndParamsArgumentsStream(
+                SEEDEngine::new,
+                SEED__Test::getKeySizeStream
         );
     }
 

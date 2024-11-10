@@ -33,9 +33,9 @@ class AES_ECB_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _ECB_Tests.getArgumentsStream(
-                    AES__Test::getKeySizeStream,
-                    AESEngine::newInstance
+            return _ECB_Tests.getCipherAndParamsArgumentsStream(
+                    AESEngine::newInstance,
+                    AES__Test::getKeySizeStream
             );
         }
 

@@ -43,7 +43,8 @@ class DESede_CBC_Test
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
             return _CBC_Tests.getCipherAndParamsArgumentsStream(
-                    DESedeEngine::new, DESede__Test::getKeySizeStream
+                    DESedeEngine::new,
+                    DESede__Test::getKeySizeStream
             );
         }
 
