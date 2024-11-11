@@ -2,7 +2,7 @@ package __asymmetric;
 
 import java.util.stream.IntStream;
 
-public final class _RSA_Tests {
+public final class _RSA__Constants {
 
     public static final String ALGORITHM = "RSA";
 
@@ -13,7 +13,7 @@ public final class _RSA_Tests {
         );
     }
 
-    private _RSA_Tests() {
+    private _RSA__Constants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

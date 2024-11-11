@@ -1,11 +1,15 @@
 package __asymmetric.rsa;
 
-import __asymmetric._RSA_Tests;
+import __asymmetric._RSA__Constants;
 import __symmetric._ECB_Constants;
 import __symmetric._JCEProviderTest;
 import _javax.security._Random_TestUtils;
 import _javax.security._Signature_Tests;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.crypto.encodings.PKCS1Encoding;
+import org.bouncycastle.crypto.engines.RSAEngine;
+import org.bouncycastle.crypto.generators.RSAKeyPairGenerator;
+import org.bouncycastle.crypto.params.RSAKeyGenerationParameters;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,9 +19,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.crypto.Cipher;
+import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -35,6 +41,29 @@ class RSA_ECB_Test
 
         @Test
         void __() throws Exception {
+            // https://github.com/anonrig/bouncycastle-implementations/blob/master/rsa.java
+            // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
+            // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
+            final var generator = new RSAKeyPairGenerator();
+            final var params = new RSAKeyGenerationParameters(
+                    new BigInteger("10001", 16),
+                    SecureRandom.getInstance("SHA1PRNG"),
+                    4096,
+                    80
+            );
+            generator.init(params);
+            final var keyPair = generator.generateKeyPair();
+            final var cipher = new PKCS1Encoding(new RSAEngine());
+            final var plain = _Random_TestUtils.newRandomBytes(
+                    ThreadLocalRandom.current().nextInt((4086 >> 3) - 11 + 1));
+            // ---------------------------------------------------------------------------------------------------------
+            cipher.init(true, keyPair.getPublic());
+            final var encrypted = cipher.processBlock(plain, 0, plain.length);
+            // ---------------------------------------------------------------------------------------------------------
+            cipher.init(false, keyPair.getPrivate());
+            final var decrypted = cipher.processBlock(encrypted, 0, encrypted.length);
+            // ---------------------------------------------------------------------------------------------------------
+            assertThat(decrypted).isEqualTo(plain);
         }
     }
 
@@ -68,7 +97,7 @@ class RSA_ECB_Test
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("PKCS1Padding")
                         .map(p -> ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
-                        .flatMap(t -> _RSA_Tests.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
+                        .flatMap(t -> _RSA__Constants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 
             private static final Map<Integer, Integer> M_LEN = new HashMap<>() {{
@@ -113,7 +142,7 @@ class RSA_ECB_Test
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("OAEPWithSHA-1AndMGF1Padding")
                         .map(p -> ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
-                        .flatMap(t -> _RSA_Tests.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
+                        .flatMap(t -> _RSA__Constants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 
             private static final Map<Integer, Integer> M_LEN = new HashMap<>() {{
@@ -174,7 +203,7 @@ class RSA_ECB_Test
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("OAEPWithSHA-256AndMGF1Padding")
                         .map(p -> ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
-                        .flatMap(t -> _RSA_Tests.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
+                        .flatMap(t -> _RSA__Constants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 
             private static final Map<Integer, Integer> M_LEN = new HashMap<>() {{
