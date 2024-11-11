@@ -3,7 +3,7 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import io.github.jinahya.bouncycastle.crypto.JinahyaBufferedBlockCipherCrypto;
 import io.github.jinahya.bouncycastle.crypto.JinahyaCrypto;
 import io.github.jinahya.bouncycastle.crypto.modes.JinahyaAEADCipherCrypto;
-import org.bouncycastle.crypto.engines.ARIAEngine;
+import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.paddings.PKCS7Padding;
@@ -17,18 +17,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Utilities for the {@value _ARIA__Constants#ALGORITHM} algorithm.
+ * Utilities for the {@value _AES__Constants#ALGORITHM} algorithm.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public final class JinahyaARIAUtils {
+public final class JinahyaAESUtils {
 
     // ----------------------------------------------------------------------------------------------- /CBC/PKCS7Padding
     private static JinahyaCrypto _CBC_PKCS7Padding(final byte[] key, final byte[] iv) {
-        _ARIA__Utils.requireValidKey(key);
-        _ARIA__Utils.requireValidIv(iv);
+        _AES__Utils.requireValidKey(key);
+        _AES__Utils.requireValidIv(iv);
         final var cipher = new PaddedBufferedBlockCipher(
-                CBCBlockCipher.newInstance(new ARIAEngine()),
+                CBCBlockCipher.newInstance(new AESEngine()),
                 new PKCS7Padding()
         );
         final var params = new ParametersWithIV(
@@ -104,10 +104,10 @@ public final class JinahyaARIAUtils {
 
     // -------------------------------------------------------------------------------------------------- /GCM/NoPadding
     private static JinahyaCrypto _GCM_NoPadding(final byte[] key, final int tLen, final byte[] iv, final byte[] aad) {
-        _ARIA__Utils.requireValidKey(key);
+        _AES__Utils.requireValidKey(key);
         __GCM_Utils.requireValid_tLen_GCM(tLen);
         __GCM_Utils.requireValid_iv_GCM(iv);
-        final var cipher = GCMBlockCipher.newInstance(new ARIAEngine());
+        final var cipher = GCMBlockCipher.newInstance(new AESEngine());
         final var params = new AEADParameters(
                 new KeyParameter(key),
                 tLen,
@@ -194,7 +194,7 @@ public final class JinahyaARIAUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private JinahyaARIAUtils() {
+    private JinahyaAESUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

@@ -1,8 +1,10 @@
 package io.github.jinahya.bouncycastle.miscellaneous;
 
+import _javax.security._Random_TestUtils;
+
 import java.util.concurrent.ThreadLocalRandom;
 
-final class _ARIA__Utils_TestUtils {
+final class _ARIA__TestUtils {
 
     static int randomKeyBytes() {
         return _ARIA__Constants.ALLOWED_KEY_BYTES_LIST.get(
@@ -10,7 +12,11 @@ final class _ARIA__Utils_TestUtils {
         );
     }
 
-    private _ARIA__Utils_TestUtils() {
+    static byte[] randomKey() {
+        return _Random_TestUtils.newRandomBytes(randomKeyBytes());
+    }
+
+    private _ARIA__TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

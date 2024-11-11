@@ -3,27 +3,22 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Utilities for the {@value _ARIA__Constants#ALGORITHM} algorithm.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
-final class _ARIA__Constants {
+final class _AES__Constants {
 
     /**
      * The name of the algorithm. The value is {@value}.
      */
-    static final String ALGORITHM = "ARIA";
+    static final String ALGORITHM = "AES";
 
     /**
-     * The block size of the {@value _ARIA__Constants#ALGORITHM} algorithm. The value is {@value}.
+     * The block size of the {@value #ALGORITHM} algorithm. The value is {@value}.
      *
      * @see #BLOCK_BYTES
      */
     static final int BLOCK_SIZE = 128;
 
     /**
-     * The block size, in bytes, of the {@value _ARIA__Constants#ALGORITHM} algorithm. The value is {@value}.
+     * The block size, in bytes, of the {@value #ALGORITHM} algorithm. The value is {@value}.
      *
      * @see #BLOCK_SIZE
      */
@@ -32,7 +27,7 @@ final class _ARIA__Constants {
     /**
      * A list of allowed key sizes.
      */
-    static final List<Integer> ALLOWED_KEY_SIZES_LIST = List.of(
+    static final List<Integer> ALLOWED_KEY_SIZE_LIST = List.of(
             128,
             192,
             256
@@ -41,13 +36,13 @@ final class _ARIA__Constants {
     /**
      * A list of allowed key sizes, in bytes.
      */
-    static final List<Integer> ALLOWED_KEY_BYTES_LIST =
-            ALLOWED_KEY_SIZES_LIST.stream()
+    public static final List<Integer> ALLOWED_KEY_BYTES_LIST =
+            _AES__Constants.ALLOWED_KEY_SIZE_LIST.stream()
                     .map(ks -> ks >> 3)
                     .collect(Collectors.toUnmodifiableList());
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _ARIA__Constants() {
+    private _AES__Constants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

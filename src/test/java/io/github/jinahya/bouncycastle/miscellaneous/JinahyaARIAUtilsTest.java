@@ -14,36 +14,36 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JinahyaARIAUtilsTest {
 
-    @DisplayName("_CBC_PKCS5Padding")
+    @DisplayName("_CBC_PKCS7Padding")
     @Nested
-    class _CBC_PKCS5PaddingTest {
+    class _CBC_PKCS7PaddingTest {
 
         @Test
-        void _CBC_PKCS5Padding_bytes() {
+        void _CBC_PKCS7Padding_bytes() {
             // ------------------------------------------------------------------------------------------------------- given
-            final var key = _Random_TestUtils.newRandomBytes(_ARIA__Constants.BLOCK_BYTES);
-            final var iv = _Random_TestUtils.newRandomBytes(_ARIA__Constants.BLOCK_BYTES);
+            final var key = _ARIA__TestUtils.randomKey();
+            final var iv = __CBC_TestUtils.newRandomIv(_ARIA__Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // -------------------------------------------------------------------------------------------------------- when
-            final var encrypted = JinahyaARIAUtils.encrypt_CBC_PKCS5Padding(key, iv, plain);
-            final var decrypted = JinahyaARIAUtils.decrypt_CBC_PKCS5Padding(key, iv, encrypted);
+            final var encrypted = JinahyaARIAUtils.encrypt_CBC_PKCS7Padding(key, iv, plain);
+            final var decrypted = JinahyaARIAUtils.decrypt_CBC_PKCS7Padding(key, iv, encrypted);
             // -------------------------------------------------------------------------------------------------------- then
             assertThat(decrypted).isEqualTo(plain);
         }
 
         @Test
-        void _CBC_PKCS5Padding_stream() throws IOException {
+        void _CBC_PKCS7Padding_stream() throws IOException {
             // ------------------------------------------------------------------------------------------------------- given
-            final var key = _Random_TestUtils.newRandomBytes(_ARIA__Constants.BLOCK_BYTES);
-            final var iv = _Random_TestUtils.newRandomBytes(_ARIA__Constants.BLOCK_BYTES);
+            final var key = _ARIA__TestUtils.randomKey();
+            final var iv = __CBC_TestUtils.newRandomIv(_ARIA__Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1048576));
             // -------------------------------------------------------------------------------------------------------- when
             final byte[] encrypted;
             {
                 final var in = new ByteArrayInputStream(plain);
                 final var out = new ByteArrayOutputStream();
-                final var inlen = ThreadLocalRandom.current().nextInt(8192) + 1;
-                final var bytes = JinahyaARIAUtils.encrypt_CBC_PKCS5Padding(key, iv, in, out, inlen);
+                final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
+                final var bytes = JinahyaARIAUtils.encrypt_CBC_PKCS7Padding(key, iv, in, out, inbuf);
                 assert bytes >= plain.length;
                 encrypted = out.toByteArray();
             }
@@ -51,8 +51,8 @@ class JinahyaARIAUtilsTest {
             {
                 final var in = new ByteArrayInputStream(encrypted);
                 final var out = new ByteArrayOutputStream();
-                final var inlen = ThreadLocalRandom.current().nextInt(8192) + 1;
-                final var bytes = JinahyaARIAUtils.decrypt_CBC_PKCS5Padding(key, iv, in, out, inlen);
+                final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
+                final var bytes = JinahyaARIAUtils.decrypt_CBC_PKCS7Padding(key, iv, in, out, inbuf);
                 assert bytes <= encrypted.length;
                 decrypted = out.toByteArray();
             }
@@ -68,16 +68,10 @@ class JinahyaARIAUtilsTest {
         @Test
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _Random_TestUtils.newRandomBytes(_ARIA__Constants.BLOCK_BYTES);
-            final var tLen = __GCM_Constants.ALLOWED_T_LEN_LIST_GCM.get(
-                    ThreadLocalRandom.current().nextInt(__GCM_Constants.ALLOWED_T_LEN_LIST_GCM.size())
-            );
-            final var iv = _Random_TestUtils.newRandomBytes(
-                    ThreadLocalRandom.current().nextInt(128) + __GCM_Constants.IV_SIZE_GCM_MINIMUM
-            );
-            final var aad = ThreadLocalRandom.current().nextBoolean()
-                    ? null
-                    : _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1024));
+            final var key = _ARIA__TestUtils.randomKey();
+            final var tLen = __GCM_TestUtils.randomTLen();
+            final var iv = __GCM_TestUtils.randomIv();
+            final var aad = __GCM_TestUtils.randomAad();
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
             final var encrypted = JinahyaARIAUtils.encrypt_GCM_NoPadding(key, tLen, iv, aad, plain);
@@ -89,24 +83,18 @@ class JinahyaARIAUtilsTest {
         @Test
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _Random_TestUtils.newRandomBytes(_ARIA__Constants.BLOCK_BYTES);
-            final var tLen = __GCM_Constants.ALLOWED_T_LEN_LIST_GCM.get(
-                    ThreadLocalRandom.current().nextInt(__GCM_Constants.ALLOWED_T_LEN_LIST_GCM.size())
-            );
-            final var iv = _Random_TestUtils.newRandomBytes(
-                    ThreadLocalRandom.current().nextInt(128) + __GCM_Constants.IV_SIZE_GCM_MINIMUM
-            );
-            final var aad = ThreadLocalRandom.current().nextBoolean()
-                    ? null
-                    : _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1024));
-            final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
+            final var key = _ARIA__TestUtils.randomKey();
+            final var tLen = __GCM_TestUtils.randomTLen();
+            final var iv = __GCM_TestUtils.randomIv();
+            final var aad = __GCM_TestUtils.randomAad();
+            final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1048576));
             // ---------------------------------------------------------------------------------------------------- when
             final byte[] encrypted;
             {
                 final var in = new ByteArrayInputStream(plain);
                 final var out = new ByteArrayOutputStream();
-                final var inlen = ThreadLocalRandom.current().nextInt(8192) + 1;
-                final var bytes = JinahyaARIAUtils.encrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inlen);
+                final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
+                final var bytes = JinahyaARIAUtils.encrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inbuf);
                 assert bytes >= plain.length;
                 encrypted = out.toByteArray();
             }
@@ -114,8 +102,8 @@ class JinahyaARIAUtilsTest {
             {
                 final var in = new ByteArrayInputStream(encrypted);
                 final var out = new ByteArrayOutputStream();
-                final var inlen = ThreadLocalRandom.current().nextInt(8192) + 1;
-                final var bytes = JinahyaARIAUtils.decrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inlen);
+                final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
+                final var bytes = JinahyaARIAUtils.decrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inbuf);
                 assert bytes <= encrypted.length;
                 decrypted = out.toByteArray();
             }
