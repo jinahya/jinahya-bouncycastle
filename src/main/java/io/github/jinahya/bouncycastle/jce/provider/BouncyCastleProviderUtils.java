@@ -4,7 +4,7 @@ import java.security.Provider;
 import java.security.Security;
 
 /**
- * Utilities related to the {@value BouncyCastleProviderUtils#BOUNCY_CASTLE_PROVIDER_CLASS_NAME} class.
+ * Utilities related to the {@link org.bouncycastle.jce.provider.BouncyCastleProvider} class.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -38,6 +38,10 @@ public final class BouncyCastleProviderUtils {
     }
 
     // ------------------------------------------------------------------------------------------------------------ name
+
+    /**
+     * The name of the Bouncy Castle provider. The value is {@value}.
+     */
     public static final String BOUNCY_CASTLE_PROVIDER_NAME = "BC";
 
     static {

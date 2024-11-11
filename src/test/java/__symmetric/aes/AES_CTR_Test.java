@@ -1,6 +1,7 @@
 package __symmetric.aes;
 
-import __symmetric._CTR_Tests;
+import __symmetric._CTR_Constants;
+import __symmetric._CTR_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -42,7 +43,7 @@ class AES_CTR_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CTR_Tests.getCipherAndParamsArgumentsStream(
+            return _CTR_TestUtils.getCipherAndParamsArgumentsStream(
                     AES__Test::getKeySizeStream,
                     AESEngine::newInstance
             );
@@ -69,7 +70,7 @@ class AES_CTR_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _CTR_Tests.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _CTR_Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> {
                         return Arguments.of(t, ks);
                     }));

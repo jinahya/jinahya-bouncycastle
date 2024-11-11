@@ -1,6 +1,7 @@
 package __symmetric.seed;
 
-import __symmetric._CBC_Tests;
+import __symmetric._CBC_Constants;
+import __symmetric._CBC_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -134,7 +135,7 @@ class SEED_CBC_Test
         }
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CBC_Tests.getCipherAndParamsArgumentsStream(
+            return _CBC_TestUtils.getCipherAndParamsArgumentsStream(
                     SEEDEngine::new,
                     SEED__Test::getKeySizeStream
             );
@@ -165,7 +166,7 @@ class SEED_CBC_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("PKCS5Padding")
-                    .map(p -> ALGORITHM + '/' + _CBC_Tests.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _CBC_Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 

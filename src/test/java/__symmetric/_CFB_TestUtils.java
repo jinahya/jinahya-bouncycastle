@@ -19,9 +19,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
-public final class _CFB_Tests {
-
-    public static final String MODE = "CFB";
+public final class _CFB_TestUtils {
 
     public static IntStream getBitWidthStream() {
         return IntStream.of(
@@ -33,7 +31,7 @@ public final class _CFB_Tests {
     }
 
     public static String mode(final int bitWidth) {
-        return MODE + bitWidth;
+        return _CFB_Constants.MODE + bitWidth;
     }
 
     public static Stream<Arguments> getKeySizeAndBitWidthArgumentsStream(
@@ -82,7 +80,7 @@ public final class _CFB_Tests {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CFB_Tests() {
+    private _CFB_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

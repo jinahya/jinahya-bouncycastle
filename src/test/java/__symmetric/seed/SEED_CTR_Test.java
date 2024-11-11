@@ -1,6 +1,7 @@
 package __symmetric.seed;
 
-import __symmetric._CTR_Tests;
+import __symmetric._CTR_Constants;
+import __symmetric._CTR_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
@@ -33,7 +34,7 @@ class SEED_CTR_Test
         extends SEED__Test {
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _CTR_Tests.getCipherAndParamsArgumentsStream(
+        return _CTR_TestUtils.getCipherAndParamsArgumentsStream(
                 SEED__Test::getKeySizeStream,
                 SEEDEngine::new
         );
@@ -63,7 +64,7 @@ class SEED_CTR_Test
     @ParameterizedTest
     void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _CTR_Tests.MODE + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _CTR_Constants.MODE + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -85,7 +86,7 @@ class SEED_CTR_Test
     @ParameterizedTest
     void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _CTR_Tests.MODE + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _CTR_Constants.MODE + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);

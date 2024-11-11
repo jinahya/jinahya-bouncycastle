@@ -1,6 +1,6 @@
 package __symmetric.lea;
 
-import __symmetric._CFB_Tests;
+import __symmetric._CFB_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -32,7 +32,7 @@ class LEA_CFB_Test
     }
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _CFB_Tests.getCipherAndParamsArgumentsStream(
+        return _CFB_TestUtils.getCipherAndParamsArgumentsStream(
                 LEA__Test::getKeySizeStream,
                 LEAEngine::new
         );

@@ -31,7 +31,8 @@ public final class JinahyaStreamCipherUtils {
         }
         if (inoff + inlen > in.length) {
             throw new IllegalArgumentException(
-                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")");
+                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")"
+            );
         }
         for (var out = new byte[in.length == 0 ? 1 : in.length]; ; ) {
             try {
@@ -44,6 +45,16 @@ public final class JinahyaStreamCipherUtils {
         }
     }
 
+    /**
+     * Process, using specified cipher, remaining bytes of specified input buffer, and put processed bytes to specified
+     * output buffer.
+     *
+     * @param cipher the cipher.
+     * @param input  the input buffer whose remaining bytes are processed.
+     * @param output the output buffer onto which processed bytes are put.
+     * @return the number of byte put on the {@code output}.
+     * @throws java.nio.BufferOverflowException when {@code output.remaining()} is not enough.
+     */
     public static int processBytes(final StreamCipher cipher, final ByteBuffer input, final ByteBuffer output) {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(input, "input is null");

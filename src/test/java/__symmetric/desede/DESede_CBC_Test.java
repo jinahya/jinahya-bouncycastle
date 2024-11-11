@@ -1,6 +1,7 @@
 package __symmetric.desede;
 
-import __symmetric._CBC_Tests;
+import __symmetric._CBC_Constants;
+import __symmetric._CBC_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -42,7 +43,7 @@ class DESede_CBC_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CBC_Tests.getCipherAndParamsArgumentsStream(
+            return _CBC_TestUtils.getCipherAndParamsArgumentsStream(
                     DESedeEngine::new,
                     DESede__Test::getKeySizeStream
             );
@@ -71,7 +72,7 @@ class DESede_CBC_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("PKCS5Padding")
-                    .map(p -> ALGORITHM + '/' + _CBC_Tests.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _CBC_Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 

@@ -1,46 +1,53 @@
 package __symmetric;
 
 import _javax.security._Random_TestUtils;
-import _org.bouncycastle.crypto.paddings._BlockCipherPadding_TestUtils;
+import _org.bouncycastle.crypto._CipherParameters_TestUtils;
 import _org.bouncycastle.crypto.paddings._PaddedBufferedBlockCipher_TestUtils;
-import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BlockCipher;
+import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.ParametersWithIV;
+import org.junit.jupiter.api.Named;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-@Slf4j
-public final class _ECB_Tests {
+import static _org.bouncycastle.crypto.paddings._BlockCipherPadding_TestUtils.getBlockCipherPaddingStream;
 
-    public static final String MODE = "ECB";
+@Slf4j
+public final class _CBC_TestUtils {
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream(
             final Supplier<? extends BlockCipher> cipherSupplier,
             final Supplier<? extends IntStream> keySizeStreamSupplier) {
         Objects.requireNonNull(keySizeStreamSupplier, "keySizeStreamSupplier is null");
         Objects.requireNonNull(cipherSupplier, "cipherSupplier is null");
-        return _BlockCipherPadding_TestUtils.getBlockCipherPaddingStream()
+        return getBlockCipherPaddingStream()
                 .flatMap(p -> keySizeStreamSupplier.get().mapToObj(ks -> {
                     final var cipher = new PaddedBufferedBlockCipher(
-                            cipherSupplier.get(),
+                            CBCBlockCipher.newInstance(cipherSupplier.get()),
                             p
                     );
                     final var key = _Random_TestUtils.newRandomBytes(ks >> 3);
-                    final var params = new KeyParameter(key);
+                    final var iv = _Random_TestUtils.newRandomBytes(cipher.getBlockSize());
+                    final var params = ThreadLocalRandom.current().nextBoolean()
+                            ? new KeyParameter(key)
+                            : new ParametersWithIV(new KeyParameter(key), iv);
                     return Arguments.of(
-                            _PaddedBufferedBlockCipher_TestUtils.named(cipher),
-                            _KeyParameters_TestUtils.named(params)
+                            Named.of(_PaddedBufferedBlockCipher_TestUtils.cipherName(cipher), cipher),
+                            Named.of(_CipherParameters_TestUtils.paramsName(params), params)
                     );
                 }));
     }
 
-    private _ECB_Tests() {
+    // -----------------------------------------------------------------------------------------------------------------
+    private _CBC_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

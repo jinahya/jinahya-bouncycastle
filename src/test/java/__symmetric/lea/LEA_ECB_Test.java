@@ -1,6 +1,6 @@
 package __symmetric.lea;
 
-import __symmetric._ECB_Tests;
+import __symmetric._ECB_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ class LEA_ECB_Test
         extends LEA__Test {
 
     private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-        return _ECB_Tests.getCipherAndParamsArgumentsStream(
+        return _ECB_TestUtils.getCipherAndParamsArgumentsStream(
                 LEAEngine::new,
                 LEA__Test::getKeySizeStream
         );

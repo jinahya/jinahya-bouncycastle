@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
-public final class _GCM_Tests {
+public final class _GCM_TestUtils {
 
     public static int newRandomMacSize() {
         // https://github.com/bcgit/bc-lts-java/blob/d12b4c076c57eba0d226d422fd7ad2669758d876/core/src/main/java/org/bouncycastle/crypto/modes/GCMBlockCipher.java#L141
@@ -57,8 +57,6 @@ public final class _GCM_Tests {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static final String MODE = "GCM";
-
     public static IntStream getTLenStream() {
         return IntStream.of(
                 128, 120, 112, 104, 96,
@@ -67,7 +65,7 @@ public final class _GCM_Tests {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _GCM_Tests() {
+    private _GCM_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

@@ -1,6 +1,6 @@
 package __symmetric.aria;
 
-import __symmetric._CTR_Tests;
+import __symmetric._CTR_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ class ARIA_CTR_Test
         extends ARIA__Test {
 
     private static Stream<Arguments> getCipherAndParamsArgumentsStream_() {
-        return _CTR_Tests.getCipherAndParamsArgumentsStream(
+        return _CTR_TestUtils.getCipherAndParamsArgumentsStream(
                 ARIA__Test::getKeySizeStream,
                 ARIAEngine::new
         );

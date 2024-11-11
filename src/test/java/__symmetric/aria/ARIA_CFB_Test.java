@@ -1,6 +1,7 @@
 package __symmetric.aria;
 
-import __symmetric._CFB_Tests;
+import __symmetric._CFB_Constants;
+import __symmetric._CFB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
@@ -40,7 +41,7 @@ class ARIA_CFB_Test
     }
 
     private static Stream<Arguments> getArgumentsStream() {
-        return _CFB_Tests.getCipherAndParamsArgumentsStream(
+        return _CFB_TestUtils.getCipherAndParamsArgumentsStream(
                 ARIA__Test::getKeySizeStream,
                 ARIAEngine::new
         );
@@ -66,7 +67,7 @@ class ARIA_CFB_Test
     @ParameterizedTest
     void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _CFB_Tests.MODE + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _CFB_Constants.MODE + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -89,7 +90,7 @@ class ARIA_CFB_Test
     @ParameterizedTest
     void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _CFB_Tests.MODE + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _CFB_Constants.MODE + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -109,7 +110,7 @@ class ARIA_CFB_Test
 
     // -----------------------------------------------------------------------------------------------------------------
     private static Stream<Arguments> getKeySizeAndBitWidthArgumentsStream() {
-        return _CFB_Tests.getBitWidthStream().mapToObj(bw -> {
+        return _CFB_TestUtils.getBitWidthStream().mapToObj(bw -> {
             return getKeySizeStream()
                     .mapToObj(ks -> Arguments.of(
                             Named.of("bitWidth", bw),
@@ -123,7 +124,7 @@ class ARIA_CFB_Test
     @ParameterizedTest
     void __(final int bitWidth, final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _CFB_Tests.mode(bitWidth) + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _CFB_TestUtils.mode(bitWidth) + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(
@@ -149,7 +150,7 @@ class ARIA_CFB_Test
     @ParameterizedTest
     void __(final int bitWidth, final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _CFB_Tests.mode(bitWidth) + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + _CFB_TestUtils.mode(bitWidth) + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(

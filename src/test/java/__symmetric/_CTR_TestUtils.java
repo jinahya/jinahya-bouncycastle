@@ -16,9 +16,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
-public final class _CTR_Tests {
-
-    public static final String MODE = "CTR";
+public final class _CTR_TestUtils {
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream(
             final Supplier<? extends IntStream> keyStreamSupplier,
@@ -36,7 +34,7 @@ public final class _CTR_Tests {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CTR_Tests() {
+    private _CTR_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

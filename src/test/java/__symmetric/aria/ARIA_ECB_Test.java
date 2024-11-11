@@ -1,6 +1,7 @@
 package __symmetric.aria;
 
-import __symmetric._ECB_Tests;
+import __symmetric._ECB_Constants;
+import __symmetric._ECB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
@@ -33,7 +34,7 @@ class ARIA_ECB_Test
         extends ARIA__Test {
 
     private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-        return _ECB_Tests.getCipherAndParamsArgumentsStream(
+        return _ECB_TestUtils.getCipherAndParamsArgumentsStream(
                 ARIAEngine::new,
                 ARIA__Test::getKeySizeStream
         );
@@ -63,7 +64,7 @@ class ARIA_ECB_Test
                                 "PKCS5Padding"
                         )
                         .map(p -> {
-                            return ALGORITHM + '/' + _ECB_Tests.MODE + '/' + p;
+                            return ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p;
                         })
                         .map(t -> {
                             return Arguments.of(

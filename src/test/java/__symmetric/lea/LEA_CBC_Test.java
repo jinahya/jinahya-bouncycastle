@@ -1,6 +1,6 @@
 package __symmetric.lea;
 
-import __symmetric._CBC_Tests;
+import __symmetric._CBC_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.crypto.paddings._BlockCipherPadding_TestUtils;
@@ -128,7 +128,7 @@ class LEA_CBC_Test
         }
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-            return _CBC_Tests.getCipherAndParamsArgumentsStream(
+            return _CBC_TestUtils.getCipherAndParamsArgumentsStream(
                     LEAEngine::new, LEA__Test::getKeySizeStream
             );
         }

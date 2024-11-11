@@ -1,6 +1,7 @@
 package __symmetric.aes;
 
-import __symmetric._CFB_Tests;
+import __symmetric._CFB_Constants;
+import __symmetric._CFB_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -43,7 +44,7 @@ class AES_CFB_Test
     class LowLevelApiTest {
 
         private static Stream<Arguments> getCipherAndParamsArgumentsStream_() {
-            return _CFB_Tests.getCipherAndParamsArgumentsStream(
+            return _CFB_TestUtils.getCipherAndParamsArgumentsStream(
                     AES__Test::getKeySizeStream,
                     AESEngine::newInstance
             );
@@ -70,7 +71,7 @@ class AES_CFB_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _CFB_Tests.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + _CFB_Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> {
                         return Arguments.of(t, ks);
                     }));
@@ -107,8 +108,8 @@ class AES_CFB_Test
         }
 
         private static Stream<Arguments> getTransformationWithBitWidthAndKeySizeArgumentsStream() {
-            return _CFB_Tests.getBitWidthStream()
-                    .mapToObj(_CFB_Tests::mode)
+            return _CFB_TestUtils.getBitWidthStream()
+                    .mapToObj(_CFB_TestUtils::mode)
                     .flatMap(m -> {
                         return Stream.of("NoPadding")
                                 .map(p -> ALGORITHM + '/' + m + '/' + p);

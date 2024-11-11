@@ -18,9 +18,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
-public final class _CCM_Tests {
-
-    public static final String MODE = "CCM";
+public final class _CCM_TestUtils {
 
     public static IntStream getBouncyCastleTagLengthStream() {
         return IntStream.of(
@@ -82,7 +80,7 @@ public final class _CCM_Tests {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CCM_Tests() {
+    private _CCM_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }
