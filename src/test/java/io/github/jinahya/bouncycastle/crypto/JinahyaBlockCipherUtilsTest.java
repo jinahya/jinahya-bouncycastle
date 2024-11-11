@@ -12,9 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class JinahyaBlockCipherUtilsTest {
 
-    public static void __(final BlockCipher cipher, final CipherParameters params) throws IOException {
-        final var plain = new byte[ThreadLocalRandom.current().nextInt(8192)];
-        // -------------------------------------------------------------------------------------------------------------
+    private static void __array(final BlockCipher cipher, final CipherParameters params, final byte[] plain)
+            throws IOException {
+        // ----------------------------------------------------------------------------------------------------- encrypt
         {
             cipher.init(true, params);
             final var in = new ByteArrayInputStream(plain);
@@ -33,5 +33,10 @@ public class JinahyaBlockCipherUtilsTest {
             }
             assertThat(bytes.length / cipher.getBlockSize()).isEqualTo(blocks);
         }
+    }
+
+    public static void __(final BlockCipher cipher, final CipherParameters params) throws IOException {
+        final var plain = new byte[ThreadLocalRandom.current().nextInt(8192)];
+        __array(cipher, params, plain);
     }
 }
