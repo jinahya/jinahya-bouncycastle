@@ -48,8 +48,6 @@ There are three layers of APIs you can choose to use.
 
 The lowest layer, of this module, which is the closest to the Bouncy Castle's low-level lightweight API.
 
-e.g.
-
 ```java
 class Test {
 
