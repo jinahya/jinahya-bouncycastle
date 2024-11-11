@@ -15,21 +15,24 @@ is (based|verified) (on|against)
 
 ### Java
 
-Requires Java 21 for building, Java 11 for running.
+Requires Java `21` for building, Java `11` for running.
 
-```commandline
- $ grep '<maven.compiler' pom.xml
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-    <maven.compiler.release>${maven.compiler.target}</maven.compiler.release>
-    <maven.compiler.testSource>21</maven.compiler.testSource>
-    <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
-    <maven.compiler.testRelease>${maven.compiler.testTarget}</maven.compiler.testRelease>
+```xml
+
+<properties>
+  <maven.compiler.source>11</maven.compiler.source>
+  <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+  <maven.compiler.release>${maven.compiler.target}</maven.compiler.release>
+  <maven.compiler.testSource>21</maven.compiler.testSource>
+  <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
+  <maven.compiler.testRelease>${maven.compiler.testTarget}</maven.compiler.testRelease>
+</properties>
 ```
 
 ### Maven coordinates
 
 ```xml
+
 <dependency>
   <groupId>io.github.jinahya</groupId>
   <artifactId>jinahya-bcprov</artifactId>
