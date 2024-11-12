@@ -106,10 +106,6 @@ class RSA_ECB_Test
         @Nested
         class OAEPWithSAH_1AndMGF1Padding_Test {
 
-            private static final String MD_NAME = "SHA-1";
-
-            private static final String MGF_NAME = "MGF1";
-
             private static final int HASH_SIZE = 160;
 
             private static final int H_LEN = HASH_SIZE >> 3;
@@ -215,7 +211,7 @@ class RSA_ECB_Test
         }
 
         // -----------------------------------------------------------------------------------------------------------------
-        @DisplayName("/ECB/PKCS1Padding")
+        @DisplayName("PKCS1Padding")
         @Nested
         class _ECB_PKCS1Padding_Test {
 
@@ -248,7 +244,7 @@ class RSA_ECB_Test
             }
         }
 
-        @DisplayName("/ECB/OAEPWithSHA-1AndMGF1Padding")
+        @DisplayName("OAEPWithSHA-1AndMGF1Padding")
         @Nested
         class _ECB_OAEPWithSHA_1AndMGF1Padding_Test {
 
@@ -273,7 +269,6 @@ class RSA_ECB_Test
                     keyPair = generator.generateKeyPair();
                 }
                 final int mLen = _RSA__TestUtils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
-//                log.debug("hLen: {}, k: {}, mLen: {}", H_LEN, keySize >> 3, mLen);
                 JCEProviderTest.__(
                         cipher,
                         new byte[0],
@@ -300,7 +295,7 @@ class RSA_ECB_Test
             }
         }
 
-        @DisplayName("/ECB/OAEPWithSHA-256AndMGF1Padding")
+        @DisplayName("OAEPWithSHA-256AndMGF1Padding")
         @Nested
         class _ECB_OAEPWithSHA_256AndMGF1Padding_Test {
 
