@@ -9,7 +9,8 @@ public final class _RSA__Constants {
     public static IntStream getKeySizeStream() {
         return IntStream.of(
                 1024,
-                2048
+                2048,
+                3072
         );
     }
 

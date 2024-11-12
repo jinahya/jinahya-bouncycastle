@@ -16,6 +16,13 @@ public final class _KeyPair_TestUtils {
         return generator.generateKeyPair();
     }
 
+    public static KeyPair generateKeyPair_FIPS(final int keySize)
+            throws NoSuchAlgorithmException, NoSuchProviderException {
+        final var generator = KeyPairGenerator.getInstance(_RSA__Constants.ALGORITHM, "FIPS");
+        generator.initialize(keySize);
+        return generator.generateKeyPair();
+    }
+
     private _KeyPair_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
