@@ -18,6 +18,73 @@ import java.util.Objects;
  */
 public final class JinahyaAsymmetricBlockCipherUtils {
 
+    private static void validate(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
+                                 final int inlen, final byte[] out, final int outoff) {
+        Objects.requireNonNull(cipher, "cipher is null");
+        Objects.requireNonNull(in, "in is null");
+        if (inoff < 0) {
+            throw new IllegalArgumentException("inoff(" + inoff + ") is negative");
+        }
+        if (inlen < 0) {
+            throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
+        }
+        if ((inoff + inlen) > in.length) {
+            throw new IndexOutOfBoundsException(
+                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")"
+            );
+        }
+        Objects.requireNonNull(out, "out is null");
+        if (outoff < 0) {
+            throw new IllegalArgumentException("outoff(" + outoff + ") is negative");
+        }
+        if (outoff > out.length) {
+            throw new IndexOutOfBoundsException(
+                    "outoff(" + outoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")"
+            );
+        }
+    }
+
+    public static void processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
+                                    final int inlen, final byte[] out, final int outoff)
+            throws InvalidCipherTextException {
+        validate(cipher, in, inoff, inlen, out, outoff);
+        JinahyaAsymmetricBlockCipherUtils_.processBlock(
+                cipher,
+                in,
+                inoff,
+                inlen,
+                out,
+                outoff
+        );
+    }
+
+    /**
+     * @param cipher
+     * @param in
+     * @param inoff
+     * @param inlen
+     * @param out
+     * @param outoff
+     * @return the number of blocks processed.
+     * @throws InvalidCipherTextException
+     */
+    public static int processBlocks(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
+                                    final int inlen, final byte[] out, final int outoff)
+            throws InvalidCipherTextException {
+        validate(cipher, in, inoff, inlen, out, outoff);
+        ;
+        return JinahyaAsymmetricBlockCipherUtils_.processBlocks(
+                cipher,
+                in,
+                inoff,
+                inlen,
+                out,
+                outoff
+        );
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads a block from specified input stream, processes, and writes to specified output stream.
      *

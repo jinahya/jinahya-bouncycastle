@@ -6,8 +6,56 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 final class JinahyaAsymmetricBlockCipherUtils_ {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static void processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff, final int inlen,
+                             final byte[] out, final int outoff)
+            throws InvalidCipherTextException {
+        assert cipher != null;
+        assert in != null;
+        assert inoff >= 0;
+        assert inlen >= cipher.getInputBlockSize();
+        assert inoff + inlen <= in.length;
+        assert out != null;
+        assert outoff >= 0;
+        assert (out.length - outoff) >= cipher.getOutputBlockSize();
+        final var block = cipher.processBlock(in, inoff, inlen);
+        System.arraycopy(block, 0, out, outoff, block.length);
+    }
+
+    static int processBlocks(final AsymmetricBlockCipher cipher, final byte[] in, int inoff, int inlen,
+                             final byte[] out, int outoff)
+            throws InvalidCipherTextException {
+        assert cipher != null;
+        assert in != null;
+        assert inoff >= 0;
+        assert inlen >= 0;
+        assert inoff + inlen <= in.length;
+        assert out != null;
+        assert outoff >= 0;
+        assert outoff <= out.length;
+        final var inputBlockSize = cipher.getInputBlockSize();
+        final var outputBlockSize = cipher.getOutputBlockSize();
+        final int blocks = Math.min(
+                inlen / cipher.getInputBlockSize(),
+                (out.length - outoff) / cipher.getOutputBlockSize()
+        );
+        for (int i = 0; i < blocks; i++) {
+            processBlock(cipher, in, inoff, inlen, out, outoff);
+            inoff += inputBlockSize;
+            inlen -= inputBlockSize;
+            outoff += outputBlockSize;
+        }
+        return blocks;
+    }
+
+    static int processBlocks(final AsymmetricBlockCipher cipher, final ByteBuffer input, final ByteBuffer output)
+            throws InvalidCipherTextException {
+        throw new UnsupportedOperationException("not implemented yet");
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     private static boolean readBlock(final InputStream in, final byte[] inbuf, final int inoff, final int bytes)
