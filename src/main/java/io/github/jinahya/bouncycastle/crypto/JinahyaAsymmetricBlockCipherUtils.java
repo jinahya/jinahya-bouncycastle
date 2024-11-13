@@ -97,7 +97,7 @@ public final class JinahyaAsymmetricBlockCipherUtils {
 //    }
 
     /**
-     * Processes, using specified cipher, all blocks from specified input stream, and write processed blocks to
+     * Processes, using specified cipher, all blocks from specified input stream, and writes processed blocks to
      * specified output stream.
      *
      * @param cipher the cipher.

@@ -13,6 +13,7 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
             throws IOException, InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
+        assert in.markSupported();
         assert out != null;
         final var inbuf = new byte[cipher.getInputBlockSize()];
         for (var c = 0L; ; c++) {

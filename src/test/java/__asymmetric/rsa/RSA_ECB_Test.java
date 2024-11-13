@@ -52,17 +52,6 @@ class RSA_ECB_Test
     @Nested
     class LowLevelApiTest {
 
-        private static Stream<Arguments> getKeySizeAndParamsArgumentsStream() {
-            return _RSA__TestUtils.getKeySizeStream().mapToObj(ks -> {
-                return Arguments.of(ks, new RSAKeyGenerationParameters(
-                        new BigInteger("10001", 16),
-                        SECURE_RANDOM,
-                        ks,
-                        80
-                ));
-            });
-        }
-
         @DisplayName("PKCS1Padding")
         @Nested
         class PKCS1Encoding_Test {
@@ -83,7 +72,7 @@ class RSA_ECB_Test
             }
 
             @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
-            @ParameterizedTest
+            @ParameterizedTest(name = "[{index}] {0}-bit key")
             void __(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
                 // https://github.com/anonrig/bouncycastle-implementations/blob/master/rsa.java
                 // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
@@ -126,7 +115,7 @@ class RSA_ECB_Test
             }
 
             @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
-            @ParameterizedTest
+            @ParameterizedTest(name = "[{index}] {0}-bit key")
             void __(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
                 // https://stackoverflow.com/a/32166210/330457
                 // https://stackoverflow.com/a/3101932/330457
@@ -168,7 +157,7 @@ class RSA_ECB_Test
             }
 
             @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
-            @ParameterizedTest
+            @ParameterizedTest(name = "[{index}] {0}-bit key")
             void __(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
                 // https://stackoverflow.com/a/32166210/330457
                 // https://stackoverflow.com/a/3101932/330457
@@ -320,7 +309,6 @@ class RSA_ECB_Test
                     keyPair = generator.generateKeyPair();
                 }
                 final int mLen = _RSA__TestUtils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
-//                log.debug("hLen: {}, k: {}, mLen: {}", H_LEN, keySize >> 3, mLen);
                 JCEProviderTest.__(
                         cipher,
                         new byte[0],
