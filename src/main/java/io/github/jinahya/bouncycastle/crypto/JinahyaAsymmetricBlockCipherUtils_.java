@@ -54,7 +54,40 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
 
     static int processBlocks(final AsymmetricBlockCipher cipher, final ByteBuffer input, final ByteBuffer output)
             throws InvalidCipherTextException {
-        throw new UnsupportedOperationException("not implemented yet");
+        assert cipher != null;
+        assert input != null;
+        assert output != null;
+        final byte[] in;
+        final int inoff;
+        final int inlen = input.remaining();
+        if (input.hasArray()) {
+            in = input.array();
+            inoff = input.arrayOffset() + input.position();
+        } else {
+            in = new byte[inlen];
+//            input.get(0, in); // Java 13
+            for (int p = input.position(), i = 0; i < in.length; p++, i++) {
+                in[i] = input.get(p);
+            }
+            inoff = 0;
+        }
+        final byte[] out;
+        final int outoff;
+        if (output.hasArray()) {
+            out = output.array();
+            outoff = output.arrayOffset() + output.position();
+        } else {
+            out = new byte[output.remaining()];
+            outoff = 0;
+        }
+        final var outlen = processBlocks(cipher, in, inoff, inlen, out, outoff);
+        if (output.hasArray()) {
+            output.position(output.position() + outlen);
+        } else {
+            output.put(out, outoff, outlen);
+        }
+        input.position(input.position() + inlen);
+        return outlen;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

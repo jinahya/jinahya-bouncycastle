@@ -58,12 +58,12 @@ final class JinahyaBufferedBlockCipherUtils_ {
             outoff = 0;
         }
         final var outlen = processBytesAndDoFinal(cipher, in, inoff, inlen, out, outoff);
-        input.position(input.position() + inlen);
         if (output.hasArray()) {
             output.position(output.position() + outlen);
         } else {
             output.put(out, outoff, outlen);
         }
+        input.position(input.position() + inlen);
         return outlen;
     }
 

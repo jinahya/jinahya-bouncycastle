@@ -26,6 +26,7 @@ public final class JinahyaAsymmetricBlockCipherUtils {
         return count;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     private static void validate(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
                                  final int inlen, final byte[] out, final int outoff) {
         Objects.requireNonNull(cipher, "cipher is null");
@@ -52,29 +53,20 @@ public final class JinahyaAsymmetricBlockCipherUtils {
         }
     }
 
-//    public static int processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
-//                                   final int inlen, final byte[] out, final int outoff)
-//            throws InvalidCipherTextException {
-//        validate(cipher, in, inoff, inlen, out, outoff);
-//        return JinahyaAsymmetricBlockCipherUtils_.processBlock(
-//                cipher,
-//                in,
-//                inoff,
-//                inlen,
-//                out,
-//                outoff
-//        );
-//    }
-
     /**
-     * @param cipher
-     * @param in
-     * @param inoff
-     * @param inlen
-     * @param out
-     * @param outoff
+     * Processes, using specified cipher, all bytes int specified range of specified input array, put processed bytes on
+     * specified output array starting at specified index.
+     *
+     * @param cipher the cipher.
+     * @param in     the input array.
+     * @param inoff  starting position of the {@code in}.
+     * @param inlen  number of bytes to process.
+     * @param out    the output array.
+     * @param outoff the starting position of the {@code out}.
      * @return the number of byte set on the {@code out}.
-     * @throws InvalidCipherTextException
+     * @throws InvalidCipherTextException when thrown from
+     *                                    {@link AsymmetricBlockCipher#processBlock(byte[], int, int)
+     *                                    cipher.processBlock}.
      */
     public static int processBlocks(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
                                     final int inlen, final byte[] out, final int outoff)
