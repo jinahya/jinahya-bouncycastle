@@ -18,6 +18,14 @@ import java.util.Objects;
  */
 public final class JinahyaAsymmetricBlockCipherUtils {
 
+    public static int getInputBlockCount(final AsymmetricBlockCipher cipher, final int inlen) {
+        var count = inlen / cipher.getInputBlockSize();
+        if (inlen % cipher.getInputBlockSize() > 0) {
+            count++;
+        }
+        return count;
+    }
+
     private static void validate(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
                                  final int inlen, final byte[] out, final int outoff) {
         Objects.requireNonNull(cipher, "cipher is null");
@@ -44,19 +52,19 @@ public final class JinahyaAsymmetricBlockCipherUtils {
         }
     }
 
-    public static void processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
-                                    final int inlen, final byte[] out, final int outoff)
-            throws InvalidCipherTextException {
-        validate(cipher, in, inoff, inlen, out, outoff);
-        JinahyaAsymmetricBlockCipherUtils_.processBlock(
-                cipher,
-                in,
-                inoff,
-                inlen,
-                out,
-                outoff
-        );
-    }
+//    public static int processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
+//                                   final int inlen, final byte[] out, final int outoff)
+//            throws InvalidCipherTextException {
+//        validate(cipher, in, inoff, inlen, out, outoff);
+//        return JinahyaAsymmetricBlockCipherUtils_.processBlock(
+//                cipher,
+//                in,
+//                inoff,
+//                inlen,
+//                out,
+//                outoff
+//        );
+//    }
 
     /**
      * @param cipher
@@ -65,14 +73,13 @@ public final class JinahyaAsymmetricBlockCipherUtils {
      * @param inlen
      * @param out
      * @param outoff
-     * @return the number of blocks processed.
+     * @return the number of byte set on the {@code out}.
      * @throws InvalidCipherTextException
      */
     public static int processBlocks(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
                                     final int inlen, final byte[] out, final int outoff)
             throws InvalidCipherTextException {
         validate(cipher, in, inoff, inlen, out, outoff);
-        ;
         return JinahyaAsymmetricBlockCipherUtils_.processBlocks(
                 cipher,
                 in,

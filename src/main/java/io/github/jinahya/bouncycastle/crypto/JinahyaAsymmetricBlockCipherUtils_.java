@@ -11,22 +11,23 @@ import java.nio.ByteBuffer;
 final class JinahyaAsymmetricBlockCipherUtils_ {
 
     // -----------------------------------------------------------------------------------------------------------------
-    static void processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff, final int inlen,
-                             final byte[] out, final int outoff)
+    static int processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff, final int inlen,
+                            final byte[] out, final int outoff)
             throws InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
         assert inoff >= 0;
-        assert inlen >= cipher.getInputBlockSize();
+        assert inlen >= 0;
+        assert inlen <= cipher.getInputBlockSize();
         assert inoff + inlen <= in.length;
         assert out != null;
         assert outoff >= 0;
-        assert (out.length - outoff) >= cipher.getOutputBlockSize();
         final var block = cipher.processBlock(in, inoff, inlen);
         System.arraycopy(block, 0, out, outoff, block.length);
+        return block.length;
     }
 
-    static int processBlocks(final AsymmetricBlockCipher cipher, final byte[] in, int inoff, int inlen,
+    static int processBlocks(final AsymmetricBlockCipher cipher, final byte[] in, int inoff, final int inlen,
                              final byte[] out, int outoff)
             throws InvalidCipherTextException {
         assert cipher != null;
@@ -37,19 +38,18 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         assert out != null;
         assert outoff >= 0;
         assert outoff <= out.length;
-        final var inputBlockSize = cipher.getInputBlockSize();
-        final var outputBlockSize = cipher.getOutputBlockSize();
-        final int blocks = Math.min(
-                inlen / cipher.getInputBlockSize(),
-                (out.length - outoff) / cipher.getOutputBlockSize()
-        );
-        for (int i = 0; i < blocks; i++) {
-            processBlock(cipher, in, inoff, inlen, out, outoff);
-            inoff += inputBlockSize;
-            inlen -= inputBlockSize;
-            outoff += outputBlockSize;
+        var bytes = 0;
+        final var blocks = JinahyaAsymmetricBlockCipherUtils.getInputBlockCount(cipher, inlen);
+        for (int inlen_ = cipher.getInputBlockSize(), i = 0; i < blocks; i++) {
+            if (i == blocks - 1) {
+                inlen_ = in.length - inoff;
+            }
+            final var outlen = processBlock(cipher, in, inoff, inlen_, out, outoff);
+            inoff += inlen_;
+            outoff += outlen;
+            bytes += outlen;
         }
-        return blocks;
+        return bytes;
     }
 
     static int processBlocks(final AsymmetricBlockCipher cipher, final ByteBuffer input, final ByteBuffer output)

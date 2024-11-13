@@ -16,7 +16,7 @@ public final class _Random_TestUtils {
 
     private static SecureRandom random = null;
 
-    static SecureRandom random() {
+    public static SecureRandom random() {
         if (random == null) {
             try {
                 random = SecureRandom.getInstanceStrong();

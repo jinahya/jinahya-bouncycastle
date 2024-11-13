@@ -81,7 +81,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
     public byte[] encrypt(final byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForEncryption();
-        final var inblocks = in.length / cipher.getInputBlockSize();
+        final var inblocks = JinahyaAsymmetricBlockCipherUtils.getInputBlockCount(cipher, in.length);
         final var out = new byte[inblocks * cipher.getOutputBlockSize()];
         try {
             final var outblocks = JinahyaAsymmetricBlockCipherUtils_.processBlocks(
@@ -120,7 +120,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
     public byte[] decrypt(byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForDecryption();
-        final var inblocks = in.length / cipher.getInputBlockSize();
+        final var inblocks = JinahyaAsymmetricBlockCipherUtils.getInputBlockCount(cipher, in.length);
         final var out = new byte[inblocks * cipher.getOutputBlockSize()];
         try {
             final var outblocks = JinahyaAsymmetricBlockCipherUtils_.processBlocks(
