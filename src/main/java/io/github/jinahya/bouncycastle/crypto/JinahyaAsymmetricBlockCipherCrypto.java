@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -81,10 +82,9 @@ public class JinahyaAsymmetricBlockCipherCrypto
     public byte[] encrypt(final byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForEncryption();
-        final var inblocks = JinahyaAsymmetricBlockCipherUtils.getInputBlockCount(cipher, in.length);
-        final var out = new byte[inblocks * cipher.getOutputBlockSize()];
+        final var out = new byte[cipher.getOutputBlockSize()];
         try {
-            final var outblocks = JinahyaAsymmetricBlockCipherUtils_.processBlocks(
+            final var outlen = JinahyaAsymmetricBlockCipherUtils_.processBytes(
                     cipher,
                     in,
                     0,
@@ -92,11 +92,10 @@ public class JinahyaAsymmetricBlockCipherCrypto
                     out,
                     0
             );
-            assert outblocks == inblocks;
+            return Arrays.copyOf(out, outlen);
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofEncryptionFailure(icte);
         }
-        return out;
     }
 
     @Override
@@ -120,10 +119,9 @@ public class JinahyaAsymmetricBlockCipherCrypto
     public byte[] decrypt(byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForDecryption();
-        final var inblocks = JinahyaAsymmetricBlockCipherUtils.getInputBlockCount(cipher, in.length);
-        final var out = new byte[inblocks * cipher.getOutputBlockSize()];
+        final var out = new byte[cipher.getOutputBlockSize()];
         try {
-            final var outblocks = JinahyaAsymmetricBlockCipherUtils_.processBlocks(
+            final var outlen = JinahyaAsymmetricBlockCipherUtils_.processBytes(
                     cipher,
                     in,
                     0,
@@ -131,11 +129,10 @@ public class JinahyaAsymmetricBlockCipherCrypto
                     out,
                     0
             );
-            assert outblocks == inblocks;
+            return Arrays.copyOf(out, outlen);
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofEncryptionFailure(icte);
         }
-        return out;
     }
 
     @Override
@@ -160,22 +157,23 @@ public class JinahyaAsymmetricBlockCipherCrypto
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         Objects.requireNonNull(inbuf, "inbuf is null");
-        initForEncryption();
-        if (inbuf.length < cipher.getInputBlockSize()) {
-            throw new IllegalArgumentException(
-                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + cipher.getInputBlockSize() + ")"
-            );
-        }
-        try {
-            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
-                    cipher,
-                    in,
-                    out,
-                    inbuf
-            );
-        } catch (final InvalidCipherTextException icte) {
-            throw JinahyaCryptoException.ofEncryptionFailure(icte);
-        }
+//        initForEncryption();
+//        if (inbuf.length < cipher.getInputBlockSize()) {
+//            throw new IllegalArgumentException(
+//                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + cipher.getInputBlockSize() + ")"
+//            );
+//        }
+//        try {
+//            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
+//                    cipher,
+//                    in,
+//                    out,
+//                    inbuf
+//            );
+//        } catch (final InvalidCipherTextException icte) {
+//            throw JinahyaCryptoException.ofEncryptionFailure(icte);
+//        }
+        return 0L;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -184,21 +182,22 @@ public class JinahyaAsymmetricBlockCipherCrypto
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         Objects.requireNonNull(inbuf, "inbuf is null");
-        initForDecryption();
-        if (inbuf.length < cipher.getInputBlockSize()) {
-            throw new IllegalArgumentException(
-                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + cipher.getInputBlockSize() + ")"
-            );
-        }
-        try {
-            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
-                    cipher,
-                    in,
-                    out,
-                    inbuf
-            );
-        } catch (final InvalidCipherTextException icte) {
-            throw JinahyaCryptoException.ofEncryptionFailure(icte);
-        }
+//        initForDecryption();
+//        if (inbuf.length < cipher.getInputBlockSize()) {
+//            throw new IllegalArgumentException(
+//                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + cipher.getInputBlockSize() + ")"
+//            );
+//        }
+//        try {
+//            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
+//                    cipher,
+//                    in,
+//                    out,
+//                    inbuf
+//            );
+//        } catch (final InvalidCipherTextException icte) {
+//            throw JinahyaCryptoException.ofEncryptionFailure(icte);
+//        }
+        return 0L;
     }
 }

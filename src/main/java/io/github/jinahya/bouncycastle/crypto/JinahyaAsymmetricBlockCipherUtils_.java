@@ -3,16 +3,14 @@ package io.github.jinahya.bouncycastle.crypto;
 import org.bouncycastle.crypto.AsymmetricBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 final class JinahyaAsymmetricBlockCipherUtils_ {
 
     // -----------------------------------------------------------------------------------------------------------------
-    static int processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff, final int inlen,
-                            final byte[] out, final int outoff)
+    private static int processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
+                                    final int inlen,
+                                    final byte[] out, final int outoff)
             throws InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
@@ -27,8 +25,8 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         return block.length;
     }
 
-    static int processBlocks(final AsymmetricBlockCipher cipher, final byte[] in, int inoff, final int inlen,
-                             final byte[] out, int outoff)
+    static int processBytes(final AsymmetricBlockCipher cipher, final byte[] in, int inoff, final int inlen,
+                            final byte[] out, int outoff)
             throws InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
@@ -80,7 +78,7 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
             out = new byte[output.remaining()];
             outoff = 0;
         }
-        final var outlen = processBlocks(cipher, in, inoff, inlen, out, outoff);
+        final var outlen = processBytes(cipher, in, inoff, inlen, out, outoff);
         if (output.hasArray()) {
             output.position(output.position() + outlen);
         } else {
@@ -90,79 +88,79 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         return outlen;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    private static boolean readBlock(final InputStream in, final byte[] inbuf, final int inoff, final int bytes)
-            throws IOException {
-        assert in != null;
-        assert in.markSupported();
-        assert inbuf != null;
-        assert bytes > 0;
-        in.mark(bytes);
-        if ((in.readNBytes(inbuf, inoff, bytes)) < bytes) {
-            in.reset();
-            return false;
-        }
-        return true;
-    }
-
-    static boolean processBlock(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out)
-            throws IOException, InvalidCipherTextException {
-        assert cipher != null;
-        assert in != null;
-        assert in.markSupported();
-        assert out != null;
-        final var inbuf = new byte[cipher.getInputBlockSize()];
-        if (!readBlock(in, inbuf, 0, inbuf.length)) {
-            return false;
-        }
-        final var outbuf = cipher.processBlock(inbuf, 0, inbuf.length);
-        out.write(outbuf);
-        return true;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static int readBlocks(final AsymmetricBlockCipher cipher, final InputStream in, final byte[] inbuf)
-            throws IOException {
-        assert cipher != null;
-        assert in != null;
-        assert in.markSupported();
-        assert inbuf != null;
-        int count = 0;
-        {
-            final var inlen = cipher.getInputBlockSize();
-            final int limit = inbuf.length / cipher.getInputBlockSize();
-            for (var inoff = 0; count < limit; count++, inoff += inlen) {
-                if (!readBlock(in, inbuf, inoff, inlen)) {
-                    break;
-                }
-            }
-        }
-        return count;
-    }
-
-    static long processAllBytes(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
-                                final byte[] inbuf)
-            throws IOException, InvalidCipherTextException {
-        assert cipher != null;
-        assert in != null;
-        assert in.markSupported();
-        assert out != null;
-        assert inbuf != null;
-        assert inbuf.length >= cipher.getInputBlockSize();
-        var count = 0L;
-        int inoff;
-        final var inlen = cipher.getInputBlockSize();
-        for (int blocks; (blocks = readBlocks(cipher, in, inbuf)) > 0; ) {
-            inoff = 0;
-            for (int i = 0; i < blocks; i++) {
-                final var outbuf = cipher.processBlock(inbuf, inoff, inlen);
-                out.write(outbuf);
-                inoff += inlen;
-                count++;
-            }
-        }
-        return count;
-    }
+//    // -----------------------------------------------------------------------------------------------------------------
+//    private static boolean readBlock(final InputStream in, final byte[] inbuf, final int inoff, final int bytes)
+//            throws IOException {
+//        assert in != null;
+//        assert in.markSupported();
+//        assert inbuf != null;
+//        assert bytes > 0;
+//        in.mark(bytes);
+//        if ((in.readNBytes(inbuf, inoff, bytes)) < bytes) {
+//            in.reset();
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    static boolean processBlock(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out)
+//            throws IOException, InvalidCipherTextException {
+//        assert cipher != null;
+//        assert in != null;
+//        assert in.markSupported();
+//        assert out != null;
+//        final var inbuf = new byte[cipher.getInputBlockSize()];
+//        if (!readBlock(in, inbuf, 0, inbuf.length)) {
+//            return false;
+//        }
+//        final var outbuf = cipher.processBlock(inbuf, 0, inbuf.length);
+//        out.write(outbuf);
+//        return true;
+//    }
+//
+//    // -----------------------------------------------------------------------------------------------------------------
+//    private static int readBlocks(final AsymmetricBlockCipher cipher, final InputStream in, final byte[] inbuf)
+//            throws IOException {
+//        assert cipher != null;
+//        assert in != null;
+//        assert in.markSupported();
+//        assert inbuf != null;
+//        int count = 0;
+//        {
+//            final var inlen = cipher.getInputBlockSize();
+//            final int limit = inbuf.length / cipher.getInputBlockSize();
+//            for (var inoff = 0; count < limit; count++, inoff += inlen) {
+//                if (!readBlock(in, inbuf, inoff, inlen)) {
+//                    break;
+//                }
+//            }
+//        }
+//        return count;
+//    }
+//
+//    static long processAllBytes(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
+//                                final byte[] inbuf)
+//            throws IOException, InvalidCipherTextException {
+//        assert cipher != null;
+//        assert in != null;
+//        assert in.markSupported();
+//        assert out != null;
+//        assert inbuf != null;
+//        assert inbuf.length >= cipher.getInputBlockSize();
+//        var count = 0L;
+//        int inoff;
+//        final var inlen = cipher.getInputBlockSize();
+//        for (int blocks; (blocks = readBlocks(cipher, in, inbuf)) > 0; ) {
+//            inoff = 0;
+//            for (int i = 0; i < blocks; i++) {
+//                final var outbuf = cipher.processBlock(inbuf, inoff, inlen);
+//                out.write(outbuf);
+//                inoff += inlen;
+//                count++;
+//            }
+//        }
+//        return count;
+//    }
 
     // -----------------------------------------------------------------------------------------------------------------
     private JinahyaAsymmetricBlockCipherUtils_() {
