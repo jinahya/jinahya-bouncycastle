@@ -105,7 +105,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
         Objects.requireNonNull(output, "output is null");
         initForEncryption();
         try {
-            return JinahyaAsymmetricBlockCipherUtils_.processBlocks(
+            return JinahyaAsymmetricBlockCipherUtils_.processBytes(
                     cipher,
                     input,
                     output
@@ -144,7 +144,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
         Objects.requireNonNull(output, "output is null");
         initForDecryption();
         try {
-            return JinahyaAsymmetricBlockCipherUtils_.processBlocks(
+            return JinahyaAsymmetricBlockCipherUtils_.processBytes(
                     cipher,
                     input,
                     output
@@ -167,7 +167,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
             );
         }
         try {
-            return JinahyaAsymmetricBlockCipherUtils_.processAllBlocks(
+            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
                     cipher,
                     in,
                     out,
@@ -191,7 +191,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
             );
         }
         try {
-            return JinahyaAsymmetricBlockCipherUtils_.processAllBlocks(
+            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
                     cipher,
                     in,
                     out,

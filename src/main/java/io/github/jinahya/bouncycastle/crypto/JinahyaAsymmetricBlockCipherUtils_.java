@@ -23,7 +23,7 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         assert out != null;
         assert outoff >= 0;
         final var block = cipher.processBlock(in, inoff, inlen);
-        System.arraycopy(block, 0, out, outoff, block.length);
+        System.arraycopy(block, 0, out, outoff, block.length); // IndexOutOfBoundsException
         return block.length;
     }
 
@@ -52,7 +52,7 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         return bytes;
     }
 
-    static int processBlocks(final AsymmetricBlockCipher cipher, final ByteBuffer input, final ByteBuffer output)
+    static int processBytes(final AsymmetricBlockCipher cipher, final ByteBuffer input, final ByteBuffer output)
             throws InvalidCipherTextException {
         assert cipher != null;
         assert input != null;
@@ -140,8 +140,8 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         return count;
     }
 
-    static long processAllBlocks(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
-                                 final byte[] inbuf)
+    static long processAllBytes(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
+                                final byte[] inbuf)
             throws IOException, InvalidCipherTextException {
         assert cipher != null;
         assert in != null;

@@ -46,7 +46,7 @@ class JinahyaAsymmetricBlockCipherUtilsTest {
                 cipher.init(true, keyPair.getPublic());
                 final int blocks = JinahyaAsymmetricBlockCipherUtils.getInputBlockCount(cipher, plain.length);
                 final var out = new byte[cipher.getOutputBlockSize() * blocks];
-                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlocks(
+                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBytes(
                         cipher,
                         plain,
                         0,
@@ -62,7 +62,7 @@ class JinahyaAsymmetricBlockCipherUtilsTest {
                 cipher.init(false, keyPair.getPrivate());
                 final int blocks = JinahyaAsymmetricBlockCipherUtils.getInputBlockCount(cipher, encrypted.length);
                 final var out = new byte[cipher.getOutputBlockSize() * blocks];
-                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlocks(
+                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBytes(
                         cipher,
                         encrypted,
                         0,
@@ -91,7 +91,7 @@ class JinahyaAsymmetricBlockCipherUtilsTest {
             {
                 cipher.init(true, keyPair.getPublic());
                 final var out = new byte[cipher.getOutputBlockSize()];
-                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlocks(
+                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBytes(
                         cipher,
                         plain,
                         0,
@@ -106,7 +106,7 @@ class JinahyaAsymmetricBlockCipherUtilsTest {
             {
                 cipher.init(false, keyPair.getPrivate());
                 final var out = new byte[cipher.getOutputBlockSize()];
-                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlocks(
+                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBytes(
                         cipher,
                         encrypted,
                         0,
@@ -135,7 +135,7 @@ class JinahyaAsymmetricBlockCipherUtilsTest {
             {
                 cipher.init(true, keyPair.getPublic());
                 final var out = new byte[cipher.getOutputBlockSize()];
-                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlocks(
+                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBytes(
                         cipher,
                         plain,
                         0,
@@ -150,7 +150,7 @@ class JinahyaAsymmetricBlockCipherUtilsTest {
             {
                 cipher.init(false, keyPair.getPrivate());
                 final var out = new byte[cipher.getOutputBlockSize()];
-                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlocks(
+                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBytes(
                         cipher,
                         encrypted,
                         0,

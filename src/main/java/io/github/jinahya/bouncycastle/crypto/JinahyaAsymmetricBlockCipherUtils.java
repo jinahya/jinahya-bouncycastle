@@ -6,6 +6,7 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
 /**
@@ -54,22 +55,22 @@ public final class JinahyaAsymmetricBlockCipherUtils {
     }
 
     /**
-     * Processes, using specified cipher, all bytes int specified range of specified input array, put processed bytes on
+     * Processes, using specified cipher, bytes in specified range of specified input array, put processed bytes on
      * specified output array starting at specified index.
      *
      * @param cipher the cipher.
      * @param in     the input array.
-     * @param inoff  starting position of the {@code in}.
-     * @param inlen  number of bytes to process.
-     * @param out    the output array.
-     * @param outoff the starting position of the {@code out}.
+     * @param inoff  a starting index of the {@code in}.
+     * @param inlen  the number of bytes to process.
+     * @param out    the output array onto which processed bytes are set.
+     * @param outoff the starting index of the {@code out} onto which processed bytes are set.
      * @return the number of byte set on the {@code out}.
      * @throws InvalidCipherTextException when thrown from
      *                                    {@link AsymmetricBlockCipher#processBlock(byte[], int, int)
      *                                    cipher.processBlock}.
      */
-    public static int processBlocks(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
-                                    final int inlen, final byte[] out, final int outoff)
+    public static int processBytes(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
+                                   final int inlen, final byte[] out, final int outoff)
             throws InvalidCipherTextException {
         validate(cipher, in, inoff, inlen, out, outoff);
         return JinahyaAsymmetricBlockCipherUtils_.processBlocks(
@@ -82,36 +83,18 @@ public final class JinahyaAsymmetricBlockCipherUtils {
         );
     }
 
+    static int processBytes(final AsymmetricBlockCipher cipher, final ByteBuffer input, final ByteBuffer output)
+            throws InvalidCipherTextException {
+        Objects.requireNonNull(cipher, "cipher is null");
+        Objects.requireNonNull(input, "input is null");
+        Objects.requireNonNull(output, "output is null");
+        return JinahyaAsymmetricBlockCipherUtils_.processBytes(cipher, input, output);
+    }
     // -----------------------------------------------------------------------------------------------------------------
 
-//    /**
-//     * Reads a block from specified input stream, processes, and writes to specified output stream.
-//     *
-//     * @param cipher a cipher for processing the block.
-//     * @param in     the input stream from which a block is read; should
-//     *               {@link InputStream#markSupported() support mark}.
-//     * @param out    the output stream to which the processed block is written.
-//     * @return {@code true} if a block has been read, processed, and written to the output stream; {@code false} if no
-//     * block has been read from the input stream.
-//     * @throws IllegalArgumentException   when {@code in} doesn't {@link InputStream#markSupported() support mark}.
-//     * @throws IOException                if an I/O error occurs.
-//     * @throws InvalidCipherTextException when failed to process.
-//     * @see AsymmetricBlockCipher#processBlock(byte[], int, int)
-//     * @see #processAllBlocks(AsymmetricBlockCipher, InputStream, OutputStream, byte[])
-//     */
-//    static boolean processBlock(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out)
-//            throws IOException, InvalidCipherTextException {
-//        Objects.requireNonNull(cipher, "cipher is null");
-//        if (!Objects.requireNonNull(in, "in is null").markSupported()) {
-//            throw new IllegalArgumentException("in doesn't support mark");
-//        }
-//        Objects.requireNonNull(out, "out is null");
-//        return JinahyaAsymmetricBlockCipherUtils_.processBlock(cipher, in, out);
-//    }
-
     /**
-     * Reads all available blocks from specified input stream, processes, and writes processed blocks to specified
-     * output stream.
+     * Reads all available blocks from specified input stream, processes, and writes processed bytes to specified output
+     * stream.
      *
      * @param cipher a cipher for processing blocks.
      * @param in     the input stream from which blocks are read; should
@@ -119,7 +102,7 @@ public final class JinahyaAsymmetricBlockCipherUtils {
      * @param out    the output stream to which processed blocks are written.
      * @param inbuf  a buffer, for reading blocks from the input stream, whose {@code length} should be greater than or
      *               equals to {@link AsymmetricBlockCipher#getInputBlockSize() cipher.getInputBlockSize()}.
-     * @return the number of blocks read, processed, and written.
+     * @return the number of bytes written to the output stream.
      * @throws IllegalArgumentException   when {@code in} doesn't {@link InputStream#markSupported() support mark}.
      * @throws IllegalArgumentException   when {@code inbuf.length} is less than {@code cipher.getInputBlockSize()}.
      * @throws IOException                if an I/O error occurs.
@@ -142,7 +125,7 @@ public final class JinahyaAsymmetricBlockCipherUtils {
                 );
             }
         }
-        return JinahyaAsymmetricBlockCipherUtils_.processAllBlocks(cipher, in, out, inbuf);
+        return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(cipher, in, out, inbuf);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
