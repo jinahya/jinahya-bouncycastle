@@ -16,7 +16,7 @@ public interface JinahyaCrypto {
     byte[] encrypt(final byte[] in);
 
     /**
-     * Encrypts all remaining bytes of specified input buffer, and put encrypted bytes to specified output buffer.
+     * Encrypts all remaining bytes of specified input buffer, and puts encrypted bytes to specified output buffer.
      *
      * @param input  the input buffer whose remaining bytes are encrypted.
      * @param output the output buffer onto which encrypted bytes are put.
@@ -35,7 +35,7 @@ public interface JinahyaCrypto {
     byte[] decrypt(final byte[] in);
 
     /**
-     * Decrypts all remaining bytes of specified input buffer, and put decrypted bytes to specified output buffer.
+     * Decrypts all remaining bytes of specified input buffer, and puts decrypted bytes to specified output buffer.
      *
      * @param input  the input buffer whose remaining bytes are decrypted.
      * @param output the output buffer onto which decrypted bytes are put.

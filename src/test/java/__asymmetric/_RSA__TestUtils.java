@@ -67,7 +67,7 @@ public final class _RSA__TestUtils {
     private static final Map<Integer, Integer> M_LEN_RSAES_PKCS1_v1_5 = new HashMap<>() {{
         put(128, 117);
         put(256, 245);
-        put(384, 318);
+        put(384, 373);
     }};
 
     // https://datatracker.ietf.org/doc/html/rfc8017#section-7.2.1

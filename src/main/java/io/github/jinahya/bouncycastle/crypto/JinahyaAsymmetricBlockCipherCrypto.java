@@ -78,13 +78,24 @@ public class JinahyaAsymmetricBlockCipherCrypto
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    private void validate(final byte[] in) {
+        assert in != null;
+        final var inputBlockSize = cipher.getInputBlockSize();
+        if (in.length > inputBlockSize) {
+            throw new IllegalArgumentException(
+                    "in.length(" + in.length + ") > cipher.inputBlockSize(" + inputBlockSize + ")"
+            );
+        }
+    }
+
     @Override
     public byte[] encrypt(final byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForEncryption();
+        validate(in);
         final var out = new byte[cipher.getOutputBlockSize()];
         try {
-            final var outlen = JinahyaAsymmetricBlockCipherUtils_.processBytes(
+            final var outlen = JinahyaAsymmetricBlockCipherUtils_.processBlock(
                     cipher,
                     in,
                     0,
@@ -103,8 +114,9 @@ public class JinahyaAsymmetricBlockCipherCrypto
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
         initForEncryption();
+        JinahyaAsymmetricBlockCipherUtils.validateNonNull(cipher, input, output);
         try {
-            return JinahyaAsymmetricBlockCipherUtils_.processBytes(
+            return JinahyaAsymmetricBlockCipherUtils_.processBlock(
                     cipher,
                     input,
                     output
@@ -119,9 +131,10 @@ public class JinahyaAsymmetricBlockCipherCrypto
     public byte[] decrypt(byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForDecryption();
+        validate(in);
         final var out = new byte[cipher.getOutputBlockSize()];
         try {
-            final var outlen = JinahyaAsymmetricBlockCipherUtils_.processBytes(
+            final var outlen = JinahyaAsymmetricBlockCipherUtils_.processBlock(
                     cipher,
                     in,
                     0,
@@ -140,8 +153,9 @@ public class JinahyaAsymmetricBlockCipherCrypto
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
         initForDecryption();
+        JinahyaAsymmetricBlockCipherUtils.validateNonNull(cipher, input, output);
         try {
-            return JinahyaAsymmetricBlockCipherUtils_.processBytes(
+            return JinahyaAsymmetricBlockCipherUtils_.processBlock(
                     cipher,
                     input,
                     output
