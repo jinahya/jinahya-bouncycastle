@@ -10,6 +10,7 @@ import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.encodings.OAEPEncoding;
 import org.bouncycastle.crypto.encodings.PKCS1Encoding;
 import org.bouncycastle.crypto.engines.RSAEngine;
+import org.bouncycastle.crypto.signers.GenericSigner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,7 +40,63 @@ class JinahyaAsymmetricBlockCipherUtilsTest {
         @DisplayName("RSA/ECB/PKCS1Padding")
         @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0}-bit key")
-        void __RSA_ECB_PKCS1Padding(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
+        void _PriPub_RSA_ECB_PKCS1Padding(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
+            // https://github.com/anonrig/bouncycastle-implementations/blob/master/rsa.java
+            // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
+            // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
+            final var cipher = new PKCS1Encoding(new RSAEngine());
+            final var mLen = _RSA__TestUtils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
+            // ---------------------------------------------------------------------------------------------------------
+            cipher.init(true, keyPair.getPrivate());
+            assertThat(cipher.getInputBlockSize()).isEqualTo(mLen);
+            final byte[] encrypted;
+            final byte[] signature;
+            {
+                final byte[] out = new byte[cipher.getOutputBlockSize()];
+                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlock(
+                        cipher,
+                        plain,
+                        0,
+                        plain.length,
+                        out,
+                        0
+                );
+                encrypted = Arrays.copyOf(out, outlen);
+                final var signer = new GenericSigner(cipher, new SHA1Digest());
+                signer.init(true, keyPair.getPrivate());
+                signer.update(plain, 0, plain.length);
+                signature = signer.generateSignature();
+            }
+            // ---------------------------------------------------------------------------------------------------------
+            cipher.init(false, keyPair.getPublic());
+            assertThat(cipher.getOutputBlockSize()).isEqualTo(mLen);
+            final byte[] decrypted;
+            {
+                final byte[] out = new byte[cipher.getOutputBlockSize()];
+                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlock(
+                        cipher,
+                        encrypted,
+                        0,
+                        encrypted.length,
+                        out,
+                        0
+                );
+                decrypted = Arrays.copyOf(out, outlen);
+            }
+            // ---------------------------------------------------------------------------------------------------------
+            assertThat(decrypted).isEqualTo(plain);
+            final var signer = new GenericSigner(cipher, new SHA1Digest());
+            signer.init(false, keyPair.getPublic());
+            signer.update(decrypted, 0, decrypted.length);
+            final var verified = signer.verifySignature(signature);
+            assertThat(verified).isTrue();
+        }
+
+        @DisplayName("RSA/ECB/PKCS1Padding")
+        @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
+        @ParameterizedTest(name = "[{index}] {0}-bit key")
+        void _PubPri_RSA_ECB_PKCS1Padding(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
             // https://github.com/anonrig/bouncycastle-implementations/blob/master/rsa.java
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html

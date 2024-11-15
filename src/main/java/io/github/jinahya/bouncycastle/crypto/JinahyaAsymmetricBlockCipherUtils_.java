@@ -90,6 +90,28 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    static long x(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
+                  final byte[] inbuf, final byte[] outbuf)
+            throws IOException, InvalidCipherTextException {
+        assert cipher != null;
+        assert in != null;
+        assert out != null;
+        assert inbuf != null;
+        assert outbuf != null;
+        final var inputBlockSize = cipher.getInputBlockSize();
+        assert inbuf.length >= inputBlockSize;
+        final var outputBlockSize = cipher.getOutputBlockSize();
+        assert outbuf.length >= outputBlockSize;
+        var bytes = 0L;
+        for (int r, outlen; (r = in.readNBytes(inbuf, 0, inputBlockSize)) > 0; ) {
+            outlen = processBlock(cipher, inbuf, 0, r, outbuf, 0);
+            out.write(outbuf, 0, outlen);
+            bytes += outlen;
+        }
+        return bytes;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     private JinahyaAsymmetricBlockCipherUtils_() {
         throw new AssertionError("instantiation is not allowed");
     }

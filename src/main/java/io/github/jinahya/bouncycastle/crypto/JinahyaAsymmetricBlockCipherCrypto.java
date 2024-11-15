@@ -171,23 +171,13 @@ public class JinahyaAsymmetricBlockCipherCrypto
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         Objects.requireNonNull(inbuf, "inbuf is null");
-//        initForEncryption();
-//        if (inbuf.length < cipher.getInputBlockSize()) {
-//            throw new IllegalArgumentException(
-//                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + cipher.getInputBlockSize() + ")"
-//            );
-//        }
-//        try {
-//            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
-//                    cipher,
-//                    in,
-//                    out,
-//                    inbuf
-//            );
-//        } catch (final InvalidCipherTextException icte) {
-//            throw JinahyaCryptoException.ofEncryptionFailure(icte);
-//        }
-        return 0L;
+        initForEncryption();
+        final var outbuf = new byte[cipher.getOutputBlockSize()];
+        try {
+            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf);
+        } catch (final InvalidCipherTextException e) {
+            throw JinahyaCryptoException.ofEncryptionFailure(e);
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -196,22 +186,18 @@ public class JinahyaAsymmetricBlockCipherCrypto
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         Objects.requireNonNull(inbuf, "inbuf is null");
-//        initForDecryption();
-//        if (inbuf.length < cipher.getInputBlockSize()) {
-//            throw new IllegalArgumentException(
-//                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + cipher.getInputBlockSize() + ")"
-//            );
-//        }
-//        try {
-//            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
-//                    cipher,
-//                    in,
-//                    out,
-//                    inbuf
-//            );
-//        } catch (final InvalidCipherTextException icte) {
-//            throw JinahyaCryptoException.ofEncryptionFailure(icte);
-//        }
-        return 0L;
+        initForDecryption();
+        final var inputBlockSize = cipher.getInputBlockSize();
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length < inputBlockSize) {
+            throw new IllegalArgumentException(
+                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + inputBlockSize + ")"
+            );
+        }
+        final var outbuf = new byte[cipher.getOutputBlockSize()];
+        try {
+            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf);
+        } catch (final InvalidCipherTextException e) {
+            throw JinahyaCryptoException.ofEncryptionFailure(e);
+        }
     }
 }
