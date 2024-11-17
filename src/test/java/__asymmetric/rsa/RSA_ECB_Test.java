@@ -6,6 +6,7 @@ import __symmetric._ECB_Constants;
 import __symmetric._JCEProviderTest;
 import _javax.security._Random_TestUtils;
 import _javax.security._Signature_Tests;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA_Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.digests.SHA1Digest;
@@ -78,7 +79,7 @@ class RSA_ECB_Test
                 // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
                 // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
                 final var cipher = new PKCS1Encoding(new RSAEngine());
-                final var mLen = _RSA__TestUtils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+                final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
                 final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
                 // ---------------------------------------------------------------------------------------------------------
                 cipher.init(true, keyPair.getPublic());
@@ -120,7 +121,7 @@ class RSA_ECB_Test
                 // https://stackoverflow.com/a/32166210/330457
                 // https://stackoverflow.com/a/3101932/330457
                 final var cipher = new OAEPEncoding(new RSAEngine(), new SHA1Digest(), new SHA1Digest(), new byte[0]);
-                final var mLen = _RSA__TestUtils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
+                final var mLen = _RSA_Utils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
                 final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
                 // ---------------------------------------------------------------------------------------------------------
                 cipher.init(true, keyPair.getPublic());
@@ -162,7 +163,7 @@ class RSA_ECB_Test
                 // https://stackoverflow.com/a/32166210/330457
                 // https://stackoverflow.com/a/3101932/330457
                 final var cipher = new OAEPEncoding(new RSAEngine(), new SHA256Digest(), new SHA1Digest(), new byte[0]);
-                final var mLen = _RSA__TestUtils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
+                final var mLen = _RSA_Utils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
                 final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
                 // ---------------------------------------------------------------------------------------------------------
                 cipher.init(true, keyPair.getPublic());
@@ -220,7 +221,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final var mLen = _RSA__TestUtils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+                final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
                 JCEProviderTest.__(cipher, new byte[0], keyPair);
                 JCEProviderTest.__(cipher, _Random_TestUtils.newRandomBytes(mLen), keyPair);
                 for (int i = 0; i < 16; i++) {
@@ -257,7 +258,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final int mLen = _RSA__TestUtils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
+                final int mLen = _RSA_Utils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
                 JCEProviderTest.__(
                         cipher,
                         new byte[0],
@@ -308,7 +309,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final int mLen = _RSA__TestUtils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
+                final int mLen = _RSA_Utils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
                 JCEProviderTest.__(
                         cipher,
                         new byte[0],

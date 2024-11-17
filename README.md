@@ -152,6 +152,7 @@ class Test {
 * [NIST](https://www.nist.gov/)
     * [NIST SP 800-38G Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf)
 * [IETF Datatracker](https://datatracker.ietf.org)
+    * [RFC: 2437 / PKCS #1: RSA Cryptography Specifications Version 2.0](https://datatracker.ietf.org/doc/html/rfc2437)
     * [RFC: 8017 / PKCS #1: RSA Cryptography Specifications Version 2.2](https://datatracker.ietf.org/doc/html/rfc8017)
 * Wikipedia
     * [Block cipher mode of operation](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation)
@@ -175,3 +176,7 @@ class Test {
 * [Cryptography software tools for Visual Basic and C/C++/C# developers](https://www.cryptosys.net/index.html)
     * [CryptoSys PKI Pro](https://www.cryptosys.net/pki/index.html)
         * [RSA signature and encryption schemes: RSA-PSS and RSA-OAEP](https://www.cryptosys.net/pki/manpki/pki_rsaschemes.html)
+* medium.com
+    * [So What Are RSA PKCS#1.5, RSA OAEP and RSA PSS — And Why Is It Important To Pick The Right One?](https://medium.com/asecuritysite-when-bob-met-alice/so-what-are-rsa-pcks-1-5-rsa-oaep-and-rsa-pss-and-why-is-it-important-to-pick-the-right-one-e639992fba09) 
+* [https://asecuritysite.com/](https://asecuritysite.com/)
+    * [Provable Secure Signatures with RSA](https://asecuritysite.com/blog/2023-06-10_Provable-Secure-Signatures-with-RSA-8c1ca7d68433.html) 

@@ -88,6 +88,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
         }
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public byte[] encrypt(final byte[] in) {
         Objects.requireNonNull(in, "in is null");

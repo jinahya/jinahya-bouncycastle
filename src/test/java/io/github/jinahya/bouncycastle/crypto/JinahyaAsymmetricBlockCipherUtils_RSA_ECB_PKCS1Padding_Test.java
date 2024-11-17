@@ -2,13 +2,12 @@ package io.github.jinahya.bouncycastle.crypto;
 
 import __asymmetric._RSA__TestUtils;
 import _javax.security._Random_TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA_Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.encodings.PKCS1Encoding;
 import org.bouncycastle.crypto.engines.RSAEngine;
-import org.bouncycastle.crypto.signers.GenericSigner;
 import org.bouncycastle.crypto.signers.RSADigestSigner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
 
-    @DisplayName("processBlock(cipher, in)")
+    @DisplayName("processBlock(cipher, in, inoff, inlen, out, outoff)")
     @Nested
     class ProcessBlock_Array_Test {
 
@@ -44,34 +43,43 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA__TestUtils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
             final var digest = new SHA256Digest();
             final var signer = new RSADigestSigner(digest);
-            // ---------------------------------------------------------------------------------------------------------
-            cipher.init(true, keyPair.getPrivate());
+            // -------------------------------------------------------------------------------------------- encrypt/sign
+            JinahyaAsymmetricBlockCipherUtils.initForEncryption(cipher, keyPair.getPrivate());
             assertThat(cipher.getInputBlockSize()).isEqualTo(mLen);
             final byte[] encrypted;
             final byte[] signature;
             {
-                final byte[] out = new byte[cipher.getOutputBlockSize()];
-                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlock(
-                        cipher,
-                        plain,
-                        0,
-                        plain.length,
-                        out,
-                        0
-                );
-                encrypted = Arrays.copyOf(out, outlen);
                 {
-                    signer.init(true, keyPair.getPrivate());
-                    signer.update(plain, 0, plain.length);
-                    signature = signer.generateSignature();
+                    final byte[] out = new byte[cipher.getOutputBlockSize()];
+                    final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlock(
+                            cipher,
+                            plain,
+                            0,
+                            plain.length,
+                            out,
+                            0
+                    );
+                    encrypted = Arrays.copyOf(out, outlen);
+                }
+                {
+                    final var out = new byte[keySize >> 3];
+                    final var outlen = JinahyaSignerUtils.generateSignature(
+                            JinahyaSignerUtils.initForSigning(signer, keyPair),
+                            plain,
+                            0,
+                            plain.length,
+                            out,
+                            0
+                    );
+                    signature = Arrays.copyOf(out, outlen);
                 }
             }
-            // ---------------------------------------------------------------------------------------------------------
-            cipher.init(false, keyPair.getPublic());
+            // ------------------------------------------------------------------------------------------ decrypt/verify
+            JinahyaAsymmetricBlockCipherUtils.initForDecryption(cipher, keyPair.getPublic());
             assertThat(cipher.getOutputBlockSize()).isEqualTo(mLen);
             final byte[] decrypted;
             {
@@ -88,12 +96,14 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             }
             // ---------------------------------------------------------------------------------------------------------
             assertThat(decrypted).isEqualTo(plain);
-            {
-                signer.init(false, keyPair.getPublic());
-                signer.update(decrypted, 0, decrypted.length);
-                final var verified = signer.verifySignature(signature);
-                assertThat(verified).isTrue();
-            }
+            final var verified = JinahyaSignerUtils.verifySignature(
+                    JinahyaSignerUtils.initForVerifying(signer, keyPair),
+                    plain,
+                    0,
+                    plain.length,
+                    signature
+            );
+            assertThat(verified).isTrue();
         }
 
         @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
@@ -103,31 +113,43 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA__TestUtils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
+            final var digest = new SHA256Digest();
+            final var signer = new RSADigestSigner(digest);
             // ---------------------------------------------------------------------------------------------------------
-            cipher.init(true, keyPair.getPublic());
+            JinahyaAsymmetricBlockCipherUtils.initForEncryption(cipher, keyPair.getPublic());
             assertThat(cipher.getInputBlockSize()).isEqualTo(mLen);
             final byte[] encrypted;
             final byte[] signature;
             {
-                final byte[] out = new byte[cipher.getOutputBlockSize()];
-                final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlock(
-                        cipher,
-                        plain,
-                        0,
-                        plain.length,
-                        out,
-                        0
-                );
-                encrypted = Arrays.copyOf(out, outlen);
-                final var signer = new GenericSigner(cipher, new SHA1Digest());
-                signer.init(true, keyPair.getPrivate());
-                signer.update(plain, 0, plain.length);
-                signature = signer.generateSignature();
+                {
+                    final byte[] out = new byte[cipher.getOutputBlockSize()];
+                    final var outlen = JinahyaAsymmetricBlockCipherUtils.processBlock(
+                            cipher,
+                            plain,
+                            0,
+                            plain.length,
+                            out,
+                            0
+                    );
+                    encrypted = Arrays.copyOf(out, outlen);
+                }
+                {
+                    final var out = new byte[keySize >> 3];
+                    final var outlen = JinahyaSignerUtils.generateSignature(
+                            JinahyaSignerUtils.initForSigning(signer, keyPair),
+                            plain,
+                            0,
+                            plain.length,
+                            out,
+                            0
+                    );
+                    signature = Arrays.copyOf(out, outlen);
+                }
             }
             // ---------------------------------------------------------------------------------------------------------
-            cipher.init(false, keyPair.getPrivate());
+            JinahyaAsymmetricBlockCipherUtils.initForDecryption(cipher, keyPair.getPrivate());
             assertThat(cipher.getOutputBlockSize()).isEqualTo(mLen);
             final byte[] decrypted;
             {
@@ -144,17 +166,18 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             }
             // ---------------------------------------------------------------------------------------------------------
             assertThat(decrypted).isEqualTo(plain);
-            {
-                final var signer = new GenericSigner(cipher, new SHA1Digest());
-                signer.init(false, keyPair.getPublic());
-                signer.update(decrypted, 0, decrypted.length);
-                final var verified = signer.verifySignature(signature);
-                assertThat(verified).isTrue();
-            }
+            final boolean verified = JinahyaSignerUtils.verifySignature(
+                    JinahyaSignerUtils.initForVerifying(signer, keyPair.getPublic()),
+                    plain,
+                    0,
+                    plain.length,
+                    signature
+            );
+            assertThat(verified).isTrue();
         }
     }
 
-    @DisplayName("processBlock(cipher, input)")
+    @DisplayName("processBlock(cipher, input, output)")
     @Nested
     class ProcessBlock_Buffer_Test {
 
@@ -169,14 +192,17 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA__TestUtils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = ByteBuffer.wrap(
                     _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1))
             );
+            final var digest = new SHA256Digest();
+            final var signer = new RSADigestSigner(digest);
             // ---------------------------------------------------------------------------------------------------------
-            cipher.init(true, keyPair.getPrivate());
+            JinahyaAsymmetricBlockCipherUtils.initForEncryption(cipher, keyPair.getPrivate());
             assertThat(cipher.getInputBlockSize()).isEqualTo(mLen);
             final var encrypted = ByteBuffer.allocate(cipher.getOutputBlockSize());
+            final var signature = ByteBuffer.allocate(keySize >> 3);
             {
                 final var bytes = JinahyaAsymmetricBlockCipherUtils.processBlock(
                         cipher,
@@ -184,9 +210,14 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
                         encrypted
                 );
                 assert bytes >= plain.position();
+                JinahyaSignerUtils.generateSignature(
+                        JinahyaSignerUtils.initForSigning(signer, keyPair),
+                        plain.flip(),
+                        signature
+                );
             }
             // ---------------------------------------------------------------------------------------------------------
-            cipher.init(false, keyPair.getPublic());
+            JinahyaAsymmetricBlockCipherUtils.initForDecryption(cipher, keyPair.getPublic());
             assertThat(cipher.getOutputBlockSize()).isEqualTo(mLen);
             final var decrypted = ByteBuffer.allocate(cipher.getOutputBlockSize());
             {
@@ -196,6 +227,73 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
                         decrypted
                 );
                 assert bytes <= encrypted.position();
+                JinahyaSignerUtils.verifySignature(
+                        JinahyaSignerUtils.initForVerifying(signer, keyPair),
+                        plain.flip(),
+                        signature.flip()
+                );
+            }
+            // ---------------------------------------------------------------------------------------------------------
+            assertThat(decrypted.flip()).isEqualTo(plain.flip());
+        }
+
+        @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
+        @ParameterizedTest(name = "[{index}] {0}-bit key")
+        void encryptPublic_decryptPrivate(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
+            // https://github.com/anonrig/bouncycastle-implementations/blob/master/rsa.java
+            // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
+            // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
+            final var cipher = new PKCS1Encoding(new RSAEngine());
+            final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var plain = ByteBuffer.wrap(
+                    _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1))
+            );
+            final var digest = new SHA256Digest();
+            final var signer = new RSADigestSigner(digest);
+            // -------------------------------------------------------------------------------------------- encrypt/sign
+            JinahyaAsymmetricBlockCipherUtils.initForEncryption(cipher, keyPair.getPublic());
+            assertThat(cipher.getInputBlockSize()).isEqualTo(mLen);
+            final var encrypted = ByteBuffer.allocate(cipher.getOutputBlockSize());
+            final var signature = ByteBuffer.allocate(keySize >> 3);
+            {
+                {
+                    final var bytes = JinahyaAsymmetricBlockCipherUtils.processBlock(
+                            cipher,
+                            plain,
+                            encrypted
+                    );
+                    assert bytes >= plain.position();
+                }
+                {
+                    final var bytes = JinahyaSignerUtils.generateSignature(
+                            JinahyaSignerUtils.initForSigning(signer, keyPair),
+                            plain.flip(),
+                            signature
+                    );
+                    assert bytes == signature.capacity();
+                }
+            }
+            // ------------------------------------------------------------------------------------------ decrypt/verify
+            JinahyaAsymmetricBlockCipherUtils.initForDecryption(cipher, keyPair.getPrivate());
+            assertThat(cipher.getOutputBlockSize()).isEqualTo(mLen);
+            final var decrypted = ByteBuffer.allocate(cipher.getOutputBlockSize());
+            {
+                {
+                    final var bytes = JinahyaAsymmetricBlockCipherUtils.processBlock(
+                            cipher,
+                            encrypted.flip(),
+                            decrypted
+                    );
+                    assert bytes <= encrypted.position();
+                }
+                {
+                    final var verified = JinahyaSignerUtils.verifySignature(
+                            JinahyaSignerUtils.initForVerifying(signer, keyPair),
+                            plain.flip(),
+                            signature.flip()
+                    );
+                    assertThat(verified).isTrue();
+                }
             }
             // ---------------------------------------------------------------------------------------------------------
             assertThat(decrypted.flip()).isEqualTo(plain.flip());
@@ -213,12 +311,12 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
         @DisplayName("RSA/ECB/PKCS1Padding")
         @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0}-bit key")
-        void __RSA_ECB_PKCS1Padding(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
+        void __(final int keySize, final AsymmetricCipherKeyPair keyPair) throws Exception {
             // https://github.com/anonrig/bouncycastle-implementations/blob/master/rsa.java
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA__TestUtils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             final var baos = new ByteArrayOutputStream();
             // ---------------------------------------------------------------------------------------------------------

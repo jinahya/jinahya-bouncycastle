@@ -1,6 +1,7 @@
 package io.github.jinahya.bouncycastle.crypto;
 
 import org.bouncycastle.crypto.AsymmetricBlockCipher;
+import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 
 import java.io.IOException;
@@ -30,6 +31,23 @@ public final class JinahyaAsymmetricBlockCipherUtils {
     public static int getOutLen(final AsymmetricBlockCipher cipher, final int inlen) {
         final int blocks = JinahyaAsymmetricBlockCipherUtils.getInputBlockCount(cipher, inlen);
         return blocks * cipher.getOutputBlockSize();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private static <T extends AsymmetricBlockCipher> T initFor(final T cipher, final boolean encryption,
+                                                               final CipherParameters params) {
+        Objects.requireNonNull(cipher, "cipher is null");
+        Objects.requireNonNull(params, "params is null");
+        cipher.init(encryption, params);
+        return cipher;
+    }
+
+    public static <T extends AsymmetricBlockCipher> T initForEncryption(final T cipher, final CipherParameters params) {
+        return initFor(cipher, true, params);
+    }
+
+    public static <T extends AsymmetricBlockCipher> T initForDecryption(final T cipher, final CipherParameters params) {
+        return initFor(cipher, false, params);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -79,7 +97,7 @@ public final class JinahyaAsymmetricBlockCipherUtils {
             );
         }
         final var outputBlockSize = cipher.getOutputBlockSize();
-        if (out.length - outoff > outputBlockSize) {
+        if ((out.length - outoff) > outputBlockSize) {
             throw new IllegalArgumentException(
                     "out.length(" + out.length + ") - outoff(" + outoff + ") > " +
                             "cipher.outputBlockSize(" + outputBlockSize + ")"
