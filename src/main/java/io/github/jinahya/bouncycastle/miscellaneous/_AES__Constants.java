@@ -25,7 +25,7 @@ final class _AES__Constants {
     static final int BLOCK_BYTES = BLOCK_SIZE >> 3;
 
     /**
-     * A list of allowed key sizes.
+     * An unmodifiable list of allowed key sizes.
      */
     static final List<Integer> ALLOWED_KEY_SIZE_LIST = List.of(
             128,
@@ -34,7 +34,7 @@ final class _AES__Constants {
     );
 
     /**
-     * A list of allowed key sizes, in bytes.
+     * An unmodifiable list of allowed key sizes, in bytes.
      */
     public static final List<Integer> ALLOWED_KEY_BYTES_LIST =
             _AES__Constants.ALLOWED_KEY_SIZE_LIST.stream()

@@ -25,6 +25,13 @@ final class _AES__Utils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    public static String getTransformation(final String mode, final String padding) {
+        Objects.requireNonNull(mode, "mode is null");
+        Objects.requireNonNull(padding, "padding is null");
+        return _AES__Constants.ALGORITHM + '/' + mode + '/' + padding;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     private _AES__Utils() {
         throw new AssertionError("instantiation is not allowed");
     }
