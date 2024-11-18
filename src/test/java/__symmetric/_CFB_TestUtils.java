@@ -3,6 +3,7 @@ package __symmetric;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BlockCipher_TestUtils;
 import _org.bouncycastle.crypto.params._ParametersWithIV_TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous.__CFB__Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.modes.CFBBlockCipher;
@@ -31,7 +32,7 @@ public final class _CFB_TestUtils {
     }
 
     public static String mode(final int bitWidth) {
-        return _CFB_Constants.MODE + bitWidth;
+        return __CFB__Constants.MODE + bitWidth;
     }
 
     public static Stream<Arguments> getKeySizeAndBitWidthArgumentsStream(

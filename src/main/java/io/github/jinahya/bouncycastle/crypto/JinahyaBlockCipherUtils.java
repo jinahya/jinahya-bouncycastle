@@ -18,21 +18,6 @@ import java.util.Objects;
  */
 public final class JinahyaBlockCipherUtils {
 
-//    public static int getBlockBytes(final BlockCipher cipher) {
-//        return Objects.requireNonNull(cipher, "cipher is null").getBlockSize();
-//    }
-//
-//    /**
-//     * Returns the block size of specified cipher, in bits.
-//     *
-//     * @param cipher the cipher.
-//     * @return the block size of {@code cipher} in bits.
-//     * @see BlockCipher#getBlockSize()
-//     */
-//    public static int getBlockSizeInBits(final BlockCipher cipher) {
-//        return getBlockBytes(cipher) >> 3;
-//    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

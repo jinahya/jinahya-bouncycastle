@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Utilities for the {@value _SEED__Constants#ALGORITHM} algorithm.
+ * Utilities for the {@value _SEED___Constants#ALGORITHM} algorithm.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -25,8 +25,8 @@ public final class JinahyaSEEDUtils {
 
     // ----------------------------------------------------------------------------------------------- /CBC/PKCS7Padding
     private static JinahyaCrypto _CBC_PKCS7Padding(final byte[] key, final byte[] iv) {
-        _SEED__Utils.requireValidKey(key);
-        _SEED__Utils.requireValidIv(iv);
+        _SEED___Utils.requireValidKey(key);
+        _SEED___Utils.requireValidIv(iv);
         final var cipher = new PaddedBufferedBlockCipher(
                 CBCBlockCipher.newInstance(new SEEDEngine()),
                 new PKCS7Padding()
@@ -108,7 +108,7 @@ public final class JinahyaSEEDUtils {
 
     // -------------------------------------------------------------------------------------------------- /GCM/NoPadding
     private static JinahyaCrypto _GCM_NoPadding(final byte[] key, final int tLen, final byte[] iv, final byte[] aad) {
-        _SEED__Utils.requireValidKey(key);
+        _SEED___Utils.requireValidKey(key);
         __GCM__Utils.requireValid_tLen_GCM(tLen);
         __GCM__Utils.requireValid_iv_GCM(iv);
         final var cipher = GCMBlockCipher.newInstance(new SEEDEngine());

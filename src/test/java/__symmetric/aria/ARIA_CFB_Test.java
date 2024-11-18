@@ -1,6 +1,6 @@
 package __symmetric.aria;
 
-import __symmetric._CFB_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__CFB__Constants;
 import __symmetric._CFB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -67,7 +67,7 @@ class ARIA_CFB_Test
     @ParameterizedTest
     void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _CFB_Constants.MODE + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + __CFB__Constants.MODE + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
@@ -90,7 +90,7 @@ class ARIA_CFB_Test
     @ParameterizedTest
     void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _CFB_Constants.MODE + "/NoPadding";
+            final var transformation = ALGORITHM + '/' + __CFB__Constants.MODE + "/NoPadding";
             final Cipher cipher;
             try {
                 cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);

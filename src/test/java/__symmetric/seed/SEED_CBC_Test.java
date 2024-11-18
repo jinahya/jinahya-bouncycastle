@@ -1,12 +1,12 @@
 package __symmetric.seed;
 
-import __symmetric._CBC_Constants;
 import __symmetric._CBC_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.crypto.paddings._BlockCipherPadding_TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous.__CBC__Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.engines.SEEDEngine;
@@ -166,7 +166,7 @@ class SEED_CBC_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("PKCS5Padding")
-                    .map(p -> ALGORITHM + '/' + _CBC_Constants.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + __CBC__Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 

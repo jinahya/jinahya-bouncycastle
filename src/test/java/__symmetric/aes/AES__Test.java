@@ -10,14 +10,18 @@ import java.util.stream.IntStream;
 @Slf4j
 abstract class AES__Test {
 
+    @Deprecated
     static final String ALGORITHM = "AES";
 
     // -----------------------------------------------------------------------------------------------------------------
+    @Deprecated
     static final int BLOCK_SIZE = 128;
 
+    @Deprecated
     static final int BLOCK_BYTES = BLOCK_SIZE >> 3;
 
     // -----------------------------------------------------------------------------------------------------------------
+    @Deprecated
     static IntStream getKeySizeStream() {
         return IntStream.of(
                 128,
@@ -26,6 +30,7 @@ abstract class AES__Test {
         );
     }
 
+    @Deprecated
     static IntStream getKeyBytesStream() {
         return getKeySizeStream().map(ks -> ks >> 3);
     }

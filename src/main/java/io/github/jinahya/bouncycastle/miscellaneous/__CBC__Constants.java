@@ -1,11 +1,11 @@
 package io.github.jinahya.bouncycastle.miscellaneous;
 
-final class __CBC_Constants {
+public final class __CBC__Constants {
 
-    static final String MODE = "CBC";
+    public static final String MODE = "CBC";
 
     // -----------------------------------------------------------------------------------------------------------------
-    private __CBC_Constants() {
+    private __CBC__Constants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

@@ -21,8 +21,8 @@ class JinahyaSEEDUtilsTest {
         @Test
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _Random_TestUtils.newRandomBytes(_SEED__Constants.BLOCK_BYTES);
-            final var iv = _Random_TestUtils.newRandomBytes(_SEED__Constants.BLOCK_BYTES);
+            final var key = _Random_TestUtils.newRandomBytes(_SEED___Constants.BLOCK_BYTES);
+            final var iv = _Random_TestUtils.newRandomBytes(_SEED___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
             final var encrypted = JinahyaSEEDUtils.encrypt_CBC_PKCS7Padding(key, iv, plain);
@@ -34,8 +34,8 @@ class JinahyaSEEDUtilsTest {
         @Test
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _Random_TestUtils.newRandomBytes(_SEED__Constants.BLOCK_BYTES);
-            final var iv = _Random_TestUtils.newRandomBytes(_SEED__Constants.BLOCK_BYTES);
+            final var key = _Random_TestUtils.newRandomBytes(_SEED___Constants.BLOCK_BYTES);
+            final var iv = _Random_TestUtils.newRandomBytes(_SEED___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1048576));
             // ---------------------------------------------------------------------------------------------------- when
             final byte[] encrypted;
@@ -68,7 +68,7 @@ class JinahyaSEEDUtilsTest {
         @Test
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _Random_TestUtils.newRandomBytes(_SEED__Constants.BLOCK_BYTES);
+            final var key = _Random_TestUtils.newRandomBytes(_SEED___Constants.BLOCK_BYTES);
             final var tLen = __GCM__Constants.ALLOWED_T_LEN_LIST_GCM.get(
                     ThreadLocalRandom.current().nextInt(__GCM__Constants.ALLOWED_T_LEN_LIST_GCM.size())
             );
@@ -89,7 +89,7 @@ class JinahyaSEEDUtilsTest {
         @Test
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _Random_TestUtils.newRandomBytes(_SEED__Constants.BLOCK_BYTES);
+            final var key = _Random_TestUtils.newRandomBytes(_SEED___Constants.BLOCK_BYTES);
             final var tLen = __GCM__Constants.ALLOWED_T_LEN_LIST_GCM.get(
                     ThreadLocalRandom.current().nextInt(__GCM__Constants.ALLOWED_T_LEN_LIST_GCM.size())
             );

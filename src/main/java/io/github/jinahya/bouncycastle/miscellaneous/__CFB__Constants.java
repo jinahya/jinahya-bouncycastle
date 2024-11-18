@@ -1,14 +1,11 @@
-package __symmetric;
+package io.github.jinahya.bouncycastle.miscellaneous;
 
-import lombok.extern.slf4j.Slf4j;
+public final class __CFB__Constants {
 
-@Slf4j
-public final class _CCM_Constants {
-
-    public static final String MODE = "CCM";
+    public static final String MODE = "CFB";
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CCM_Constants() {
+    private __CFB__Constants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

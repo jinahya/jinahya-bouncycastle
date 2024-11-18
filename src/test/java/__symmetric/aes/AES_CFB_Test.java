@@ -1,11 +1,12 @@
 package __symmetric.aes;
 
-import __symmetric._CFB_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__CFB__Constants;
 import __symmetric._CFB_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._AES___Constants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +72,7 @@ class AES_CFB_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _CFB_Constants.MODE + '/' + p)
+                    .map(p -> _AES___Constants.ALGORITHM + '/' + __CFB__Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> {
                         return Arguments.of(t, ks);
                     }));
@@ -87,8 +88,9 @@ class AES_CFB_Test
                 log.error("failed to get cipher for '{}'", transformation, nsae);
                 return;
             }
-            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
-            final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
+            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3),
+                                              _AES___Constants.ALGORITHM);
+            final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(_AES___Constants.BLOCK_BYTES));
             _Cipher_TestUtils.__(cipher, key, params, (byte[]) null);
         }
 
@@ -102,8 +104,9 @@ class AES_CFB_Test
                 log.error("failed to get cipher for '{}'", transformation, nsae);
                 return;
             }
-            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
-            final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
+            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3),
+                                              _AES___Constants.ALGORITHM);
+            final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(_AES___Constants.BLOCK_BYTES));
             _Cipher_TestUtils.__(cipher, key, params, (byte[]) null, dir);
         }
 

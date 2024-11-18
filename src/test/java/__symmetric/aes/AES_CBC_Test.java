@@ -1,11 +1,12 @@
 package __symmetric.aes;
 
-import __symmetric._CBC_Constants;
 import __symmetric._CBC_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._AES___Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__CBC__Constants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +72,7 @@ class AES_CBC_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("PKCS5Padding")
-                    .map(p -> ALGORITHM + '/' + _CBC_Constants.MODE + '/' + p)
+                    .map(p -> _AES___Constants.ALGORITHM + '/' + __CBC__Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 
@@ -80,7 +81,8 @@ class AES_CBC_Test
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
         void __bytes(final String transformation, final int keySize) throws Exception {
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
-            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
+            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3),
+                                              _AES___Constants.ALGORITHM);
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
             _Cipher_TestUtils.__(cipher, key, params, null);
         }
@@ -90,7 +92,8 @@ class AES_CBC_Test
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
         void __file(final String transformation, final int keySize, @TempDir final Path dir) throws Exception {
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
-            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
+            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3),
+                                              _AES___Constants.ALGORITHM);
             final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
             _Cipher_TestUtils.__(cipher, key, params, null, dir);
         }
