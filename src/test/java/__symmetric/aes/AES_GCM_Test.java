@@ -1,11 +1,12 @@
 package __symmetric.aes;
 
-import __symmetric._GCM_Constants;
 import __symmetric._GCM_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto.modes._AEADCipher_TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._AES___Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__GCM__Constants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +67,7 @@ class AES_GCM_Test
 
         private static Stream<Arguments> getTransformationKeySizeAndTLenArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _GCM_Constants.MODE + '/' + p)
+                    .map(p -> _AES___Constants.ALGORITHM + '/' + __GCM__Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> {
                         return _GCM_TestUtils.getTLenStream().mapToObj(tl -> {
                             return Arguments.of(t, ks, tl);
@@ -80,10 +81,10 @@ class AES_GCM_Test
         void __(final String transformation, final int keySize, final int tLen) throws Exception {
             final var cipher = Cipher.getInstance(transformation);
             final var key = new SecretKeySpec(
-                    _Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM
+                    _Random_TestUtils.newRandomBytes(keySize >> 3), _AES___Constants.ALGORITHM
             );
             _Random_TestUtils.getRandomBytesStream().forEach(p -> {
-                final var iv = _Random_TestUtils.newRandomBytes(BLOCK_BYTES);
+                final var iv = _Random_TestUtils.newRandomBytes(_AES___Constants.BLOCK_BYTES);
                 final var params = new GCMParameterSpec(tLen, iv);
                 final var aad = ThreadLocalRandom.current().nextBoolean()
                         ? null
@@ -104,10 +105,10 @@ class AES_GCM_Test
             final var cipher = Cipher.getInstance(transformation);
             final var key = new SecretKeySpec(
                     _Random_TestUtils.newRandomBytes(keySize >> 3),
-                    ALGORITHM
+                    _AES___Constants.ALGORITHM
             );
             _Random_TestUtils.getRandomFileStream(dir).forEach(p -> {
-                final var iv = _Random_TestUtils.newRandomBytes(BLOCK_BYTES);
+                final var iv = _Random_TestUtils.newRandomBytes(_AES___Constants.BLOCK_BYTES);
                 final var params = new GCMParameterSpec(tLen, iv);
                 final var aad = ThreadLocalRandom.current().nextBoolean()
                         ? null

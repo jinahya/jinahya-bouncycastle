@@ -1,6 +1,6 @@
 package __symmetric.seed;
 
-import __symmetric._ECB_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import __symmetric._ECB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -59,7 +59,7 @@ class SEED_ECB_Test
     @ParameterizedTest
     void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _ECB_Constants.MODE + "/PKCS5Padding";
+            final var transformation = ALGORITHM + '/' + __ECB__Constants.MODE + "/PKCS5Padding";
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(
                     _Random_TestUtils.newRandomBytes(keySize >> 3),
@@ -75,7 +75,7 @@ class SEED_ECB_Test
     @ParameterizedTest
     void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-            final var transformation = ALGORITHM + '/' + _ECB_Constants.MODE + "/PKCS5Padding";
+            final var transformation = ALGORITHM + '/' + __ECB__Constants.MODE + "/PKCS5Padding";
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(
                     _Random_TestUtils.newRandomBytes(keySize >> 3),

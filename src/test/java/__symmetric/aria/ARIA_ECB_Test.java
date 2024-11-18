@@ -1,6 +1,6 @@
 package __symmetric.aria;
 
-import __symmetric._ECB_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import __symmetric._ECB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
@@ -64,7 +64,7 @@ class ARIA_ECB_Test
                                 "PKCS5Padding"
                         )
                         .map(p -> {
-                            return ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p;
+                            return ALGORITHM + '/' + __ECB__Constants.MODE + '/' + p;
                         })
                         .map(t -> {
                             return Arguments.of(

@@ -1,6 +1,6 @@
 package __symmetric.aes;
 
-import __symmetric._CTR_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__CTR__Constants;
 import __symmetric._CTR_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
@@ -70,7 +70,7 @@ class AES_CTR_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("NoPadding")
-                    .map(p -> ALGORITHM + '/' + _CTR_Constants.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + __CTR__Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> {
                         return Arguments.of(t, ks);
                     }));

@@ -2,7 +2,7 @@ package __asymmetric.rsa;
 
 import __asymmetric._RSA_TestConstants;
 import __asymmetric._RSA_TestUtils;
-import __symmetric._ECB_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import __symmetric._JCEProviderTest;
 import _javax.security._Random_TestUtils;
 import _javax.security._Signature_Tests;
@@ -208,7 +208,7 @@ class RSA_ECB_Test
 
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("PKCS1Padding")
-                        .map(p -> _RSA_Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
+                        .map(p -> _RSA_Constants.ALGORITHM + '/' + __ECB__Constants.MODE + '/' + p)
                         .flatMap(t -> _RSA_TestConstants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 
@@ -245,7 +245,7 @@ class RSA_ECB_Test
 
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("OAEPWithSHA-1AndMGF1Padding")
-                        .map(p -> _RSA_Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
+                        .map(p -> _RSA_Constants.ALGORITHM + '/' + __ECB__Constants.MODE + '/' + p)
                         .flatMap(t -> _RSA_TestConstants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 
@@ -296,7 +296,7 @@ class RSA_ECB_Test
 
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("OAEPWithSHA-256AndMGF1Padding")
-                        .map(p -> _RSA_Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
+                        .map(p -> _RSA_Constants.ALGORITHM + '/' + __ECB__Constants.MODE + '/' + p)
                         .flatMap(t -> _RSA_TestConstants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 

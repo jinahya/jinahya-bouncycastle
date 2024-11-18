@@ -1,14 +1,11 @@
-package __symmetric;
+package io.github.jinahya.bouncycastle.miscellaneous;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-public final class _CTR_Constants {
+public final class __CTR__Constants {
 
     public static final String MODE = "CTR";
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CTR_Constants() {
+    private __CTR__Constants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

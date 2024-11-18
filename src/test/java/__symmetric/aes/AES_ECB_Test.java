@@ -1,6 +1,6 @@
 package __symmetric.aes;
 
-import __symmetric._ECB_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import __symmetric._ECB_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
@@ -62,7 +62,7 @@ class AES_ECB_Test
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return getKeySizeStream().mapToObj(ks -> {
                 return Stream.of("PKCS5Padding")
-                        .map(p -> ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
+                        .map(p -> ALGORITHM + '/' + __ECB__Constants.MODE + '/' + p)
                         .map(t -> Arguments.of(t, ks));
             }).flatMap(Function.identity());
         }

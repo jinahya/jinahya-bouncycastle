@@ -1,6 +1,6 @@
 package __symmetric.desede;
 
-import __symmetric._ECB_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import __symmetric._ECB_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
@@ -72,7 +72,7 @@ class DESede_ECB_Test
 
         private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
             return Stream.of("PKCS5Padding")
-                    .map(p -> ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
+                    .map(p -> ALGORITHM + '/' + __ECB__Constants.MODE + '/' + p)
                     .flatMap(t -> getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
         }
 
