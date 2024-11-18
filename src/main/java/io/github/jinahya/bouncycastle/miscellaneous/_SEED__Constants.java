@@ -25,14 +25,14 @@ final class _SEED__Constants {
     public static final int BLOCK_BYTES = BLOCK_SIZE >> 3;
 
     /**
-     * A list of allowed key sizes.
+     * An unmodifiable list of allowed key sizes.
      */
     public static final List<Integer> ALLOWED_KEY_SIZE_LIST = List.of(
             128
     );
 
     /**
-     * A list of allowed key sizes, in bytes.
+     * An unmodifiable list of allowed key sizes, in bytes.
      */
     public static final List<Integer> ALLOWED_KEY_BYTES_LIST =
             _SEED__Constants.ALLOWED_KEY_SIZE_LIST.stream()

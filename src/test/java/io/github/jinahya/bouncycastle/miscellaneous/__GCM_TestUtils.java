@@ -7,13 +7,13 @@ import java.util.concurrent.ThreadLocalRandom;
 final class __GCM_TestUtils {
 
     static int randomTLen() {
-        return __GCM_Constants.ALLOWED_T_LEN_LIST_GCM.get(
-                ThreadLocalRandom.current().nextInt(__GCM_Constants.ALLOWED_T_LEN_LIST_GCM.size())
+        return __GCM__Constants.ALLOWED_T_LEN_LIST_GCM.get(
+                ThreadLocalRandom.current().nextInt(__GCM__Constants.ALLOWED_T_LEN_LIST_GCM.size())
         );
     }
 
     static int randomIvBytes() {
-        return ThreadLocalRandom.current().nextInt(128) + __GCM_Constants.IV_SIZE_GCM_MINIMUM;
+        return ThreadLocalRandom.current().nextInt(128) + __GCM__Constants.IV_SIZE_GCM_MINIMUM;
     }
 
     static byte[] randomIv() {

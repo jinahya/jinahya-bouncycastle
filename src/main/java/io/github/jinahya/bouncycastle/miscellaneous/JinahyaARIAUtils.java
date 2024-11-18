@@ -105,8 +105,8 @@ public final class JinahyaARIAUtils {
     // -------------------------------------------------------------------------------------------------- /GCM/NoPadding
     private static JinahyaCrypto _GCM_NoPadding(final byte[] key, final int tLen, final byte[] iv, final byte[] aad) {
         _ARIA__Utils.requireValidKey(key);
-        __GCM_Utils.requireValid_tLen_GCM(tLen);
-        __GCM_Utils.requireValid_iv_GCM(iv);
+        __GCM__Utils.requireValid_tLen_GCM(tLen);
+        __GCM__Utils.requireValid_iv_GCM(iv);
         final var cipher = GCMBlockCipher.newInstance(new ARIAEngine());
         final var params = new AEADParameters(
                 new KeyParameter(key),
@@ -123,7 +123,7 @@ public final class JinahyaARIAUtils {
      * @param key  a key.
      * @param tLen a length (in bits) of authentication tag.
      * @param iv   an initialization vector whose length should be greater than or equals to
-     *             {@value __GCM_Constants#IV_SIZE_GCM_MINIMUM}.
+     *             {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
      * @param aad  an additional authenticated data. may be {@code null}.
      * @param in   the input bytes to encrypt.
      * @return an array of encrypted bytes.
@@ -140,7 +140,7 @@ public final class JinahyaARIAUtils {
      * @param key  a key.
      * @param tLen a length (in bits) of authentication tag.
      * @param iv   an initialization vector whose length should be greater than or equals to
-     *             {@value __GCM_Constants#IV_SIZE_GCM_MINIMUM}.
+     *             {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
      * @param aad  an additional authenticated data. may be {@code null}.
      * @param in   the input bytes to decrypt.
      * @return an array of decrypted bytes.
@@ -157,7 +157,7 @@ public final class JinahyaARIAUtils {
      * @param key   the key.
      * @param tLen  a length (in bits) of authentication tag.
      * @param iv    an initialization vector whose length should be greater than or equals to
-     *              {@value __GCM_Constants#IV_SIZE_GCM_MINIMUM}.
+     *              {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
      * @param aad   an additional authenticated data. may be {@code null}.
      * @param in    the input stream from which plain bytes are read.
      * @param out   the output stream to which encrypted bytes are written.
@@ -178,7 +178,7 @@ public final class JinahyaARIAUtils {
      * @param key   the key.
      * @param tLen  a length (in bits) of authentication tag.
      * @param iv    an initialization vector whose length should be greater than or equals to
-     *              {@value __GCM_Constants#IV_SIZE_GCM_MINIMUM}.
+     *              {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
      * @param aad   an additional authenticated data. may be {@code null}.
      * @param in    the input stream from which plain bytes are read.
      * @param out   the output stream to which decrypted bytes are written.

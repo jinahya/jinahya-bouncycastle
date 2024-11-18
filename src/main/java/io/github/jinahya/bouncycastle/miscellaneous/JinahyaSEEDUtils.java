@@ -39,7 +39,8 @@ public final class JinahyaSEEDUtils {
     }
 
     /**
-     * Encrypts, using specified key and iv, specified input bytes, and returns the result.
+     * Encrypts, in {@code CBC} mode with {@code PKCS7Padding}, using specified key and iv, specified input bytes, and
+     * returns the result.
      *
      * @param key the key.
      * @param iv  the iv.
@@ -52,12 +53,13 @@ public final class JinahyaSEEDUtils {
     }
 
     /**
-     * Decrypts, using specified key and iv, specified input bytes, and returns the result.
+     * Decrypts, in {@code CBC} mode with {@code PKCS7Padding}, using specified key and iv, specified input bytes, and
+     * returns the result.
      *
      * @param key the key.
      * @param iv  the iv.
-     * @param in  the input bytes to decrypt.
-     * @return an array of decrypted bytes.
+     * @param in  the input bytes to encrypt.
+     * @return an array of encrypted bytes.
      */
     public static byte[] decrypt_CBC_PKCS7Padding(final byte[] key, final byte[] iv, final byte[] in) {
         return _CBC_PKCS7Padding(key, iv)
@@ -67,8 +69,8 @@ public final class JinahyaSEEDUtils {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Encrypts, using specified key and iv, all bytes from specified input stream, and writes encrypted bytes to
-     * specified output stream.
+     * Encrypts, in {@code CBC} mode with {@code PKCS7Padding}, using specified key and iv, all bytes from specified
+     * input stream, and writes encrypted bytes to specified output stream.
      *
      * @param key   the key.
      * @param iv    the iv.
@@ -86,8 +88,8 @@ public final class JinahyaSEEDUtils {
     }
 
     /**
-     * Decrypts, using specified key and iv, all bytes from specified input stream, and writes decrypted bytes to
-     * specified output stream.
+     * Decrypts, in {@code CBC} mode with {@code PKCS7Padding}, using specified key and iv, all bytes from specified
+     * input stream, and writes decrypted bytes to specified output stream.
      *
      * @param key   the key.
      * @param iv    the iv.
@@ -107,8 +109,8 @@ public final class JinahyaSEEDUtils {
     // -------------------------------------------------------------------------------------------------- /GCM/NoPadding
     private static JinahyaCrypto _GCM_NoPadding(final byte[] key, final int tLen, final byte[] iv, final byte[] aad) {
         _SEED__Utils.requireValidKey(key);
-        __GCM_Utils.requireValid_tLen_GCM(tLen);
-        __GCM_Utils.requireValid_iv_GCM(iv);
+        __GCM__Utils.requireValid_tLen_GCM(tLen);
+        __GCM__Utils.requireValid_iv_GCM(iv);
         final var cipher = GCMBlockCipher.newInstance(new SEEDEngine());
         final var params = new AEADParameters(
                 new KeyParameter(key),
@@ -120,12 +122,12 @@ public final class JinahyaSEEDUtils {
     }
 
     /**
-     * Encrypts specified input bytes, in {@code GCM} mode with no padding, and returns result.
+     * Encrypts, in {@value __GCM__Constants#MODE} mode with no padding, specified input bytes, and returns result.
      *
      * @param key  a key.
      * @param tLen a length (in bits) of authentication tag.
      * @param iv   an initialization vector whose length should be greater than or equals to
-     *             {@value __GCM_Constants#IV_SIZE_GCM_MINIMUM}.
+     *             {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
      * @param aad  an additional authenticated data. may be {@code null}.
      * @param in   the input bytes to encrypt.
      * @return an array of encrypted bytes.
@@ -142,7 +144,7 @@ public final class JinahyaSEEDUtils {
      * @param key  a key.
      * @param tLen a length (in bits) of authentication tag.
      * @param iv   an initialization vector whose length should be greater than or equals to
-     *             {@value __GCM_Constants#IV_SIZE_GCM_MINIMUM}.
+     *             {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
      * @param aad  an additional authenticated data. may be {@code null}.
      * @param in   the input bytes to decrypt.
      * @return an array of decrypted bytes.
@@ -159,7 +161,7 @@ public final class JinahyaSEEDUtils {
      * @param key   the key.
      * @param tLen  a length (in bits) of authentication tag.
      * @param iv    an initialization vector whose length should be greater than or equals to
-     *              {@value __GCM_Constants#IV_SIZE_GCM_MINIMUM}.
+     *              {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
      * @param aad   an additional authenticated data. may be {@code null}.
      * @param in    the input stream from which plain bytes are read.
      * @param out   the output stream to which encrypted bytes are written.
@@ -180,7 +182,7 @@ public final class JinahyaSEEDUtils {
      * @param key   the key.
      * @param tLen  a length (in bits) of authentication tag.
      * @param iv    an initialization vector whose length should be greater than or equals to
-     *              {@value __GCM_Constants#IV_SIZE_GCM_MINIMUM}.
+     *              {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
      * @param aad   an additional authenticated data. may be {@code null}.
      * @param in    the input stream from which plain bytes are read.
      * @param out   the output stream to which decrypted bytes are written.
