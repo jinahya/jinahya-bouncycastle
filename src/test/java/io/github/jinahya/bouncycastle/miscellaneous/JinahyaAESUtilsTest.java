@@ -22,7 +22,7 @@ class JinahyaAESUtilsTest {
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
             final var key = _AES__TestUtils.randomKey();
-            final var iv = __CBC_TestUtils.newRandomIv(_AES__Constants.BLOCK_BYTES);
+            final var iv = __CBC_TestUtils.newRandomIv(_AES_Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
             final var encrypted = JinahyaAESUtils.encrypt_CBC_PKCS7Padding(key, iv, plain);
@@ -35,7 +35,7 @@ class JinahyaAESUtilsTest {
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
             final var key = _AES__TestUtils.randomKey();
-            final var iv = __CBC_TestUtils.newRandomIv(_AES__Constants.BLOCK_BYTES);
+            final var iv = __CBC_TestUtils.newRandomIv(_AES_Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1048576));
             // ---------------------------------------------------------------------------------------------------- when
             final byte[] encrypted;

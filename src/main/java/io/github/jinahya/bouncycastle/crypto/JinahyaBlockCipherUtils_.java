@@ -10,27 +10,36 @@ import java.io.OutputStream;
 final class JinahyaBlockCipherUtils_ {
 
     /**
-     * @param cipher
-     * @param in
-     * @param inoff
-     * @param out
-     * @param outoff
-     * @param mac
-     * @return
+     * Processes, using specified cipher, a block bytes from specified input array, and set processed bytes on specified
+     * output array.
+     *
+     * @param cipher the cipher.
+     * @param in     the input array to process.
+     * @param inoff  a starting index of the {@code in}.
+     * @param out    the output array.
+     * @param outoff a starting index of the {@code out}.
+     * @param inmac  a mac to be updated with unprocessed bytes; may be {@code null}.
+     * @param outmac a mac to be updated with processed bytes; may be {@code null}.
+     * @return the number of bytes set on the output array.
      * @see BlockCipher#processBlock(byte[], int, byte[], int)
      */
     static int processBlock(final BlockCipher cipher, final byte[] in, final int inoff, final byte[] out,
-                            final int outoff, final Mac mac) {
+                            final int outoff, final Mac inmac, final Mac outmac) {
         assert cipher != null;
+        final var blockSize = cipher.getBlockSize();
         assert in != null;
         assert inoff >= 0;
+        assert (in.length - inoff) >= blockSize;
         assert out != null;
         assert outoff >= 0;
+        assert (out.length - outoff) >= blockSize;
         final var outlen = cipher.processBlock(in, inoff, out, outoff);
-        final var blockSize = cipher.getBlockSize();
         assert outlen == blockSize;
-        if (mac != null) {
-            mac.update(in, inoff, blockSize);
+        if (inmac != null) {
+            inmac.update(in, inoff, blockSize);
+        }
+        if (outmac != null) {
+            outmac.update(out, outoff, outlen);
         }
         return outlen;
     }

@@ -3,7 +3,7 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import java.util.List;
 import java.util.stream.Collectors;
 
-final class _AES__Constants {
+public final class _AES_Constants {
 
     /**
      * The name of the algorithm. The value is {@value}.
@@ -15,14 +15,14 @@ final class _AES__Constants {
      *
      * @see #BLOCK_BYTES
      */
-    static final int BLOCK_SIZE = 128;
+    public static final int BLOCK_SIZE = 128;
 
     /**
      * The block size, in bytes, of the {@value #ALGORITHM} algorithm. The value is {@value}.
      *
      * @see #BLOCK_SIZE
      */
-    static final int BLOCK_BYTES = BLOCK_SIZE >> 3;
+    public static final int BLOCK_BYTES = BLOCK_SIZE >> 3;
 
     /**
      * An unmodifiable list of allowed key sizes.
@@ -37,12 +37,12 @@ final class _AES__Constants {
      * An unmodifiable list of allowed key sizes, in bytes.
      */
     public static final List<Integer> ALLOWED_KEY_BYTES_LIST =
-            _AES__Constants.ALLOWED_KEY_SIZE_LIST.stream()
+            _AES_Constants.ALLOWED_KEY_SIZE_LIST.stream()
                     .map(ks -> ks >> 3)
                     .collect(Collectors.toUnmodifiableList());
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _AES__Constants() {
+    private _AES_Constants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

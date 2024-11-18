@@ -7,8 +7,8 @@ import java.util.concurrent.ThreadLocalRandom;
 final class _AES__TestUtils {
 
     static int randomKeyBytes() {
-        return _AES__Constants.ALLOWED_KEY_BYTES_LIST.get(
-                ThreadLocalRandom.current().nextInt(_AES__Constants.ALLOWED_KEY_BYTES_LIST.size())
+        return _AES_Constants.ALLOWED_KEY_BYTES_LIST.get(
+                ThreadLocalRandom.current().nextInt(_AES_Constants.ALLOWED_KEY_BYTES_LIST.size())
         );
     }
 
