@@ -66,7 +66,8 @@
     <maven.compiler.testSource>21</maven.compiler.testSource>
     <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
     <maven.compiler.testRelease>${maven.compiler.testTarget}</maven.compiler.testRelease>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>    <version.lombok>1.18.34</version.lombok>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <version.lombok>1.18.34</version.lombok>
     <sonar.organization>jinahya-github</sonar.organization>
     <sonar.projectKey>jinahya_jinahya-bcprov</sonar.projectKey>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
@@ -79,11 +80,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>jakarta.platform</groupId>
-        <artifactId>jakarta.jakartaee-bom</artifactId>
-        <version>11.0.0-M4</version>
-      </dependency>
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
@@ -104,18 +100,6 @@
       <groupId>io.vavr</groupId>
       <artifactId>vavr</artifactId>
       <version>0.10.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
-      <version>3.0.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>nl.jqno.equalsverifier</groupId>
-      <artifactId>equalsverifier-nodep</artifactId>
-      <version>3.17.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -308,7 +292,7 @@
             <configuration>
               <skip>true</skip>
               <rules>
-                <dependencyConvergence />
+                <dependencyConvergence/>
               </rules>
             </configuration>
             <goals>
@@ -502,7 +486,7 @@
       <properties>
         <!-- https://repo1.maven.org/maven2/org/bouncycastle/ -->
         <!-- https://central.sonatype.com/artifact/org.bouncycastle/bcprov-lts8on -->
-<!--        <version.org.bouncycastle>2.73.6</version.org.bouncycastle>-->
+        <!--        <version.org.bouncycastle>2.73.6</version.org.bouncycastle>-->
         <version.org.bouncycastle>2.73.7</version.org.bouncycastle>
       </properties>
       <dependencies>

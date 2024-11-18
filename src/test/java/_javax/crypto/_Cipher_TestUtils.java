@@ -1,8 +1,6 @@
 package _javax.crypto;
 
 import _javax.security._Random_TestUtils;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -58,8 +56,8 @@ public final class _Cipher_TestUtils {
         assertThat(decrypted).isEqualTo(plain);
     }
 
-    public static void __(@Nonnull final Cipher cipher, @Nonnull final Key key,
-                          @Nullable final AlgorithmParameterSpec params, @Nullable final byte[] aad)
+    public static void __(final Cipher cipher, final Key key,
+                          final AlgorithmParameterSpec params, final byte[] aad)
             throws Exception {
         assertThat(cipher.getProvider().getName()).isEqualTo(BouncyCastleProvider.PROVIDER_NAME);
         __(cipher, key, params, aad, new byte[0]);
@@ -69,9 +67,9 @@ public final class _Cipher_TestUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static void __(@Nonnull final Cipher cipher, @Nonnull final Key key,
-                          @Nullable final AlgorithmParameterSpec params, @Nullable final byte[] aad,
-                          @Nonnull final Path dir, @Nonnull final Path plain)
+    public static void __(final Cipher cipher, final Key key,
+                          final AlgorithmParameterSpec params, final byte[] aad,
+                          final Path dir, final Path plain)
             throws Exception {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(key, "key is null");
@@ -190,9 +188,9 @@ public final class _Cipher_TestUtils {
         assertThat(decrypted).hasSameBinaryContentAs(plain);
     }
 
-    public static void __(@Nonnull final Cipher cipher, @Nonnull final Key key,
-                          @Nullable final AlgorithmParameterSpec params, @Nullable final byte[] aad,
-                          @Nonnull final Path dir)
+    public static void __(final Cipher cipher, final Key key,
+                          final AlgorithmParameterSpec params, final byte[] aad,
+                          final Path dir)
             throws IOException {
         assertThat(cipher.getProvider().getName()).isEqualTo(BouncyCastleProvider.PROVIDER_NAME);
         _Random_TestUtils.getRandomFileStream(dir).forEach(p -> {

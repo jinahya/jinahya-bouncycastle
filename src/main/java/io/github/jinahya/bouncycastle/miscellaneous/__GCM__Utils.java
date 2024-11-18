@@ -11,7 +11,8 @@ final class __GCM__Utils {
 
     static byte[] requireValid_iv_GCM(final byte[] iv) {
         if (Objects.requireNonNull(iv, "iv is null").length < __GCM__Constants.IV_SIZE_GCM_MINIMUM) {
-            throw new IllegalArgumentException("iv.length(" + iv.length + ") < " + __GCM__Constants.IV_SIZE_GCM_MINIMUM);
+            throw new IllegalArgumentException(
+                    "iv.length(" + iv.length + ") < " + __GCM__Constants.IV_SIZE_GCM_MINIMUM);
         }
         return iv;
     }
