@@ -1,12 +1,13 @@
 package __asymmetric.rsa;
 
-import __asymmetric._RSA__Constants;
-import __asymmetric._RSA__TestUtils;
+import __asymmetric._RSA_TestConstants;
+import __asymmetric._RSA_TestUtils;
 import __symmetric._ECB_Constants;
 import __symmetric._JCEProviderTest;
 import _javax.security._Random_TestUtils;
 import _javax.security._Signature_Tests;
 import io.github.jinahya.bouncycastle.miscellaneous._RSA_Utils;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA_Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.digests.SHA1Digest;
@@ -58,7 +59,7 @@ class RSA_ECB_Test
         class PKCS1Encoding_Test {
 
             private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-                return _RSA__TestUtils.getKeySizeStream().mapToObj(ks -> {
+                return _RSA_TestUtils.getKeySizeStream().mapToObj(ks -> {
                     final var params = new RSAKeyGenerationParameters(
                             new BigInteger("10001", 16),
                             SECURE_RANDOM,
@@ -79,7 +80,7 @@ class RSA_ECB_Test
                 // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
                 // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
                 final var cipher = new PKCS1Encoding(new RSAEngine());
-                final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+                final var mLen = _RSA_Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
                 final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
                 // ---------------------------------------------------------------------------------------------------------
                 cipher.init(true, keyPair.getPublic());
@@ -101,7 +102,7 @@ class RSA_ECB_Test
             private static final int H_LEN = HASH_SIZE >> 3;
 
             private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-                return _RSA__TestUtils.getKeySizeStream().mapToObj(ks -> {
+                return _RSA_TestUtils.getKeySizeStream().mapToObj(ks -> {
                     final var params = new RSAKeyGenerationParameters(
                             new BigInteger("10001", 16),
                             SECURE_RANDOM,
@@ -121,7 +122,7 @@ class RSA_ECB_Test
                 // https://stackoverflow.com/a/32166210/330457
                 // https://stackoverflow.com/a/3101932/330457
                 final var cipher = new OAEPEncoding(new RSAEngine(), new SHA1Digest(), new SHA1Digest(), new byte[0]);
-                final var mLen = _RSA_Utils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
+                final var mLen = _RSA_Utils.max_mLen_RSAES_OAEP(keySize >> 3, H_LEN);
                 final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
                 // ---------------------------------------------------------------------------------------------------------
                 cipher.init(true, keyPair.getPublic());
@@ -143,7 +144,7 @@ class RSA_ECB_Test
             private static final int H_LEN = HASH_SIZE >> 3;
 
             private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-                return _RSA__TestUtils.getKeySizeStream().mapToObj(ks -> {
+                return _RSA_TestUtils.getKeySizeStream().mapToObj(ks -> {
                     final var params = new RSAKeyGenerationParameters(
                             new BigInteger("10001", 16),
                             SECURE_RANDOM,
@@ -163,7 +164,7 @@ class RSA_ECB_Test
                 // https://stackoverflow.com/a/32166210/330457
                 // https://stackoverflow.com/a/3101932/330457
                 final var cipher = new OAEPEncoding(new RSAEngine(), new SHA256Digest(), new SHA1Digest(), new byte[0]);
-                final var mLen = _RSA_Utils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
+                final var mLen = _RSA_Utils.max_mLen_RSAES_OAEP(keySize >> 3, H_LEN);
                 final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
                 // ---------------------------------------------------------------------------------------------------------
                 cipher.init(true, keyPair.getPublic());
@@ -207,8 +208,8 @@ class RSA_ECB_Test
 
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("PKCS1Padding")
-                        .map(p -> _RSA__Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
-                        .flatMap(t -> _RSA__Constants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
+                        .map(p -> _RSA_Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
+                        .flatMap(t -> _RSA_TestConstants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 
             @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
@@ -221,7 +222,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final var mLen = _RSA_Utils.mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+                final var mLen = _RSA_Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
                 JCEProviderTest.__(cipher, new byte[0], keyPair);
                 JCEProviderTest.__(cipher, _Random_TestUtils.newRandomBytes(mLen), keyPair);
                 for (int i = 0; i < 16; i++) {
@@ -244,8 +245,8 @@ class RSA_ECB_Test
 
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("OAEPWithSHA-1AndMGF1Padding")
-                        .map(p -> _RSA__Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
-                        .flatMap(t -> _RSA__Constants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
+                        .map(p -> _RSA_Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
+                        .flatMap(t -> _RSA_TestConstants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 
             @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
@@ -258,7 +259,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final int mLen = _RSA_Utils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
+                final int mLen = _RSA_Utils.max_mLen_RSAES_OAEP(keySize >> 3, H_LEN);
                 JCEProviderTest.__(
                         cipher,
                         new byte[0],
@@ -295,8 +296,8 @@ class RSA_ECB_Test
 
             private static Stream<Arguments> getTransformationAndKeySizeArgumentsStream() {
                 return Stream.of("OAEPWithSHA-256AndMGF1Padding")
-                        .map(p -> _RSA__Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
-                        .flatMap(t -> _RSA__Constants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
+                        .map(p -> _RSA_Constants.ALGORITHM + '/' + _ECB_Constants.MODE + '/' + p)
+                        .flatMap(t -> _RSA_TestConstants.getKeySizeStream().mapToObj(ks -> Arguments.of(t, ks)));
             }
 
             @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
@@ -309,7 +310,7 @@ class RSA_ECB_Test
                     generator.initialize(keySize);
                     keyPair = generator.generateKeyPair();
                 }
-                final int mLen = _RSA_Utils.mLen_RSAES_OAEP(keySize >> 3, H_LEN);
+                final int mLen = _RSA_Utils.max_mLen_RSAES_OAEP(keySize >> 3, H_LEN);
                 JCEProviderTest.__(
                         cipher,
                         new byte[0],

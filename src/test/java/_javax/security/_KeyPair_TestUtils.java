@@ -1,6 +1,6 @@
 package _javax.security;
 
-import __asymmetric._RSA__Constants;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA_Constants;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -11,14 +11,14 @@ public final class _KeyPair_TestUtils {
 
     public static KeyPair generateKeyPair(final String provider, final int keySize)
             throws NoSuchAlgorithmException, NoSuchProviderException {
-        final var generator = KeyPairGenerator.getInstance(_RSA__Constants.ALGORITHM, provider);
+        final var generator = KeyPairGenerator.getInstance(_RSA_Constants.ALGORITHM, provider);
         generator.initialize(keySize);
         return generator.generateKeyPair();
     }
 
     public static KeyPair generateKeyPair_FIPS(final int keySize)
             throws NoSuchAlgorithmException, NoSuchProviderException {
-        final var generator = KeyPairGenerator.getInstance(_RSA__Constants.ALGORITHM, "FIPS");
+        final var generator = KeyPairGenerator.getInstance(_RSA_Constants.ALGORITHM, "FIPS");
         generator.initialize(keySize);
         return generator.generateKeyPair();
     }
