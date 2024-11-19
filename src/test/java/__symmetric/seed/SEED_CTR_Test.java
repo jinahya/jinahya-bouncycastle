@@ -4,7 +4,7 @@ import io.github.jinahya.bouncycastle.miscellaneous.__CTR__Constants;
 import __symmetric._CTR_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
-import _org.bouncycastle.crypto._StreamCipher_TestUtils;
+import io.github.jinahya.bouncycastle.crypto._StreamCipher_TestUtils;
 import _org.bouncycastle.jce.provider._BouncyCastleProvider_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

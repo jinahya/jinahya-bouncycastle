@@ -5,11 +5,11 @@ import org.bouncycastle.crypto.Digest;
 import java.util.Objects;
 
 /**
- * Utilities for {@value _RSA_Constants#ALGORITHM} algorithm.
+ * Utilities for {@value _RSA___Constants#ALGORITHM} algorithm.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public final class _RSA_Utils {
+public final class _RSA___Utils {
 
     /**
      * Returns the maximum value of the {@code mLen} for specified {@code k} in <a
@@ -37,8 +37,8 @@ public final class _RSA_Utils {
      * PKCS #1: RSA Cryptography Specifications Version 2.2)
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc8017#section-7.1.1">7.1.1.  Encryption Operation</a> (RFC
      * 8017: PKCS #1: RSA Cryptography Specifications Version 2.2)
-     * @see _RSA_Constants#H_LEN_SHA1
-     * @see _RSA_Constants#H_LEN_SHA256
+     * @see _RSA___Constants#H_LEN_SHA1
+     * @see _RSA___Constants#H_LEN_SHA256
      */
     public static int max_mLen_RSAES_OAEP(final int k, final int hLen) {
         return k - (hLen << 1) - 2; // mLen <= k - 2hLen - 2
@@ -61,7 +61,7 @@ public final class _RSA_Utils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _RSA_Utils() {
+    private _RSA___Utils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

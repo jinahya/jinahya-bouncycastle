@@ -1,7 +1,7 @@
 package _javax.crypto;
 
 import __symmetric._JCEProviderTest;
-import io.github.jinahya.bouncycastle.miscellaneous._RSA_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA___Constants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ class _Shall_We_Dance_Test
     public static final String PROVIDER = "BC";
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static final String ASYMMETRIC_ALGORITHM = _RSA_Constants.ALGORITHM;
+    public static final String ASYMMETRIC_ALGORITHM = _RSA___Constants.ALGORITHM;
 
     public static final String ASYMMETRIC_MODE = "ECB";
 

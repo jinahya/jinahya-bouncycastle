@@ -2,8 +2,8 @@ package io.github.jinahya.bouncycastle.crypto;
 
 import __asymmetric._RSA_TestUtils;
 import _javax.security._Random_TestUtils;
-import io.github.jinahya.bouncycastle.miscellaneous._RSA_Constants;
-import io.github.jinahya.bouncycastle.miscellaneous._RSA_Utils;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA___Constants;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA___Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.digests.SHA1Digest;
@@ -43,7 +43,7 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSAH_256ANDMGV1Padding_Test {
             // https://stackoverflow.com/a/32166210/330457
             // https://stackoverflow.com/a/3101932/330457
             final var cipher = new OAEPEncoding(new RSAEngine(), new SHA256Digest(), new SHA1Digest(), new byte[0]);
-            final var mLen = _RSA_Utils.max_mLen_RSAES_OAEP(keySize >> 3, _RSA_Constants.H_LEN_SHA256);
+            final var mLen = _RSA___Utils.max_mLen_RSAES_OAEP(keySize >> 3, _RSA___Constants.H_LEN_SHA256);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
             // ---------------------------------------------------------------------------------------------------------
             cipher.init(true, keyPair.getPublic());
@@ -98,7 +98,7 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSAH_256ANDMGV1Padding_Test {
             // https://stackoverflow.com/a/3101932/330457
             final var hash = new SHA256Digest();
             final var cipher = new OAEPEncoding(new RSAEngine(), hash, new SHA1Digest(), new byte[0]);
-            final var mLen = _RSA_Utils.max_mLen_RSAES_OAEP(keySize >> 3, hash);
+            final var mLen = _RSA___Utils.max_mLen_RSAES_OAEP(keySize >> 3, hash);
             final var plain = ByteBuffer.wrap(
                     _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1))
             );
@@ -147,7 +147,7 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSAH_256ANDMGV1Padding_Test {
             // https://stackoverflow.com/a/3101932/330457
             final var hash = new SHA256Digest();
             final var cipher = new OAEPEncoding(new RSAEngine(), hash, new SHA1Digest(), new byte[0]);
-            final var mLen = _RSA_Utils.max_mLen_RSAES_OAEP(keySize >> 3, hash);
+            final var mLen = _RSA___Utils.max_mLen_RSAES_OAEP(keySize >> 3, hash);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             final var baos = new ByteArrayOutputStream();
             // ---------------------------------------------------------------------------------------------------------

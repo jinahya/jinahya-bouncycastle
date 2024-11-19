@@ -1,9 +1,9 @@
 package _org.bouncycastle.crypto;
 
 import _javax.security._Random_TestUtils;
-import io.github.jinahya.bouncycastle.crypto.JinahyaBlockCipher_TestUtils;
 import io.github.jinahya.bouncycastle.crypto.JinahyaBufferedBlockCipherCrypto;
 import io.github.jinahya.bouncycastle.crypto.JinahyaBufferedBlockCipherUtilsTest;
+import io.github.jinahya.bouncycastle.crypto._BlockCipher_TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
@@ -49,7 +49,7 @@ public final class _BufferedBlockCipher_TestUtils {
         __(cipher, params, _Random_TestUtils.newRandomBytes(1)); // single-random
         __(cipher, params, _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1024)));
         JinahyaBufferedBlockCipherUtilsTest.__(cipher, params);
-        JinahyaBlockCipher_TestUtils.__(cipher.getUnderlyingCipher(), params);
+        _BlockCipher_TestUtils.__(cipher.getUnderlyingCipher(), params);
     }
 
     public static void __(final BufferedBlockCipher cipher, final CipherParameters params, final File dir,

@@ -1,6 +1,6 @@
 package __asymmetric;
 
-import io.github.jinahya.bouncycastle.miscellaneous._RSA_Constants;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA___Constants;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
@@ -44,7 +44,7 @@ public final class _RSA_TestUtils {
     public static AsymmetricCipherKeyPair generateKeyPair(final int keySize) {
         final KeyPairGenerator generator;
         try {
-            generator = KeyPairGenerator.getInstance(_RSA_Constants.ALGORITHM);
+            generator = KeyPairGenerator.getInstance(_RSA___Constants.ALGORITHM);
         } catch (final NoSuchAlgorithmException nsae) {
             throw new RuntimeException(nsae);
         }

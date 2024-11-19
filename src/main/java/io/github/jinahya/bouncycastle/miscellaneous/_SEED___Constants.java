@@ -3,7 +3,7 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import java.util.List;
 import java.util.stream.Collectors;
 
-final class _SEED___Constants {
+public final class _SEED___Constants {
 
     /**
      * The name of the algorithm. The value is {@value}.

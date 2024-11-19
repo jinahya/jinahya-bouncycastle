@@ -2,7 +2,7 @@ package io.github.jinahya.bouncycastle.crypto;
 
 import __asymmetric._RSA_TestUtils;
 import _javax.security._Random_TestUtils;
-import io.github.jinahya.bouncycastle.miscellaneous._RSA_Utils;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA___Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.digests.SHA256Digest;
@@ -43,7 +43,7 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA_Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA___Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
             final var digest = new SHA256Digest();
             final var signer = new RSADigestSigner(digest);
@@ -113,7 +113,7 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA_Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA___Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1));
             final var digest = new SHA256Digest();
             final var signer = new RSADigestSigner(digest);
@@ -192,7 +192,7 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA_Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA___Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = ByteBuffer.wrap(
                     _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1))
             );
@@ -244,7 +244,7 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA_Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA___Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = ByteBuffer.wrap(
                     _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(mLen + 1))
             );
@@ -316,7 +316,7 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
-            final var mLen = _RSA_Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
+            final var mLen = _RSA___Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             final var baos = new ByteArrayOutputStream();
             // ---------------------------------------------------------------------------------------------------------

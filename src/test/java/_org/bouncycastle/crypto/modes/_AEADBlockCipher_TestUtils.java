@@ -1,6 +1,6 @@
 package _org.bouncycastle.crypto.modes;
 
-import _org.bouncycastle.crypto._BlockCipher_TestUtils;
+import io.github.jinahya.bouncycastle.crypto._BlockCipher_TestUtils;
 import org.bouncycastle.crypto.modes.AEADBlockCipher;
 import org.junit.jupiter.api.Named;
 

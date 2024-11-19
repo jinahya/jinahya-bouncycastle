@@ -1,5 +1,7 @@
 package _org.bouncycastle.crypto;
 
+import io.github.jinahya.bouncycastle.crypto._BlockCipher_TestUtils;
+import io.github.jinahya.bouncycastle.crypto._StreamCipher_TestUtils;
 import org.bouncycastle.crypto.StreamBlockCipher;
 import org.junit.jupiter.api.Named;
 
