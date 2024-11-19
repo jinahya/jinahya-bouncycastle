@@ -38,11 +38,11 @@ public final class JinahyaMacUtils {
         @Override
         public void reset() {
         }
-    } // @formatter: on
+    } // @formatter:on
 
     private static Mac DECOY;
 
-    public static Mac getDecoy() {
+    static Mac getDecoy() {
         if (DECOY == null) {
             DECOY = new Decoy();
         }
