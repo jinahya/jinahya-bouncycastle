@@ -1,5 +1,7 @@
 package io.github.jinahya.bouncycastle.crypto;
 
+import org.bouncycastle.crypto.CipherParameters;
+import org.bouncycastle.crypto.DataLengthException;
 import org.bouncycastle.crypto.Mac;
 
 import java.io.IOException;
@@ -8,6 +10,46 @@ import java.util.Objects;
 
 public final class JinahyaMacUtils {
 
+    private static final class Decoy
+            implements Mac { // @formatter:off
+
+        @Override
+        public void init(CipherParameters cipherParameters) throws IllegalArgumentException {
+        }
+        @Override
+        public String getAlgorithmName() {
+            return "DECOY";
+        }
+        @Override
+        public int getMacSize() {
+            return 0;
+        }
+        @Override
+        public void update(final byte b) throws IllegalStateException {
+        }
+        @Override
+        public void update(final byte[] bytes, final int i, final int i1)
+                throws DataLengthException, IllegalStateException {
+        }
+        @Override
+        public int doFinal(final byte[] bytes, final int i) throws DataLengthException, IllegalStateException {
+            return 0;
+        }
+        @Override
+        public void reset() {
+        }
+    } // @formatter: on
+
+    private static Mac DECOY;
+
+    public static Mac getDecoy() {
+        if (DECOY == null) {
+            DECOY = new Decoy();
+        }
+        return DECOY;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     public static <T extends Mac> T update(final T mac, final byte[] in, final int inoff, final int inlen) {
         Objects.requireNonNull(mac, "mac is null");
         Objects.requireNonNull(in, "in is null");
