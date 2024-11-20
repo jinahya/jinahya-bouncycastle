@@ -9,6 +9,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
 
 /**
  * A utility class for {@link org.bouncycastle.crypto.AsymmetricBlockCipher}.
@@ -155,8 +158,11 @@ public final class JinahyaAsymmetricBlockCipherUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static long processAllBytes(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
-                                final byte[] inbuf, final byte[] outbuf)
+    static long processAllBlocks(
+            final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out, final byte[] inbuf,
+            final byte[] outbuf,
+            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
+            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
             throws IOException, InvalidCipherTextException {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(in, "in is null");
@@ -173,8 +179,72 @@ public final class JinahyaAsymmetricBlockCipherUtils {
                     "outbuf.length(" + outbuf.length + ") < cipher.outputBlockSize(" + outputBlockSize + ")"
             );
         }
-        return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf);
+        Objects.requireNonNull(inconsumer, "inconsumer is null");
+        Objects.requireNonNull(outconsumer, "outconsumer is null");
+        return JinahyaAsymmetricBlockCipherUtils_.processAllBlocks(
+                cipher,
+                in,
+                out,
+                inbuf,
+                outbuf,
+                inconsumer,
+                outconsumer
+        );
     }
+
+    static long processAllBytes(
+            final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
+            final byte[] inbuf, final byte[] outbuf,
+            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
+            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
+            throws IOException, InvalidCipherTextException {
+        Objects.requireNonNull(cipher, "cipher is null");
+        Objects.requireNonNull(in, "in is null");
+        Objects.requireNonNull(out, "out is null");
+        final var inputBlockSize = cipher.getInputBlockSize();
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length < inputBlockSize) {
+            throw new IllegalArgumentException(
+                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + inputBlockSize + ")"
+            );
+        }
+        final var outputBlockSize = cipher.getOutputBlockSize();
+        if (Objects.requireNonNull(outbuf, "outbuf is null").length < cipher.getOutputBlockSize()) {
+            throw new IllegalArgumentException(
+                    "outbuf.length(" + outbuf.length + ") < cipher.outputBlockSize(" + outputBlockSize + ")"
+            );
+        }
+        return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(
+                cipher,
+                in,
+                out,
+                inbuf,
+                outbuf,
+                inconsumer,
+                outconsumer
+        );
+    }
+
+//    @Deprecated
+//    static long processAllBytes(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
+//                                final byte[] inbuf, final byte[] outbuf)
+//            throws IOException, InvalidCipherTextException {
+//        Objects.requireNonNull(cipher, "cipher is null");
+//        Objects.requireNonNull(in, "in is null");
+//        Objects.requireNonNull(out, "out is null");
+//        final var inputBlockSize = cipher.getInputBlockSize();
+//        if (Objects.requireNonNull(inbuf, "inbuf is null").length < inputBlockSize) {
+//            throw new IllegalArgumentException(
+//                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + inputBlockSize + ")"
+//            );
+//        }
+//        final var outputBlockSize = cipher.getOutputBlockSize();
+//        if (Objects.requireNonNull(outbuf, "outbuf is null").length < cipher.getOutputBlockSize()) {
+//            throw new IllegalArgumentException(
+//                    "outbuf.length(" + outbuf.length + ") < cipher.outputBlockSize(" + outputBlockSize + ")"
+//            );
+//        }
+//        return JinahyaAsymmetricBlockCipherUtils.processAllBytes(cipher, in, out, inbuf, outbuf);
+//    }
 
     // -----------------------------------------------------------------------------------------------------------------
     private JinahyaAsymmetricBlockCipherUtils() {

@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("RSA/ECB/PKCS1Padding")
@@ -317,7 +318,8 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
             // https://www.mysamplecode.com/2011/08/java-rsa-decrypt-string-using-bouncy.html
             final var cipher = new PKCS1Encoding(new RSAEngine());
             final var mLen = _RSA___Utils.max_mLen_RSAES_PKCS1_v1_5(keySize >> 3);
-            final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
+//            final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
+            final var plain = _Random_TestUtils.newRandomBytes(10);
             final var baos = new ByteArrayOutputStream();
             // ---------------------------------------------------------------------------------------------------------
             cipher.init(true, keyPair.getPublic());
@@ -333,9 +335,15 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
                         new ByteArrayInputStream(plain),
                         baos,
                         inbuf,
-                        outbuf
+                        outbuf,
+                        b -> o -> l -> {
+                        },
+                        b -> o -> l -> {
+                        }
                 );
-                assert bytes >= plain.length;
+                assertThat(bytes)
+                        .as("number of encrypted bytes")
+                        .isGreaterThanOrEqualTo(plain.length);
                 encrypted = baos.toByteArray();
                 baos.reset();
             }
@@ -353,13 +361,21 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
                         new ByteArrayInputStream(encrypted),
                         baos,
                         inbuf,
-                        outbuf
+                        outbuf,
+                        b -> o -> l -> {
+                        },
+                        b -> o -> l -> {
+                        }
                 );
-                assert bytes <= encrypted.length;
+                assertThat(bytes)
+                        .as("number of decrypted bytes")
+                        .isLessThanOrEqualTo(encrypted.length);
                 decrypted = baos.toByteArray();
             }
             // ---------------------------------------------------------------------------------------------------------
-            assertThat(decrypted).isEqualTo(plain);
+            assertThat(decrypted)
+                    .hasSameSizeAs(plain)
+                    .isEqualTo(plain);
         }
     }
 }

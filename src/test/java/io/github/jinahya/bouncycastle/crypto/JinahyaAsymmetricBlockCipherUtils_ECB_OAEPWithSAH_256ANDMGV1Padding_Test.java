@@ -164,7 +164,11 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSAH_256ANDMGV1Padding_Test {
                         new ByteArrayInputStream(plain),
                         baos,
                         inbuf,
-                        outbuf
+                        outbuf,
+                        b -> o -> l -> {
+                        },
+                        b -> o -> l -> {
+                        }
                 );
                 assert bytes >= plain.length;
                 encrypted = baos.toByteArray();
@@ -184,7 +188,11 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSAH_256ANDMGV1Padding_Test {
                         new ByteArrayInputStream(encrypted),
                         baos,
                         inbuf,
-                        outbuf
+                        outbuf,
+                        b -> o -> l -> {
+                        },
+                        b -> o -> l -> {
+                        }
                 );
                 assert bytes <= encrypted.length;
                 decrypted = baos.toByteArray();

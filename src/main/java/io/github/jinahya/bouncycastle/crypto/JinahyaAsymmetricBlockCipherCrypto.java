@@ -175,7 +175,17 @@ public class JinahyaAsymmetricBlockCipherCrypto
         initForEncryption();
         final var outbuf = new byte[cipher.getOutputBlockSize()];
         try {
-            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf);
+            return JinahyaAsymmetricBlockCipherUtils.processAllBytes(
+                    cipher,
+                    in,
+                    out,
+                    inbuf,
+                    outbuf,
+                    b -> o -> l -> {
+                    },
+                    b -> o -> l -> {
+                    }
+            );
         } catch (final InvalidCipherTextException e) {
             throw JinahyaCryptoException.ofEncryptionFailure(e);
         }
@@ -196,7 +206,17 @@ public class JinahyaAsymmetricBlockCipherCrypto
         }
         final var outbuf = new byte[cipher.getOutputBlockSize()];
         try {
-            return JinahyaAsymmetricBlockCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf);
+            return JinahyaAsymmetricBlockCipherUtils.processAllBytes(
+                    cipher,
+                    in,
+                    out,
+                    inbuf,
+                    outbuf,
+                    b -> o -> l -> {
+                    },
+                    b -> o -> l -> {
+                    }
+            );
         } catch (final InvalidCipherTextException e) {
             throw JinahyaCryptoException.ofEncryptionFailure(e);
         }
