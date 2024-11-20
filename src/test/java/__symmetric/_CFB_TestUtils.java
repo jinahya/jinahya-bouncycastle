@@ -2,7 +2,7 @@ package __symmetric;
 
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto.params._ParametersWithIV_TestUtils;
-import io.github.jinahya.bouncycastle.crypto._BlockCipher_TestUtils;
+import _org.bouncycastle.crypto._BlockCipher_TestUtils;
 import io.github.jinahya.bouncycastle.miscellaneous.__CFB__Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BlockCipher;

@@ -1,6 +1,7 @@
 package io.github.jinahya.bouncycastle.crypto;
 
 import _javax.security._Random_TestUtils;
+import _org.bouncycastle.crypto._BlockCipher_TestUtils;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.digests.SHA1Digest;
@@ -27,7 +28,7 @@ class JinahyaBlockCipherUtils_Test {
         return _BlockCipher_TestUtils.getCipherAndParamsArgumentsStream();
     }
 
-    @DisplayName("processBlock(cipher, in, inoff, out, outoff, inmac, outmac")
+    @DisplayName("processBlock(cipher, in, inoff, out, outoff, inconsumer, outconsumer")
     @Nested
     class ProcessBlockTest {
 
@@ -51,17 +52,18 @@ class JinahyaBlockCipherUtils_Test {
                 cipher.init(true, params);
                 {
                     final var out = new byte[blockSize];
-                    final var outlen = JinahyaBlockCipherUtils_.processBlock(
+                    final var outlen = JinahyaBlockCipherUtils.processBlock(
                             cipher,
                             plain,
                             0,
                             out,
                             0,
-                            a -> {
-                                digest.update(a, 0, a.length);
-                                mac.update(a, 0, a.length);
+                            b -> o -> l -> {
+                                digest.update(b, o, l);
+                                mac.update(b, o, l);
                             },
-                            null
+                            b -> o -> l -> {
+                            }
                     );
                     assert outlen == out.length;
                     encrypted = Arrays.copyOf(out, outlen);
@@ -89,10 +91,11 @@ class JinahyaBlockCipherUtils_Test {
                             0,
                             out,
                             0,
-                            null,
-                            a -> {
-                                digest.update(a, 0, a.length);
-                                mac.update(a, 0, a.length);
+                            b -> o -> l -> {
+                            },
+                            b -> o -> l -> {
+                                digest.update(b, o, l);
+                                mac.update(b, o, l);
                             }
                     );
                     assert outlen == out.length;
@@ -109,12 +112,16 @@ class JinahyaBlockCipherUtils_Test {
             }
             // -------------------------------------------------------------------------------------------------- verify
             assertThat(decrypted).isEqualTo(plain);
-            assertThat(decdigest).isEqualTo(encdigest);
-            assertThat(decmac).isEqualTo(encmac);
+            assertThat(decdigest)
+                    .as("digest")
+                    .isEqualTo(encdigest);
+            assertThat(decmac)
+                    .as("mac")
+                    .isEqualTo(encmac);
         }
     }
 
-    @DisplayName("processBlock(cipher, in, out, inbuf, outbuf, inmac, outmac")
+    @DisplayName("processBlock(cipher, in, out, inbuf, outbuf, inconsumer, outconsumer")
     @Nested
     class ProcessBlocksTest {
 
@@ -147,11 +154,12 @@ class JinahyaBlockCipherUtils_Test {
                             out,
                             inbuf,
                             outbuf,
-                            a -> {
-                                digest.update(a, 0, a.length);
-                                mac.update(a, 0, a.length);
+                            b -> o -> l -> {
+                                digest.update(b, o, l);
+                                mac.update(b, o, l);
                             },
-                            null
+                            b -> o -> l -> {
+                            }
                     );
                     assert count == blockCount;
                     encrypted = out.toByteArray();
@@ -179,10 +187,11 @@ class JinahyaBlockCipherUtils_Test {
                             out,
                             inbuf,
                             outbuf,
-                            null,
-                            a -> {
-                                digest.update(a, 0, a.length);
-                                mac.update(a, 0, a.length);
+                            b -> o -> l -> {
+                            },
+                            b -> o -> l -> {
+                                digest.update(b, o, l);
+                                mac.update(b, o, l);
                             }
                     );
                     assert count == blockCount;

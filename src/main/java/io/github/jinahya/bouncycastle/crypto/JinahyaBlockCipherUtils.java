@@ -1,13 +1,14 @@
 package io.github.jinahya.bouncycastle.crypto;
 
 import org.bouncycastle.crypto.BlockCipher;
-import org.bouncycastle.crypto.Mac;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
 
 /**
  * A utility class for {@link BlockCipher}.
@@ -19,9 +20,12 @@ import java.util.function.Consumer;
  */
 public final class JinahyaBlockCipherUtils {
 
-    public static int processBlock(final BlockCipher cipher, final byte[] in, final int inoff, final byte[] out,
-                                   final int outoff, final Consumer<? super byte[]> inconsumer,
-                                   final Consumer<? super byte[]> outconsumer) {
+    public static int processBlock(
+            final BlockCipher cipher,
+            final byte[] in, final int inoff,
+            final byte[] out, final int outoff,
+            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
+            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer) {
         Objects.requireNonNull(cipher, "cipher is null");
         final var blockSize = cipher.getBlockSize();
         Objects.requireNonNull(in, "in is null");
@@ -53,10 +57,12 @@ public final class JinahyaBlockCipherUtils {
         );
     }
 
-    public static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out,
-                                        final byte[] inbuf, final byte[] outbuf,
-                                        final Consumer<? super byte[]> inconsumer,
-                                        final Consumer<? super byte[]> outconsumer)
+    public static long processAllBlocks(
+            final BlockCipher cipher,
+            final InputStream in, final OutputStream out,
+            final byte[] inbuf, final byte[] outbuf,
+            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
+            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
             throws IOException {
         Objects.requireNonNull(cipher, "cipher is null");
         if (!Objects.requireNonNull(in, "in is null").markSupported()) {
@@ -83,69 +89,6 @@ public final class JinahyaBlockCipherUtils {
                 inconsumer,
                 outconsumer
         );
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Processes, using specified cipher, a block bytes from specified input array, and set processed bytes on specified
-     * output array.
-     *
-     * @param cipher the cipher.
-     * @param in     the input array to process.
-     * @param inoff  a starting index of the {@code in}.
-     * @param out    the output array.
-     * @param outoff a starting index of the {@code out}.
-     * @param inmac  a mac to be updated with unprocessed bytes; may be {@code null}.
-     * @param outmac a mac to be updated with processed bytes; may be {@code null}.
-     * @return the number of bytes set on the output array.
-     * @see BlockCipher#processBlock(byte[], int, byte[], int)
-     */
-    public static int processBlock(final BlockCipher cipher, final byte[] in, final int inoff, final byte[] out,
-                                   final int outoff, final Mac inmac, final Mac outmac) {
-        Objects.requireNonNull(cipher, "cipher is null");
-        final var blockSize = cipher.getBlockSize();
-        Objects.requireNonNull(in, "in is null");
-        if (inoff < 0) {
-            throw new IllegalArgumentException("inoff(" + inoff + ") is negative");
-        }
-        if ((in.length - inoff) < blockSize) {
-            throw new IllegalArgumentException(
-                    "in.length(" + in.length + ") - inoff(" + inoff + ") > cipher.blockSize(" + blockSize + ")"
-            );
-        }
-        Objects.requireNonNull(out, "out is null");
-        if (outoff < 0) {
-            throw new IllegalArgumentException("outoff(" + outoff + ") is negative");
-        }
-        if ((out.length - outoff) < blockSize) {
-            throw new IllegalArgumentException(
-                    "out.length(" + out.length + ") - outoff(" + outoff + ") > cipher.blockSize(" + blockSize + ")"
-            );
-        }
-        return JinahyaBlockCipherUtils_.processBlock(cipher, in, inoff, out, outoff, inmac, outmac);
-    }
-
-    public static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out,
-                                        final byte[] inbuf, final byte[] outbuf, final Mac inmac, final Mac outmac)
-            throws IOException {
-        Objects.requireNonNull(cipher, "cipher is null");
-        if (!Objects.requireNonNull(in, "in is null").markSupported()) {
-            throw new IllegalArgumentException("in doesn't support mark");
-        }
-        Objects.requireNonNull(out, "out is null");
-        final var blockSize = cipher.getBlockSize();
-        if (Objects.requireNonNull(inbuf, "inbuf is null").length < blockSize) {
-            throw new IllegalArgumentException(
-                    "inbuf.length(" + inbuf.length + ") < cipher.blockSize(" + blockSize + ")"
-            );
-        }
-        if (Objects.requireNonNull(outbuf, "outbuf is null").length < blockSize) {
-            throw new IllegalArgumentException(
-                    "outbuf.length(" + outbuf.length + ") < cipher.blockSize(" + blockSize + ")"
-            );
-        }
-        return JinahyaBlockCipherUtils_.processAllBlocks(cipher, in, out, inbuf, outbuf, inmac, outmac);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -56,7 +56,7 @@ class Test {
         final byte[] key = key();
         final byte[] iv = iv();
         final var cipher = new PaddedBufferedBlockCipher(
-                CBCBlockCipher.newInstance(new AESEngine()),
+                CBCBlockCipher.newInstance(AESEngine.newInstance()),
                 new PKCS7Padding()
         );
         final var params = new ParametersWithIV(
@@ -103,7 +103,7 @@ class Test {
         final byte[] key = key();
         final byte[] iv = iv();
         final var cipher = new PaddedBufferedBlockCipher(
-                CBCBlockCipher.newInstance(new AESEngine()),
+                CBCBlockCipher.newInstance(AESEngine.newInstance()),
                 new PKCS7Padding()
         );
         final var params = new ParametersWithIV(

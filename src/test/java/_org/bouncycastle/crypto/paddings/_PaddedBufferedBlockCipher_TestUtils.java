@@ -1,6 +1,6 @@
 package _org.bouncycastle.crypto.paddings;
 
-import io.github.jinahya.bouncycastle.crypto._BlockCipher_TestUtils;
+import _org.bouncycastle.crypto._BlockCipher_TestUtils;
 import io.github.jinahya.bouncycastle.crypto.paddings.JinahyaPaddedBufferedBlockCipherUtils;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.junit.jupiter.api.Named;

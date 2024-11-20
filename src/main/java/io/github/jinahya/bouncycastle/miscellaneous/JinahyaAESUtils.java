@@ -21,6 +21,9 @@ import java.io.OutputStream;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
+@SuppressWarnings({
+        "java:S100" // Method names should comply with a naming convention
+})
 public final class JinahyaAESUtils {
 
     // ----------------------------------------------------------------------------------------------- /CBC/PKCS7Padding
@@ -28,7 +31,7 @@ public final class JinahyaAESUtils {
         _AES___Utils.requireValidKey(key);
         _AES___Utils.requireValidIv(iv);
         final var cipher = new PaddedBufferedBlockCipher(
-                CBCBlockCipher.newInstance(new AESEngine()),
+                CBCBlockCipher.newInstance(AESEngine.newInstance()),
                 new PKCS7Padding()
         );
         final var params = new ParametersWithIV(
@@ -39,10 +42,11 @@ public final class JinahyaAESUtils {
     }
 
     /**
-     * Encrypts, using specified key and iv, specified input bytes, and returns the result.
+     * Encrypts, in {@value __CBC__Constants#MODE} mode with {@code PKCS7Padding}, specified input bytes, and returns
+     * the result.
      *
-     * @param key the key.
-     * @param iv  the iv.
+     * @param key an array of key bytes.
+     * @param iv  an array of initialization vector bytes.
      * @param in  the input bytes to encrypt.
      * @return an array of encrypted bytes.
      */
@@ -52,10 +56,11 @@ public final class JinahyaAESUtils {
     }
 
     /**
-     * Decrypts, using specified key and iv, specified input bytes, and returns the result.
+     * decrypts, in {@value __CBC__Constants#MODE} mode with {@code PKCS7Padding}, specified input bytes, and returns
+     * the result.
      *
-     * @param key the key.
-     * @param iv  the iv.
+     * @param key an array of key bytes.
+     * @param iv  an array of initialization vector bytes.
      * @param in  the input bytes to decrypt.
      * @return an array of decrypted bytes.
      */
@@ -107,7 +112,7 @@ public final class JinahyaAESUtils {
         _AES___Utils.requireValidKey(key);
         __GCM__Utils.requireValid_tLen_GCM(tLen);
         __GCM__Utils.requireValid_iv_GCM(iv);
-        final var cipher = GCMBlockCipher.newInstance(new AESEngine());
+        final var cipher = GCMBlockCipher.newInstance(AESEngine.newInstance());
         final var params = new AEADParameters(
                 new KeyParameter(key),
                 tLen,

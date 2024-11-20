@@ -1,6 +1,7 @@
-package io.github.jinahya.bouncycastle.crypto;
+package _org.bouncycastle.crypto;
 
 import _javax.security._Random_TestUtils;
+import io.github.jinahya.bouncycastle.crypto.JinahyaStreamCipherCrypto;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.StreamCipher;
 import org.junit.jupiter.api.Named;

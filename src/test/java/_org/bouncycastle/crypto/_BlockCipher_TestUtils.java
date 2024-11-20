@@ -1,8 +1,9 @@
-package io.github.jinahya.bouncycastle.crypto;
+package _org.bouncycastle.crypto;
 
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
 import _org.bouncycastle.crypto.params._ParametersWithIV_TestUtils;
+import io.github.jinahya.bouncycastle.crypto.JinahyaBlockCipherUtils;
 import io.github.jinahya.bouncycastle.miscellaneous._AES___Constants;
 import io.github.jinahya.bouncycastle.miscellaneous._SEED___Constants;
 import org.bouncycastle.crypto.BlockCipher;

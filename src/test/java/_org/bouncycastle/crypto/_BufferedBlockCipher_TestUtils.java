@@ -3,7 +3,6 @@ package _org.bouncycastle.crypto;
 import _javax.security._Random_TestUtils;
 import io.github.jinahya.bouncycastle.crypto.JinahyaBufferedBlockCipherCrypto;
 import io.github.jinahya.bouncycastle.crypto.JinahyaBufferedBlockCipherUtilsTest;
-import io.github.jinahya.bouncycastle.crypto._BlockCipher_TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
