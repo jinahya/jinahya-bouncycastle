@@ -128,35 +128,14 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         final var inlen = in.readNBytes(inbuf, 0, inbuf.length);
         if (inlen > 0) {
             assert inlen < cipher.getInputBlockSize();
-            final var outlen = JinahyaAsymmetricBlockCipherUtils_.processBlock(cipher, inbuf, 0, inlen, outbuf, 0);
+            final var outlen = processBlock(cipher, inbuf, 0, inlen, outbuf, 0);
             assert outlen <= cipher.getOutputBlockSize();
             out.write(outbuf, 0, outlen);
             inconsumer.apply(inbuf).apply(0).accept(inlen);
             outconsumer.apply(outbuf).apply(0).accept(outlen);
             bytes = Math.addExact(bytes, inlen);
         }
-        return bytes;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    public static long x(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
-                         final byte[] inbuf, final byte[] outbuf)
-            throws IOException, InvalidCipherTextException {
-        assert cipher != null;
-        assert in != null;
-        assert out != null;
-        assert inbuf != null;
-        assert outbuf != null;
-        final var inputBlockSize = cipher.getInputBlockSize();
-        assert inbuf.length >= inputBlockSize;
-        final var outputBlockSize = cipher.getOutputBlockSize();
-        assert outbuf.length >= outputBlockSize;
-        var bytes = 0L;
-        for (int r, outlen; (r = in.readNBytes(inbuf, 0, inputBlockSize)) > 0; ) {
-            outlen = processBlock(cipher, inbuf, 0, r, outbuf, 0);
-            out.write(outbuf, 0, outlen);
-            bytes += outlen;
-        }
+        assert in.read() == -1;
         return bytes;
     }
 
