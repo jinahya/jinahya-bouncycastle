@@ -56,11 +56,11 @@ final class JinahyaBlockCipherUtils_ {
     }
 
     static long processAllBlocks(
-            final BlockCipher cipher, final InputStream in, final OutputStream out, final byte[] inbuf,
-            final byte[] outbuf,
+            final BlockCipher cipher,
+            final InputStream in, final OutputStream out,
+            final byte[] inbuf, final byte[] outbuf,
             final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
             final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
-
             throws IOException {
         assert cipher != null;
         final var blockSize = cipher.getBlockSize();
@@ -73,7 +73,7 @@ final class JinahyaBlockCipherUtils_ {
         assert outbuf.length >= blockSize;
         // -------------------------------------------------------------------------------------------------------------
         var blocks = 0L;
-        for (int outlen; ; blocks = Math.addExact(blocks, 1L)) {
+        for (int outlen; ; blocks++) {
             in.mark(blockSize);
             if (in.readNBytes(inbuf, 0, blockSize) < blockSize) {
                 in.reset();
@@ -115,31 +115,31 @@ final class JinahyaBlockCipherUtils_ {
         return outlen;
     }
 
-    static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out,
-                                 final byte[] inbuf, final byte[] outbuf, final Mac inmac, final Mac outmac)
-            throws IOException {
-        assert cipher != null;
-        assert in != null;
-        assert in.markSupported();
-        assert out != null;
-        assert inbuf != null;
-        assert outbuf != null;
-        final var blockSize = cipher.getBlockSize();
-        assert inbuf.length >= blockSize;
-        assert outbuf.length >= blockSize;
-        long blocks = 0L;
-        for (int outlen; ; blocks = Math.addExact(blocks, 1L)) {
-            in.mark(blockSize);
-            if (in.readNBytes(inbuf, 0, blockSize) < blockSize) {
-                in.reset();
-                break;
-            }
-            outlen = processBlock(cipher, inbuf, 0, outbuf, 0, inmac, outmac);
-            assert outlen == outbuf.length;
-            out.write(outbuf, 0, outlen);
-        }
-        return blocks;
-    }
+//    static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out,
+//                                 final byte[] inbuf, final byte[] outbuf, final Mac inmac, final Mac outmac)
+//            throws IOException {
+//        assert cipher != null;
+//        assert in != null;
+//        assert in.markSupported();
+//        assert out != null;
+//        assert inbuf != null;
+//        assert outbuf != null;
+//        final var blockSize = cipher.getBlockSize();
+//        assert inbuf.length >= blockSize;
+//        assert outbuf.length >= blockSize;
+//        long blocks = 0L;
+//        for (int outlen; ; blocks = Math.addExact(blocks, 1L)) {
+//            in.mark(blockSize);
+//            if (in.readNBytes(inbuf, 0, blockSize) < blockSize) {
+//                in.reset();
+//                break;
+//            }
+//            outlen = processBlock(cipher, inbuf, 0, outbuf, 0, inmac, outmac);
+//            assert outlen == outbuf.length;
+//            out.write(outbuf, 0, outlen);
+//        }
+//        return blocks;
+//    }
 
     /**
      * Process, using specified cipher, all blocks from specified input stream, and writes processed blocks to specified

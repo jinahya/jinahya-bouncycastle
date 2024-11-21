@@ -168,25 +168,25 @@ public final class JinahyaBlockCipherUtils {
         return count;
     }
 
-    /**
-     * Processes, using specified cipher, all blocks from specified input stream, and write processed blocks to
-     * specified output stream.
-     *
-     * @param cipher the cipher.
-     * @param in     the input stream from which unprocessed blocks are read.
-     * @param out    the output stream to which processed blocks are written.
-     * @return the number of blocks processed.
-     * @throws IOException if an I/O error occurs.
-     */
-    public static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out)
-            throws IOException {
-        Objects.requireNonNull(cipher, "cipher is null");
-        if (!Objects.requireNonNull(in, "in is null").markSupported()) {
-            throw new IllegalArgumentException("in doesn't support mark");
-        }
-        Objects.requireNonNull(out, "out is null");
-        return JinahyaBlockCipherUtils_.processAllBlocks(cipher, in, out);
-    }
+//    /**
+//     * Processes, using specified cipher, all blocks from specified input stream, and write processed blocks to
+//     * specified output stream.
+//     *
+//     * @param cipher the cipher.
+//     * @param in     the input stream from which unprocessed blocks are read.
+//     * @param out    the output stream to which processed blocks are written.
+//     * @return the number of blocks processed.
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    public static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out)
+//            throws IOException {
+//        Objects.requireNonNull(cipher, "cipher is null");
+//        if (!Objects.requireNonNull(in, "in is null").markSupported()) {
+//            throw new IllegalArgumentException("in doesn't support mark");
+//        }
+//        Objects.requireNonNull(out, "out is null");
+//        return JinahyaBlockCipherUtils_.processAllBlocks(cipher, in, out);
+//    }
 
     // -----------------------------------------------------------------------------------------------------------------
     private JinahyaBlockCipherUtils() {
