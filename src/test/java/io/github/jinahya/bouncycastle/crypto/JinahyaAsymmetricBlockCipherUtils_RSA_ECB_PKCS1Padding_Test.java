@@ -1,6 +1,6 @@
 package io.github.jinahya.bouncycastle.crypto;
 
-import __asymmetric._RSA_TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA___TestUtils;
 import _javax.security._Random_TestUtils;
 import io.github.jinahya.bouncycastle.miscellaneous._RSA___Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("RSA/ECB/PKCS1Padding")
@@ -34,7 +33,7 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
     class ProcessBlock_Array_Test {
 
         private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-            return _RSA_TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
+            return _RSA___TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
         }
 
         @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
@@ -183,7 +182,7 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
     class ProcessBlock_Buffer_Test {
 
         private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-            return _RSA_TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
+            return _RSA___TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
         }
 
         @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
@@ -306,7 +305,7 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
     class ProcessAllBytes_Test {
 
         private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-            return _RSA_TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
+            return _RSA___TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
         }
 
         @DisplayName("RSA/ECB/PKCS1Padding")

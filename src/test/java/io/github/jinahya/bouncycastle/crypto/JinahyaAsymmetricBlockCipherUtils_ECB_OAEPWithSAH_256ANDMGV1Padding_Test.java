@@ -1,6 +1,6 @@
 package io.github.jinahya.bouncycastle.crypto;
 
-import __asymmetric._RSA_TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._RSA___TestUtils;
 import _javax.security._Random_TestUtils;
 import io.github.jinahya.bouncycastle.miscellaneous._RSA___Constants;
 import io.github.jinahya.bouncycastle.miscellaneous._RSA___Utils;
@@ -34,7 +34,7 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSAH_256ANDMGV1Padding_Test {
     class ProcessBlock_Array_Test {
 
         private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-            return _RSA_TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
+            return _RSA___TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
         }
 
         @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
@@ -87,7 +87,7 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSAH_256ANDMGV1Padding_Test {
     class ProcessBlock_Buffer_Test {
 
         private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-            return _RSA_TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
+            return _RSA___TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
         }
 
         @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})
@@ -136,7 +136,7 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSAH_256ANDMGV1Padding_Test {
     class ProcessAllBytes_Test {
 
         private static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-            return _RSA_TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
+            return _RSA___TestUtils.getKeySizeAndAsymmetricCipherKeyPairArgumentsStream();
         }
 
         @MethodSource({"getKeySizeAndAsymmetricCipherKeyPairArgumentsStream"})

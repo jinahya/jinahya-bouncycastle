@@ -1,6 +1,5 @@
-package __asymmetric;
+package io.github.jinahya.bouncycastle.miscellaneous;
 
-import io.github.jinahya.bouncycastle.miscellaneous._RSA___Constants;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
@@ -14,7 +13,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public final class _RSA_TestUtils {
+public final class _RSA___TestUtils {
 
     public static IntStream getKeySizeStream() {
         return IntStream.of(
@@ -25,7 +24,7 @@ public final class _RSA_TestUtils {
     }
 
     public static Stream<Arguments> getKeySizeAndAsymmetricCipherKeyPairArgumentsStream() {
-        return _RSA_TestUtils.getKeySizeStream().mapToObj(ks -> {
+        return _RSA___TestUtils.getKeySizeStream().mapToObj(ks -> {
 //            final var params = new RSAKeyGenerationParameters(
 //                    new BigInteger("10001", 16),
 //                    _Random_TestUtils.random(),
@@ -76,7 +75,7 @@ public final class _RSA_TestUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _RSA_TestUtils() {
+    private _RSA___TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

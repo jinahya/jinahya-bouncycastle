@@ -1,8 +1,8 @@
-package __asymmetric;
+package io.github.jinahya.bouncycastle.miscellaneous;
 
 import java.util.stream.IntStream;
 
-public final class _RSA_TestConstants {
+public final class _RSA___TestConstants {
 
     public static IntStream getKeySizeStream() {
         return IntStream.of(
@@ -13,7 +13,7 @@ public final class _RSA_TestConstants {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _RSA_TestConstants() {
+    private _RSA___TestConstants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }
