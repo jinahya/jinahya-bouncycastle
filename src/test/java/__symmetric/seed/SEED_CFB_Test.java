@@ -6,7 +6,7 @@ import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._StreamCipher_TestUtils;
 import _org.bouncycastle.jce.provider._BouncyCastleProvider_TestUtils;
-import io.github.jinahya.bouncycastle.jce.provider.BouncyCastleProviderUtils;
+import io.github.jinahya.bouncycastle.jce.provider.JinahyaBouncyCastleProviderUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -129,7 +129,7 @@ class SEED_CFB_Test
             try {
                 cipher = Cipher.getInstance(
                         transformation,
-                        BouncyCastleProviderUtils.BOUNCY_CASTLE_PROVIDER_NAME
+                        JinahyaBouncyCastleProviderUtils.BOUNCY_CASTLE_PROVIDER_NAME
                 );
             } catch (final NoSuchAlgorithmException naae) {
                 log.error("no such algorithm: {}", transformation);
@@ -155,7 +155,7 @@ class SEED_CFB_Test
             try {
                 cipher = Cipher.getInstance(
                         transformation,
-                        BouncyCastleProviderUtils.BOUNCY_CASTLE_PROVIDER_NAME
+                        JinahyaBouncyCastleProviderUtils.BOUNCY_CASTLE_PROVIDER_NAME
                 );
             } catch (final NoSuchAlgorithmException naae) {
                 log.error("no such algorithm: {}", transformation);

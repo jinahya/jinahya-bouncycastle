@@ -61,7 +61,7 @@ class DESede_ECB_NoPadding_Test
 
     @AfterAll
     static void removeBouncyCastleProvider() {
-        Security.removeProvider(PROVIDER_NAME_BOUNCY_CASTLE);
+//        Security.removeProvider(PROVIDER_NAME_BOUNCY_CASTLE);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

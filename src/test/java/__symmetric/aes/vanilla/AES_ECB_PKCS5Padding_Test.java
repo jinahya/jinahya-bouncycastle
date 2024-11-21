@@ -71,7 +71,7 @@ class AES_ECB_PKCS5Padding_Test {
 
     @AfterAll
     static void removeBouncyCastleProvider() {
-        Security.removeProvider(PROVIDER_NAME_BOUNCY_CASTLE);
+//        Security.removeProvider(PROVIDER_NAME_BOUNCY_CASTLE);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

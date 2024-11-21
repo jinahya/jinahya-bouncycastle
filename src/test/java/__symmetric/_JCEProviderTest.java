@@ -1,6 +1,6 @@
 package __symmetric;
 
-import io.github.jinahya.bouncycastle.jce.provider.BouncyCastleProviderUtils;
+import io.github.jinahya.bouncycastle.jce.provider.JinahyaBouncyCastleProviderUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.AfterAll;
@@ -10,12 +10,12 @@ import org.junit.jupiter.api.BeforeAll;
 public abstract class _JCEProviderTest {
 
     @BeforeAll
-    static void beforeAll() {
-        BouncyCastleProviderUtils.addBouncyCastleProvider();
+    public static void beforeAll() {
+        JinahyaBouncyCastleProviderUtils.addBouncyCastleProvider();
     }
 
     @AfterAll
-    static void afterAll() {
-        BouncyCastleProviderUtils.removeBouncyCastleProvider();
+    public static void afterAll() {
+//        BouncyCastleProviderUtils.removeBouncyCastleProvider();
     }
 }

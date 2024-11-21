@@ -1,11 +1,12 @@
 package __symmetric.seed;
 
-import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import __symmetric._ECB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.jce.provider._BouncyCastleProvider_TestUtils;
+import io.github.jinahya.bouncycastle.jce.provider.JinahyaBouncyCastleProviderUtils;
+import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
@@ -59,6 +60,7 @@ class SEED_ECB_Test
     @ParameterizedTest
     void __(final int keySize) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
+            JinahyaBouncyCastleProviderUtils.addBouncyCastleProvider();
             final var transformation = ALGORITHM + '/' + __ECB__Constants.MODE + "/PKCS5Padding";
             final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
             final var key = new SecretKeySpec(
@@ -75,8 +77,12 @@ class SEED_ECB_Test
     @ParameterizedTest
     void __(final int keySize, @TempDir final Path dir) throws Exception {
         _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
+            JinahyaBouncyCastleProviderUtils.addBouncyCastleProvider();
             final var transformation = ALGORITHM + '/' + __ECB__Constants.MODE + "/PKCS5Padding";
-            final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
+            final var cipher = Cipher.getInstance(
+                    transformation,
+                    JinahyaBouncyCastleProviderUtils.BOUNCY_CASTLE_PROVIDER_NAME
+            );
             final var key = new SecretKeySpec(
                     _Random_TestUtils.newRandomBytes(keySize >> 3),
                     ALGORITHM

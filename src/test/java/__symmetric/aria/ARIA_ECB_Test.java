@@ -1,12 +1,12 @@
 package __symmetric.aria;
 
-import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import __symmetric._ECB_TestUtils;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.jce.provider._BouncyCastleProvider_TestUtils;
-import io.github.jinahya.bouncycastle.jce.provider.BouncyCastleProviderUtils;
+import io.github.jinahya.bouncycastle.jce.provider.JinahyaBouncyCastleProviderUtils;
+import io.github.jinahya.bouncycastle.miscellaneous.__ECB__Constants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +79,11 @@ class ARIA_ECB_Test
         @ParameterizedTest
         void __(final int keySize, final String transformation) throws Exception {
             _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-                final var cipher = Cipher.getInstance(transformation);
+                JinahyaBouncyCastleProviderUtils.addBouncyCastleProvider();
+                final var cipher = Cipher.getInstance(
+                        transformation,
+                        JinahyaBouncyCastleProviderUtils.BOUNCY_CASTLE_PROVIDER_NAME
+                );
                 final var key = new SecretKeySpec(
                         _Random_TestUtils.newRandomBytes(keySize >> 3),
                         ALGORITHM
@@ -93,8 +97,11 @@ class ARIA_ECB_Test
         @ParameterizedTest
         void __(final int keySize, final String transformation, @TempDir final Path dir) throws Exception {
             _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
-                BouncyCastleProviderUtils.addBouncyCastleProvider();
-                final var cipher = Cipher.getInstance(transformation);
+                JinahyaBouncyCastleProviderUtils.addBouncyCastleProvider();
+                final var cipher = Cipher.getInstance(
+                        transformation,
+                        JinahyaBouncyCastleProviderUtils.BOUNCY_CASTLE_PROVIDER_NAME
+                );
                 final var key = new SecretKeySpec(
                         _Random_TestUtils.newRandomBytes(keySize >> 3),
                         ALGORITHM

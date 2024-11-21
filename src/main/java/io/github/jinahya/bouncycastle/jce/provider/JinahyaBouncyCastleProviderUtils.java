@@ -8,7 +8,7 @@ import java.security.Security;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public final class BouncyCastleProviderUtils {
+public final class JinahyaBouncyCastleProviderUtils {
 
     // ----------------------------------------------------------------------------------------------------------- class
     private static final String BOUNCY_CASTLE_PROVIDER_CLASS_NAME =
@@ -61,7 +61,6 @@ public final class BouncyCastleProviderUtils {
      * Adds the {@value #BOUNCY_CASTLE_PROVIDER_NAME} provider to the {@link Security}.
      *
      * @see Security#addProvider(Provider)
-     * @see #removeBouncyCastleProvider()
      */
     public static synchronized void addBouncyCastleProvider() {
         if (added) {
@@ -71,19 +70,19 @@ public final class BouncyCastleProviderUtils {
         added = true;
     }
 
-    /**
-     * Removes the {@value #BOUNCY_CASTLE_PROVIDER_NAME} provider from the {@link Security}.
-     *
-     * @see Security#removeProvider(String)
-     * @see #addBouncyCastleProvider()
-     */
-    public static synchronized void removeBouncyCastleProvider() {
-        Security.removeProvider(BOUNCY_CASTLE_PROVIDER_NAME);
-        added = false;
-    }
+//    /**
+//     * Removes the {@value #BOUNCY_CASTLE_PROVIDER_NAME} provider from the {@link Security}.
+//     *
+//     * @see Security#removeProvider(String)
+//     * @see #addBouncyCastleProvider()
+//     */
+//    public static synchronized void removeBouncyCastleProvider() {
+//        Security.removeProvider(BOUNCY_CASTLE_PROVIDER_NAME);
+//        added = false;
+//    }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private BouncyCastleProviderUtils() {
+    private JinahyaBouncyCastleProviderUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

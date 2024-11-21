@@ -77,7 +77,7 @@ class AES_GCM_NoPadding_Test {
 
     @AfterAll
     static void removeBouncyCastleProvider() {
-        Security.removeProvider(PROVIDER_NAME_BOUNCY_CASTLE);
+//        Security.removeProvider(PROVIDER_NAME_BOUNCY_CASTLE);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

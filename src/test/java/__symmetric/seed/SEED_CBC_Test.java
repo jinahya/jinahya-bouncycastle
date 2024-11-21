@@ -6,6 +6,8 @@ import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BufferedBlockCipher_TestUtils;
 import _org.bouncycastle.crypto.paddings._BlockCipherPadding_TestUtils;
+import _org.bouncycastle.jce.provider._BouncyCastleProvider_TestUtils;
+import io.github.jinahya.bouncycastle.jce.provider.JinahyaBouncyCastleProviderUtils;
 import io.github.jinahya.bouncycastle.miscellaneous.__CBC__Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.CipherParameters;
@@ -34,6 +36,7 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.Security;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
@@ -174,20 +177,31 @@ class SEED_CBC_Test
         @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
         void __(final String transformation, final int keySize) throws Exception {
-            final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
-            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
-            final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
-            _Cipher_TestUtils.__(cipher, key, params, null);
+            _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
+                Security.addProvider(new BouncyCastleProvider());
+                final var cipher = Cipher.getInstance(
+                        transformation,
+                        JinahyaBouncyCastleProviderUtils.BOUNCY_CASTLE_PROVIDER_NAME
+                );
+//                final var cipher = Cipher.getInstance(transformation);
+                final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
+                final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
+                _Cipher_TestUtils.__(cipher, key, params, null);
+                return null;
+            });
         }
 
         @DisplayName("encrypt/decrypt file")
         @MethodSource({"getTransformationAndKeySizeArgumentsStream"})
         @ParameterizedTest(name = "[{index}] {0} with {1}-bit key")
         void __(final String transformation, final int keySize, @TempDir final Path dir) throws Exception {
-            final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
-            final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
-            final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
-            _Cipher_TestUtils.__(cipher, key, params, null, dir);
+            _BouncyCastleProvider_TestUtils.callForBouncyCastleProvider(() -> {
+                final var cipher = Cipher.getInstance(transformation, BouncyCastleProvider.PROVIDER_NAME);
+                final var key = new SecretKeySpec(_Random_TestUtils.newRandomBytes(keySize >> 3), ALGORITHM);
+                final var params = new IvParameterSpec(_Random_TestUtils.newRandomBytes(BLOCK_BYTES));
+                _Cipher_TestUtils.__(cipher, key, params, null, dir);
+                return null;
+            });
         }
     }
 }
