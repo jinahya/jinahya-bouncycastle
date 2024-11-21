@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JinahyaAESUtils_Test {
+class Jinahya_AES_Utils_Test {
 
     @DisplayName("_CBC_PKCS7Padding")
     @Nested
@@ -25,8 +25,8 @@ class JinahyaAESUtils_Test {
             final var iv = __CBC_TestUtils.newRandomIv(_AES___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
-            final var encrypted = JinahyaAESUtils.encrypt_CBC_PKCS7Padding(key, iv, plain);
-            final var decrypted = JinahyaAESUtils.decrypt_CBC_PKCS7Padding(key, iv, encrypted);
+            final var encrypted = Jinahya_AES_Utils.encrypt_CBC_PKCS7Padding(key, iv, plain);
+            final var decrypted = Jinahya_AES_Utils.decrypt_CBC_PKCS7Padding(key, iv, encrypted);
             // ---------------------------------------------------------------------------------------------------- then
             assertThat(decrypted).isEqualTo(plain);
         }
@@ -43,7 +43,7 @@ class JinahyaAESUtils_Test {
                 final var in = new ByteArrayInputStream(plain);
                 final var out = new ByteArrayOutputStream();
                 final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-                final var bytes = JinahyaAESUtils.encrypt_CBC_PKCS7Padding(key, iv, in, out, inbuf);
+                final var bytes = Jinahya_AES_Utils.encrypt_CBC_PKCS7Padding(key, iv, in, out, inbuf);
                 assert bytes >= plain.length;
                 encrypted = out.toByteArray();
             }
@@ -52,7 +52,7 @@ class JinahyaAESUtils_Test {
                 final var in = new ByteArrayInputStream(encrypted);
                 final var out = new ByteArrayOutputStream();
                 final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-                final var bytes = JinahyaAESUtils.decrypt_CBC_PKCS7Padding(key, iv, in, out, inbuf);
+                final var bytes = Jinahya_AES_Utils.decrypt_CBC_PKCS7Padding(key, iv, in, out, inbuf);
                 assert bytes <= encrypted.length;
                 decrypted = out.toByteArray();
             }
@@ -74,8 +74,8 @@ class JinahyaAESUtils_Test {
             final var aad = __GCM_TestUtils.randomAad();
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
-            final var encrypted = JinahyaAESUtils.encrypt_GCM_NoPadding(key, tLen, iv, aad, plain);
-            final var decrypted = JinahyaAESUtils.decrypt_GCM_NoPadding(key, tLen, iv, aad, encrypted);
+            final var encrypted = Jinahya_AES_Utils.encrypt_GCM_NoPadding(key, tLen, iv, aad, plain);
+            final var decrypted = Jinahya_AES_Utils.decrypt_GCM_NoPadding(key, tLen, iv, aad, encrypted);
             // ---------------------------------------------------------------------------------------------------- then
             assertThat(decrypted).isEqualTo(plain);
         }
@@ -94,7 +94,7 @@ class JinahyaAESUtils_Test {
                 final var in = new ByteArrayInputStream(plain);
                 final var out = new ByteArrayOutputStream();
                 final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-                final var bytes = JinahyaAESUtils.encrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inbuf);
+                final var bytes = Jinahya_AES_Utils.encrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inbuf);
                 assert bytes >= plain.length;
                 encrypted = out.toByteArray();
             }
@@ -103,7 +103,7 @@ class JinahyaAESUtils_Test {
                 final var in = new ByteArrayInputStream(encrypted);
                 final var out = new ByteArrayOutputStream();
                 final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-                final var bytes = JinahyaAESUtils.decrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inbuf);
+                final var bytes = Jinahya_AES_Utils.decrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inbuf);
                 assert bytes <= encrypted.length;
                 decrypted = out.toByteArray();
             }

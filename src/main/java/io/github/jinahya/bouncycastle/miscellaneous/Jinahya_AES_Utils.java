@@ -24,12 +24,12 @@ import java.io.OutputStream;
 @SuppressWarnings({
         "java:S100" // Method names should comply with a naming convention
 })
-public final class JinahyaAESUtils {
+public final class Jinahya_AES_Utils {
 
     // ----------------------------------------------------------------------------------------------- /CBC/PKCS7Padding
     private static JinahyaCrypto _CBC_PKCS7Padding(final byte[] key, final byte[] iv) {
         _AES___Utils.requireValidKey(key);
-        _AES___Utils.requireValidIv(iv);
+        _AES_CBC__Utils.requireValidIv(iv);
         final var cipher = new PaddedBufferedBlockCipher(
                 CBCBlockCipher.newInstance(AESEngine.newInstance()),
                 new PKCS7Padding()
@@ -199,7 +199,7 @@ public final class JinahyaAESUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private JinahyaAESUtils() {
+    private Jinahya_AES_Utils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

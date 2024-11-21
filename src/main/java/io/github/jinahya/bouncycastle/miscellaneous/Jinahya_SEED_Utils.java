@@ -21,7 +21,7 @@ import java.io.OutputStream;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public final class JinahyaSEEDUtils {
+public final class Jinahya_SEED_Utils {
 
     // ----------------------------------------------------------------------------------------------- /CBC/PKCS7Padding
     private static JinahyaCrypto _CBC_PKCS7Padding(final byte[] key, final byte[] iv) {
@@ -198,7 +198,7 @@ public final class JinahyaSEEDUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private JinahyaSEEDUtils() {
+    private Jinahya_SEED_Utils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

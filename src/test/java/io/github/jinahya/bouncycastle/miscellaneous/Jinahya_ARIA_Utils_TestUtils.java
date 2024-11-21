@@ -1,8 +1,8 @@
 package io.github.jinahya.bouncycastle.miscellaneous;
 
-final class JinahyaARIAUtils_TestUtils {
+final class Jinahya_ARIA_Utils_TestUtils {
 
-    private JinahyaARIAUtils_TestUtils() {
+    private Jinahya_ARIA_Utils_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

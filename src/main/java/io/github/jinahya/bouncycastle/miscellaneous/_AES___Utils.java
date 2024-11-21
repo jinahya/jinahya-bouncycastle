@@ -17,13 +17,6 @@ public final class _AES___Utils {
         return key;
     }
 
-    static byte[] requireValidIv(final byte[] iv) {
-        if (Objects.requireNonNull(iv, "iv is null").length != _AES___Constants.BLOCK_BYTES) {
-            throw new IllegalArgumentException("iv.length(" + iv.length + ") != " + _AES___Constants.BLOCK_BYTES);
-        }
-        return iv;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     public static String getTransformation(final String mode, final String padding) {
         Objects.requireNonNull(mode, "mode is null");
