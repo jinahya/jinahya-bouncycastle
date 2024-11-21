@@ -46,8 +46,8 @@ class JinahyaBlockCipherUtils_Test {
             mac.init(params);
             // ------------------------------------------------------------------------------------------------- encrypt
             final byte[] encrypted;
-            final byte[] encdigest;
-            final byte[] encmac;
+            final var encdigest = new byte[digest.getDigestSize()];
+            final var encmac = new byte[mac.getMacSize()];
             {
                 cipher.init(true, params);
                 {
@@ -57,30 +57,26 @@ class JinahyaBlockCipherUtils_Test {
                             plain,
                             0,
                             out,
-                            0,
-                            b -> o -> l -> {
-                                digest.update(b, o, l);
-                                mac.update(b, o, l);
-                            },
-                            b -> o -> l -> {
-                            }
+                            0
                     );
                     assert outlen == out.length;
                     encrypted = Arrays.copyOf(out, outlen);
                 }
                 {
-                    final var d = new byte[digest.getDigestSize()];
-                    encdigest = Arrays.copyOf(d, digest.doFinal(d, 0));
+                    digest.update(plain, 0, plain.length);
+                    final var bytes = digest.doFinal(encdigest, 0);
+                    assert bytes == encdigest.length;
                 }
                 {
-                    final var m = new byte[mac.getMacSize()];
-                    encmac = Arrays.copyOf(m, mac.doFinal(m, 0));
+                    mac.update(plain, 0, plain.length);
+                    final var bytes = mac.doFinal(encmac, 0);
+                    assert bytes == encmac.length;
                 }
             }
             // ------------------------------------------------------------------------------------------------- decrypt
             final byte[] decrypted;
-            final byte[] decdigest;
-            final byte[] decmac;
+            final var decdigest = new byte[digest.getDigestSize()];
+            final var decmac = new byte[mac.getMacSize()];
             {
                 cipher.init(false, params);
                 {
@@ -90,24 +86,20 @@ class JinahyaBlockCipherUtils_Test {
                             encrypted,
                             0,
                             out,
-                            0,
-                            b -> o -> l -> {
-                            },
-                            b -> o -> l -> {
-                                digest.update(b, o, l);
-                                mac.update(b, o, l);
-                            }
+                            0
                     );
                     assert outlen == out.length;
                     decrypted = Arrays.copyOf(out, outlen);
                 }
                 {
-                    final var d = new byte[digest.getDigestSize()];
-                    decdigest = Arrays.copyOf(d, digest.doFinal(d, 0));
+                    digest.update(decrypted, 0, decrypted.length);
+                    final var bytes = digest.doFinal(decdigest, 0);
+                    assert bytes == decdigest.length;
                 }
                 {
-                    final var m = new byte[mac.getMacSize()];
-                    decmac = Arrays.copyOf(m, mac.doFinal(m, 0));
+                    mac.update(decrypted, 0, decrypted.length);
+                    final var bytes = mac.doFinal(decmac, 0);
+                    assert bytes == decmac.length;
                 }
             }
             // -------------------------------------------------------------------------------------------------- verify
@@ -143,8 +135,8 @@ class JinahyaBlockCipherUtils_Test {
             final var outbuf = new byte[inbuf.length];
             // ------------------------------------------------------------------------------------------------- encrypt
             final byte[] encrypted;
-            final byte[] encdigest;
-            final byte[] encmac;
+            final var encdigest = new byte[digest.getDigestSize()];
+            final var encmac = new byte[mac.getMacSize()];
             {
                 cipher.init(true, params);
                 {
@@ -166,18 +158,18 @@ class JinahyaBlockCipherUtils_Test {
                     out.reset();
                 }
                 {
-                    final var d = new byte[digest.getDigestSize()];
-                    encdigest = Arrays.copyOf(d, digest.doFinal(d, 0));
+                    final var bytes = digest.doFinal(encdigest, 0);
+                    assert bytes == encdigest.length;
                 }
                 {
-                    final var m = new byte[mac.getMacSize()];
-                    encmac = Arrays.copyOf(m, mac.doFinal(m, 0));
+                    final var bytes = mac.doFinal(encmac, 0);
+                    assert bytes == encmac.length;
                 }
             }
             // ------------------------------------------------------------------------------------------------- decrypt
             final byte[] decrypted;
-            final byte[] decdigest;
-            final byte[] decmac;
+            final var decdigest = new byte[digest.getDigestSize()];
+            final var decmac = new byte[mac.getMacSize()];
             {
                 cipher.init(false, params);
                 {
@@ -199,12 +191,12 @@ class JinahyaBlockCipherUtils_Test {
                     out.reset();
                 }
                 {
-                    final var d = new byte[digest.getDigestSize()];
-                    decdigest = Arrays.copyOf(d, digest.doFinal(d, 0));
+                    final var bytes = digest.doFinal(decdigest, 0);
+                    assert bytes == decdigest.length;
                 }
                 {
-                    final var m = new byte[mac.getMacSize()];
-                    decmac = Arrays.copyOf(m, mac.doFinal(m, 0));
+                    final var bytes = mac.doFinal(decmac, 0);
+                    assert bytes == decmac.length;
                 }
             }
             // -------------------------------------------------------------------------------------------------- verify

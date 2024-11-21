@@ -86,7 +86,11 @@ public class _BlockCipher_TestUtils {
                     in,
                     out,
                     new byte[cipher.getBlockSize()],
-                    new byte[cipher.getBlockSize()]
+                    new byte[cipher.getBlockSize()],
+                    b -> o -> l -> {
+                    },
+                    b -> o -> l -> {
+                    }
             );
             assertThat(blocks).isEqualTo(plain.length / cipher.getBlockSize());
             final var bytes = out.toByteArray();

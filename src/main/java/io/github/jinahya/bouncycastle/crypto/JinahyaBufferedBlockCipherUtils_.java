@@ -80,7 +80,17 @@ final class JinahyaBufferedBlockCipherUtils_ {
         }
         var bytes = 0L;
         if (!(cipher instanceof PaddedBufferedBlockCipher) && in.markSupported()) {
-            final var blocks = JinahyaBlockCipherUtils_.processAllBlocks(cipher.getUnderlyingCipher(), in, out);
+            final var blocks = JinahyaBlockCipherUtils_.processAllBlocks(
+                    cipher.getUnderlyingCipher(),
+                    in,
+                    out,
+                    inbuf,
+                    outbuf,
+                    b -> o -> l -> {
+                    },
+                    b -> o -> l -> {
+                    }
+            );
             bytes += (blocks * cipher.getBlockSize());
         }
         int outlen;
