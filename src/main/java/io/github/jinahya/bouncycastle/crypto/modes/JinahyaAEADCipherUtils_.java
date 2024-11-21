@@ -1,42 +1,41 @@
-package io.github.jinahya.bouncycastle.crypto;
+package io.github.jinahya.bouncycastle.crypto.modes;
 
 import _java.nio._ByteBufferUtils;
-import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
-import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
+import org.bouncycastle.crypto.modes.AEADCipher;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 
-final class JinahyaBufferedBlockCipherUtils_ {
+final class JinahyaAEADCipherUtils_ {
 
-    static int processBytesAndDoFinal(final BufferedBlockCipher cipher, final byte[] in, final int inoff,
-                                      final int inlen, final byte[] out, final int outoff)
+    // -----------------------------------------------------------------------------------------------------------------
+    public static int processBytesAndDoFinal(final AEADCipher cipher, final byte[] in, final int inoff, final int inlen,
+                                             final byte[] out, final int outoff)
             throws InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
         assert inoff >= 0;
         assert inlen >= 0;
-        assert inoff + inlen <= in.length;
+        assert (inoff + inlen) <= in.length;
         assert out != null;
         assert outoff >= 0;
-        assert outoff <= out.length;
+        // -------------------------------------------------------------------------------------------------------------
         var outlen = cipher.processBytes(in, inoff, inlen, out, outoff); // DataLengthException
-        outlen += cipher.doFinal(out, outlen); // InvalidCipherTextException
+        outlen += cipher.doFinal(out, outoff + outlen); // InvalidCipherTextException
         return outlen;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    static int processBytesAndDoFinal(final BufferedBlockCipher cipher, final ByteBuffer input, final ByteBuffer output)
+    public static int processBytesAndDoFinal(final AEADCipher cipher, final ByteBuffer input, final ByteBuffer output)
             throws InvalidCipherTextException {
         assert cipher != null;
         assert input != null;
         assert output != null;
+        // -------------------------------------------------------------------------------------------------------------
         final byte[] in;
         final int inoff;
         final int inlen = input.remaining();
@@ -68,56 +67,39 @@ final class JinahyaBufferedBlockCipherUtils_ {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static long processAllBytesAndDoFinal(final BufferedBlockCipher cipher, final InputStream in,
-                                          final OutputStream out, final byte[] inbuf, byte[] outbuf,
-                                          final Function<? super byte[], ? extends IntConsumer> inconsumer,
-                                          final Function<? super byte[], ? extends IntConsumer> outconsumer)
+    public static long processAllBytesAndDoFinal(final AEADCipher cipher, final InputStream in, final OutputStream out,
+                                                 final byte[] inbuf, final int inoff, final int inlen, byte[] outbuf,
+                                                 final Function<? super byte[], ? extends IntConsumer> inconsumer,
+                                                 final Function<? super byte[], ? extends IntConsumer> outconsumer)
             throws IOException, InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
         assert out != null;
-        assert inbuf != null && inbuf.length > 0;
-        if (outbuf == null || outbuf.length == 0) {
-            outbuf = new byte[cipher.getOutputSize(inbuf.length)];
-        }
+        assert inbuf != null;
+        assert inbuf.length > 0;
+        assert outbuf != null;
+        assert outbuf.length > 0;
+        assert inconsumer != null;
+        assert outconsumer != null;
+        // -------------------------------------------------------------------------------------------------------------
         var bytes = 0L;
-        if (false && !(cipher instanceof PaddedBufferedBlockCipher) && in.markSupported()) {
-            final var blocks = JinahyaBlockCipherUtils_.processAllBlocks(
-                    cipher.getUnderlyingCipher(),
-                    in,
-                    out,
-                    inbuf,
-                    outbuf,
-                    inconsumer,
-                    outconsumer
-            );
-            bytes += (blocks * cipher.getBlockSize());
-        }
-        int outlen;
         for (int r; (r = in.read(inbuf)) != -1; ) {
             for (final var uos = cipher.getUpdateOutputSize(r); outbuf.length < uos; ) {
-                System.err.println(
-                        "re-allocating outbuf(" + outbuf.length + ")" +
-                                " for an intermediate update-output-size(" + uos + ")"
-                );
-                Arrays.fill(outbuf, (byte) 0);
+                System.err.println("re-allocating outbuf(" + outbuf.length +
+                                           ") for an intermediate update output size: " + uos);
                 outbuf = new byte[uos];
             }
-            outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
+            final var outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0); // DataLengthException
             out.write(outbuf, 0, outlen);
             inconsumer.apply(inbuf).accept(r);
             outconsumer.apply(outbuf).accept(outlen);
             bytes += outlen;
         }
         for (final var os = cipher.getOutputSize(0); outbuf.length < os; ) {
-            System.err.println(
-                    "re-allocating outbuf(" + outbuf.length + ")" +
-                            " for the final output-size(" + os + ")"
-            );
-            Arrays.fill(outbuf, (byte) 0);
+            System.err.println("re-allocating outbuf(" + outbuf.length + ") for the final output size: " + os);
             outbuf = new byte[os];
         }
-        outlen = cipher.doFinal(outbuf, 0);
+        final var outlen = cipher.doFinal(outbuf, 0); // InvalidCipherTextException
         out.write(outbuf, 0, outlen);
         outconsumer.apply(outbuf).accept(outlen);
         bytes += outlen;
@@ -125,7 +107,7 @@ final class JinahyaBufferedBlockCipherUtils_ {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private JinahyaBufferedBlockCipherUtils_() {
+    private JinahyaAEADCipherUtils_() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.IntConsumer;
 
 /**
@@ -18,6 +19,17 @@ import java.util.function.IntConsumer;
  */
 public final class JinahyaBlockCipherUtils {
 
+    /**
+     * Processes, using specified cipher, an unprocessed block bytes in specified input array starting from specified
+     * input index, and set processed block bytes to specified output array starting at specified output index.
+     *
+     * @param cipher the cipher.
+     * @param in     the input array.
+     * @param inoff  the starting index of {@code in}.
+     * @param out    the output array on which processed bytes are set.
+     * @param outoff the starting index of {@code out}.
+     * @return the number of bytes set on the {@code out}.
+     */
     public static int processBlock(final BlockCipher cipher, final byte[] in, final int inoff, final byte[] out,
                                    final int outoff) {
         Objects.requireNonNull(cipher, "cipher is null");
@@ -50,8 +62,9 @@ public final class JinahyaBlockCipherUtils {
     }
 
     public static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out,
-                                        final byte[] inbuf, final byte[] outbuf, final IntConsumer inlenconsumer,
-                                        final IntConsumer outlenconsumer)
+                                        final byte[] inbuf, final byte[] outbuf,
+                                        final Function<? super byte[], ? extends IntConsumer> inconsumer,
+                                        final Function<? super byte[], ? extends IntConsumer> outconsumer)
             throws IOException {
         Objects.requireNonNull(cipher, "cipher is null");
         if (!Objects.requireNonNull(in, "in is null").markSupported()) {
@@ -69,16 +82,16 @@ public final class JinahyaBlockCipherUtils {
                     "outbuf.length(" + outbuf.length + ") < cipher.blockSize(" + blockSize + ")"
             );
         }
-        Objects.requireNonNull(inlenconsumer, "inlenconsumer is null");
-        Objects.requireNonNull(outlenconsumer, "outlenconsumer is null");
+        Objects.requireNonNull(inconsumer, "inconsumer is null");
+        Objects.requireNonNull(outconsumer, "outconsumer is null");
         return JinahyaBlockCipherUtils_.processAllBlocks(
                 cipher,
                 in,
                 out,
                 inbuf,
                 outbuf,
-                inlenconsumer,
-                outlenconsumer
+                inconsumer,
+                outconsumer
         );
     }
 

@@ -3,19 +3,19 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._BlockCipher_TestUtils;
 import _org.bouncycastle.crypto.params._KeyParameters_TestUtils;
-import org.bouncycastle.crypto.engines.ARIAEngine;
+import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-public final class _ARIA__TestUtils {
+public final class _AES___TestUtils {
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-        return _ARIA___Constants.ALLOWED_KEY_BYTES_LIST.stream().map(kb -> {
+        return _AES___Constants.ALLOWED_KEY_BYTES_LIST.stream().map(kb -> {
             return Arguments.of(
-                    _BlockCipher_TestUtils.named(new ARIAEngine()),
+                    _BlockCipher_TestUtils.named(AESEngine.newInstance()),
                     _KeyParameters_TestUtils.named(
                             new KeyParameter(_Random_TestUtils.newRandomBytes(kb))
                     )
@@ -24,8 +24,8 @@ public final class _ARIA__TestUtils {
     }
 
     static int randomKeyBytes() {
-        return _ARIA___Constants.ALLOWED_KEY_BYTES_LIST.get(
-                ThreadLocalRandom.current().nextInt(_ARIA___Constants.ALLOWED_KEY_BYTES_LIST.size())
+        return _AES___Constants.ALLOWED_KEY_BYTES_LIST.get(
+                ThreadLocalRandom.current().nextInt(_AES___Constants.ALLOWED_KEY_BYTES_LIST.size())
         );
     }
 
@@ -33,7 +33,7 @@ public final class _ARIA__TestUtils {
         return _Random_TestUtils.newRandomBytes(randomKeyBytes());
     }
 
-    private _ARIA__TestUtils() {
+    private _AES___TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

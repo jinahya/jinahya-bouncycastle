@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
 
 /**
  * A utility class for {@link BufferedBlockCipher}.
@@ -19,6 +20,7 @@ import java.util.Objects;
  * @see <a
  * href="https://downloads.bouncycastle.org/java/docs/bcprov-jdk18on-javadoc/org/bouncycastle/crypto/BufferedBlockCipher.html">org.bouncycastle.crypto.BufferedBlockCipher</a>
  * (bcprov-jdk18on-javadoc)
+ * @see JinahyaBlockCipherUtils
  */
 public final class JinahyaBufferedBlockCipherUtils {
 
@@ -62,12 +64,13 @@ public final class JinahyaBufferedBlockCipherUtils {
         if (outoff > out.length) {
             throw new IllegalArgumentException("outoff(" + outoff + ") > out.length(" + out.length + ")");
         }
-        if (true) {
-            return JinahyaBufferedBlockCipherUtils_.processBytesAndDoFinal(cipher, in, inoff, inlen, out, outoff);
-        }
-        var outlen = cipher.processBytes(in, inoff, inlen, out, outoff); // DataLengthException
-        outlen += cipher.doFinal(out, outlen); // InvalidCipherTextException
-        return outlen;
+//        final var outputSize = cipher.getOutputSize(inlen);
+//        if ((out.length - outoff) < outputSize) {
+//            throw new IllegalArgumentException(
+//                    "(out.length(" + out.length + ") - outoff(" + outoff + "))" +
+//                            " < cipher.outputSize(inlen(" + inlen + "))(" + outputSize + ")");
+//        }
+        return JinahyaBufferedBlockCipherUtils_.processBytesAndDoFinal(cipher, in, inoff, inlen, out, outoff);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -90,40 +93,7 @@ public final class JinahyaBufferedBlockCipherUtils {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
-        if (true) {
-            return JinahyaBufferedBlockCipherUtils_.processBytesAndDoFinal(cipher, input, output);
-        }
-        final byte[] in;
-        final int inoff;
-        final int inlen = input.remaining();
-        if (input.hasArray()) {
-            in = input.array();
-            inoff = input.arrayOffset() + input.position();
-        } else {
-            in = new byte[inlen];
-//            input.get(0, in); // Java 13
-            for (int p = input.position(), i = 0; i < in.length; p++, i++) {
-                in[i] = input.get(p);
-            }
-            inoff = 0;
-        }
-        final byte[] out;
-        final int outoff;
-        if (output.hasArray()) {
-            out = output.array();
-            outoff = output.arrayOffset() + output.position();
-        } else {
-            out = new byte[output.remaining()];
-            outoff = 0;
-        }
-        final var outlen = processBytesAndDoFinal(cipher, in, inoff, inlen, out, outoff);
-        input.position(input.position() + inlen);
-        if (output.hasArray()) {
-            output.position(output.position() + outlen);
-        } else {
-            output.put(out, outoff, outlen);
-        }
-        return outlen;
+        return JinahyaBufferedBlockCipherUtils_.processBytesAndDoFinal(cipher, input, output);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -132,11 +102,13 @@ public final class JinahyaBufferedBlockCipherUtils {
      * Processes and finalizes, using specified cipher, all bytes from specified input stream, and writes processed
      * bytes to specified output stream.
      *
-     * @param cipher the cipher.
-     * @param in     the input stream from which unprocessed bytes are read.
-     * @param out    the output stream to which processed bytes are written.
-     * @param inbuf  a buffer for reading bytes from the input stream.
-     * @param outbuf a buffer for processed bytes.
+     * @param cipher      the cipher.
+     * @param in          the input stream from which unprocessed bytes are read.
+     * @param out         the output stream to which processed bytes are written.
+     * @param inbuf       a buffer for reading bytes from the input stream.
+     * @param outbuf      a buffer for processed bytes.
+     * @param inconsumer  a function applies with an input array results an int consumer accepts the number of bytes.
+     * @param outconsumer a function applies with an output array results an int consumer accepts the number of bytes.
      * @return the number of bytes written to the {@code out}.
      * @throws IOException                if an I/O error occurs.
      * @throws InvalidCipherTextException if padding is expected and not found.
@@ -144,7 +116,9 @@ public final class JinahyaBufferedBlockCipherUtils {
      * @see BufferedBlockCipher#doFinal(byte[], int)
      */
     public static long processAllBytesAndDoFinal(final BufferedBlockCipher cipher, final InputStream in,
-                                                 final OutputStream out, final byte[] inbuf, byte[] outbuf)
+                                                 final OutputStream out, final byte[] inbuf, final byte[] outbuf,
+                                                 final Function<? super byte[], ? extends IntConsumer> inconsumer,
+                                                 final Function<? super byte[], ? extends IntConsumer> outconsumer)
             throws IOException, InvalidCipherTextException {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(in, "in is null");
@@ -152,36 +126,17 @@ public final class JinahyaBufferedBlockCipherUtils {
         if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
             throw new IllegalArgumentException("inbuf.length is zero");
         }
-        if (true) {
-            return JinahyaBufferedBlockCipherUtils_.processAllBytesAndDoFinal(cipher, in, out, inbuf, outbuf);
-        }
-        if (outbuf == null || outbuf.length == 0) {
-            outbuf = new byte[cipher.getOutputSize(inbuf.length)];
-        }
-        var bytes = 0L;
-        int outlen;
-        for (int r; (r = in.read(inbuf)) != -1; ) {
-            for (final var uos = cipher.getUpdateOutputSize(r); outbuf.length < uos; ) {
-                System.err.println(
-                        "re-allocating outbuf(" + outbuf.length +
-                                ") for an intermediate update-output-size(" + uos + ")"
-                );
-                Arrays.fill(outbuf, (byte) 0);
-                outbuf = new byte[uos];
-            }
-            outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
-            out.write(outbuf, 0, outlen);
-            bytes += outlen;
-        }
-        for (final var os = cipher.getOutputSize(0); outbuf.length < os; ) {
-            System.err.println("re-allocating outbuf(" + outbuf.length + ") for the final output-size(" + os + ")");
-            Arrays.fill(outbuf, (byte) 0);
-            outbuf = new byte[os];
-        }
-        outlen = cipher.doFinal(outbuf, 0);
-        out.write(outbuf, 0, outlen);
-        bytes += outlen;
-        return bytes;
+        Objects.requireNonNull(inconsumer, "inconsumer is null");
+        Objects.requireNonNull(outconsumer, "outconsumer is null");
+        return JinahyaBufferedBlockCipherUtils_.processAllBytesAndDoFinal(
+                cipher,
+                in,
+                out,
+                inbuf,
+                outbuf,
+                inconsumer,
+                outconsumer
+        );
     }
 
     // -----------------------------------------------------------------------------------------------------------------

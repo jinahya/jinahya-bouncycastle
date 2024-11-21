@@ -21,7 +21,7 @@ class JinahyaAESUtilsTest {
         @Test
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _AES__TestUtils.randomKey();
+            final var key = _AES___TestUtils.randomKey();
             final var iv = __CBC_TestUtils.newRandomIv(_AES___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
@@ -34,7 +34,7 @@ class JinahyaAESUtilsTest {
         @Test
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _AES__TestUtils.randomKey();
+            final var key = _AES___TestUtils.randomKey();
             final var iv = __CBC_TestUtils.newRandomIv(_AES___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1048576));
             // ---------------------------------------------------------------------------------------------------- when
@@ -68,7 +68,7 @@ class JinahyaAESUtilsTest {
         @Test
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _AES__TestUtils.randomKey();
+            final var key = _AES___TestUtils.randomKey();
             final var tLen = __GCM_TestUtils.randomTLen();
             final var iv = __GCM_TestUtils.randomIv();
             final var aad = __GCM_TestUtils.randomAad();
@@ -83,7 +83,7 @@ class JinahyaAESUtilsTest {
         @Test
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _AES__TestUtils.randomKey();
+            final var key = _AES___TestUtils.randomKey();
             final var tLen = __GCM_TestUtils.randomTLen();
             final var iv = __GCM_TestUtils.randomIv();
             final var aad = __GCM_TestUtils.randomAad();

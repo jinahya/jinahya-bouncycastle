@@ -1,5 +1,5 @@
 package io.github.jinahya.bouncycastle.miscellaneous;
 
-class _AES__UtilsTest {
+class _AES___UtilsTest {
 
 }

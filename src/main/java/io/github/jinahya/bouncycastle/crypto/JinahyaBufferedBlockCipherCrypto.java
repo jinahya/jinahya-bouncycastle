@@ -119,7 +119,11 @@ public class JinahyaBufferedBlockCipherCrypto
                     in,
                     out,
                     inbuf,
-                    null
+                    null,
+                    b -> l -> {
+                    },
+                    b -> l -> {
+                    }
             );
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofEncryptionFailure(icte);
@@ -141,7 +145,11 @@ public class JinahyaBufferedBlockCipherCrypto
                     in,
                     out,
                     inbuf,
-                    null
+                    null,
+                    b -> l -> {
+                    },
+                    b -> l -> {
+                    }
             );
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofDecryptionFailure(icte);

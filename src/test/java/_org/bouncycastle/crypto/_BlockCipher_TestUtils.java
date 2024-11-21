@@ -9,6 +9,8 @@ import io.github.jinahya.bouncycastle.miscellaneous._SEED___Constants;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.engines.AESEngine;
+import org.bouncycastle.crypto.engines.ARIAEngine;
+import org.bouncycastle.crypto.engines.LEAEngine;
 import org.bouncycastle.crypto.engines.SEEDEngine;
 import org.bouncycastle.crypto.paddings.BlockCipherPadding;
 import org.bouncycastle.crypto.params.KeyParameter;
@@ -87,9 +89,9 @@ public class _BlockCipher_TestUtils {
                     out,
                     new byte[cipher.getBlockSize()],
                     new byte[cipher.getBlockSize()],
-                    l -> {
+                    b -> l -> {
                     },
-                    l -> {
+                    b -> l -> {
                     }
             );
             assertThat(blocks).isEqualTo(plain.length / cipher.getBlockSize());
@@ -104,6 +106,15 @@ public class _BlockCipher_TestUtils {
     public static void __(final BlockCipher cipher, final CipherParameters params) throws IOException {
         final var plain = new byte[ThreadLocalRandom.current().nextInt(8192)];
         __array(cipher, params, plain);
+    }
+
+    public static Stream<BlockCipher> getBlockCipherStream() {
+        return Stream.of(
+                AESEngine.newInstance(),
+                new SEEDEngine(),
+                new ARIAEngine(),
+                new LEAEngine()
+        );
     }
 
     private _BlockCipher_TestUtils() {

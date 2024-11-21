@@ -84,6 +84,16 @@ public final class _Named_TestUtils {
         return Named.of(_CipherParameters_TestUtils.paramsName(params), params);
     }
 
+    public static <T> T payload(final Object argument) {
+        Objects.requireNonNull(argument, "argument is null");
+        if (argument instanceof Named<?>) {
+            return payload(((Named<?>) argument).getPayload());
+        }
+        @SuppressWarnings({"unchecked"})
+        final var cast = (T) argument;
+        return cast;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     private _Named_TestUtils() {
         throw new AssertionError("instantiation is not allowed");

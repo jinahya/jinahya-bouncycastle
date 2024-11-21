@@ -33,7 +33,7 @@ class ARIA_CTS_Test
             final var key = _Random_TestUtils.newRandomBytes(ks >> 3);
             final var params = new KeyParameter(key);
             return Arguments.of(
-                    Named.of(_BufferedBlockCipher_TestUtils.cipherName(cipher), cipher),
+                    Named.of(_BufferedBlockCipher_TestUtils.name(cipher), cipher),
                     Named.of(_CipherParameters_TestUtils.paramsName(params), params)
             );
         });

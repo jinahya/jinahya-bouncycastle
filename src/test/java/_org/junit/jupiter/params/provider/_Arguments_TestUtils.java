@@ -1,5 +1,6 @@
 package _org.junit.jupiter.params.provider;
 
+import _org.junit.jupiter.api._Named_TestUtils;
 import io.github.jinahya.bouncycastle.crypto.JinahyaCipherParametersUtils;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
@@ -9,8 +10,12 @@ import org.bouncycastle.crypto.StreamCipher;
 import org.bouncycastle.crypto.paddings.BlockCipherPadding;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.stream.IntStream;
 
 public class _Arguments_TestUtils {
 
@@ -73,6 +78,21 @@ public class _Arguments_TestUtils {
             return keyName(key);
         }
         throw new RuntimeException("failed to get key from " + params);
+    }
+
+    public static Arguments ofPayloadsMapped(final Arguments arguments,
+                                             final IntFunction<? extends Function<Object, Object>> mapper) {
+        Objects.requireNonNull(arguments, "arguments is null");
+        final var got = arguments.get();
+        return Arguments.of(
+                IntStream.range(0, got.length)
+                        .mapToObj(i -> mapper.apply(i).apply(_Named_TestUtils.payload(got[i])))
+                        .toArray()
+        );
+    }
+
+    public static Arguments ofPayloads(final Arguments arguments) {
+        return ofPayloadsMapped(arguments, i -> Function.identity());
     }
 
     // -----------------------------------------------------------------------------------------------------------------

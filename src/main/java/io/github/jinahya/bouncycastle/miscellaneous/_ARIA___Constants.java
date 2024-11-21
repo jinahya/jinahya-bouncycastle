@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Utilities for the {@value _ARIA__Constants#ALGORITHM} algorithm.
+ * Utilities for the {@value _ARIA___Constants#ALGORITHM} algorithm.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-final class _ARIA__Constants {
+final class _ARIA___Constants {
 
     /**
      * The name of the algorithm. The value is {@value}.
@@ -16,14 +16,14 @@ final class _ARIA__Constants {
     static final String ALGORITHM = "ARIA";
 
     /**
-     * The block size of the {@value _ARIA__Constants#ALGORITHM} algorithm. The value is {@value}.
+     * The block size of the {@value _ARIA___Constants#ALGORITHM} algorithm. The value is {@value}.
      *
      * @see #BLOCK_BYTES
      */
     static final int BLOCK_SIZE = 128;
 
     /**
-     * The block size, in bytes, of the {@value _ARIA__Constants#ALGORITHM} algorithm. The value is {@value}.
+     * The block size, in bytes, of the {@value _ARIA___Constants#ALGORITHM} algorithm. The value is {@value}.
      *
      * @see #BLOCK_SIZE
      */
@@ -47,7 +47,7 @@ final class _ARIA__Constants {
                     .collect(Collectors.toUnmodifiableList());
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _ARIA__Constants() {
+    private _ARIA___Constants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

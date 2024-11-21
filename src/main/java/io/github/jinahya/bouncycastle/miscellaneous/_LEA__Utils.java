@@ -3,11 +3,11 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import java.util.Objects;
 
 /**
- * Utilities for the {@value _ARIA___Constants#ALGORITHM} algorithm.
+ * Utilities for the {@value _LEA___Constants#ALGORITHM} algorithm.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-final class _ARIA__Utils {
+final class _LEA__Utils {
 
     // -----------------------------------------------------------------------------------------------------------------
     static byte[] requireValidKey(final byte[] key) {
@@ -25,7 +25,7 @@ final class _ARIA__Utils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _ARIA__Utils() {
+    private _LEA__Utils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

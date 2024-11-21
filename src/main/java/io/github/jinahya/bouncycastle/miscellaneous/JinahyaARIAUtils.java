@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Utilities for the {@value _ARIA__Constants#ALGORITHM} algorithm.
+ * Utilities for the {@value _ARIA___Constants#ALGORITHM} algorithm.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
