@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JinahyaAESUtilsTest {
+class JinahyaAESUtils_Test {
 
     @DisplayName("_CBC_PKCS7Padding")
     @Nested
