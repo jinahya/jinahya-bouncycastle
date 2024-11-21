@@ -146,11 +146,11 @@ class JinahyaBlockCipherUtils_Test {
                             out,
                             inbuf,
                             outbuf,
-                            b -> o -> l -> {
-                                digest.update(b, o, l);
-                                mac.update(b, o, l);
+                            l -> {
+                                digest.update(inbuf, 0, l);
+                                mac.update(inbuf, 0, l);
                             },
-                            b -> o -> l -> {
+                            l -> {
                             }
                     );
                     assert count == blockCount;
@@ -179,11 +179,11 @@ class JinahyaBlockCipherUtils_Test {
                             out,
                             inbuf,
                             outbuf,
-                            b -> o -> l -> {
+                            l -> {
                             },
-                            b -> o -> l -> {
-                                digest.update(b, o, l);
-                                mac.update(b, o, l);
+                            l -> {
+                                digest.update(outbuf, 0, l);
+                                mac.update(outbuf, 0, l);
                             }
                     );
                     assert count == blockCount;

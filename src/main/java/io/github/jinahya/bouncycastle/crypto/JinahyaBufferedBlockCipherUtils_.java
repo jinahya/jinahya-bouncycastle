@@ -86,9 +86,9 @@ final class JinahyaBufferedBlockCipherUtils_ {
                     out,
                     inbuf,
                     outbuf,
-                    b -> o -> l -> {
+                    l -> {
                     },
-                    b -> o -> l -> {
+                    l -> {
                     }
             );
             bytes += (blocks * cipher.getBlockSize());

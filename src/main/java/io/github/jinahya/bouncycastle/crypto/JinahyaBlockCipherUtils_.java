@@ -5,14 +5,11 @@ import org.bouncycastle.crypto.BlockCipher;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.function.Function;
 import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
 
 final class JinahyaBlockCipherUtils_ {
 
-    private static int processBlock(final BlockCipher cipher, final int blockSize,
-                                    final byte[] in, final int inoff,
+    private static int processBlock(final BlockCipher cipher, final int blockSize, final byte[] in, final int inoff,
                                     final byte[] out, final int outoff) {
         assert cipher != null;
         assert in != null;
@@ -27,9 +24,8 @@ final class JinahyaBlockCipherUtils_ {
         return outlen;
     }
 
-    static int processBlock(final BlockCipher cipher,
-                            final byte[] in, final int inoff,
-                            final byte[] out, final int outoff) {
+    static int processBlock(final BlockCipher cipher, final byte[] in, final int inoff, final byte[] out,
+                            final int outoff) {
         assert cipher != null;
         return processBlock(
                 cipher,
@@ -41,12 +37,9 @@ final class JinahyaBlockCipherUtils_ {
         );
     }
 
-    static long processAllBlocks(
-            final BlockCipher cipher,
-            final InputStream in, final OutputStream out,
-            final byte[] inbuf, final byte[] outbuf,
-            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
-            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
+    static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out,
+                                 final byte[] inbuf, final byte[] outbuf, final IntConsumer inlenconsumer,
+                                 final IntConsumer outlenconsumer)
             throws IOException {
         assert cipher != null;
         final var blockSize = cipher.getBlockSize();
@@ -57,8 +50,8 @@ final class JinahyaBlockCipherUtils_ {
         assert inbuf.length >= blockSize;
         assert outbuf != null;
         assert outbuf.length >= blockSize;
-        assert inconsumer != null;
-        assert outconsumer != null;
+        assert inlenconsumer != null;
+        assert outlenconsumer != null;
         // -------------------------------------------------------------------------------------------------------------
         var blocks = 0L;
         for (int outlen; ; blocks++) {
@@ -77,8 +70,8 @@ final class JinahyaBlockCipherUtils_ {
             );
             assert outlen == blockSize;
             out.write(outbuf, 0, outlen);
-            inconsumer.apply(inbuf).apply(0).accept(blockSize);
-            outconsumer.apply(outbuf).apply(0).accept(outlen);
+            inlenconsumer.accept(blockSize);
+            outlenconsumer.accept(outlen);
         }
         return blocks;
     }
