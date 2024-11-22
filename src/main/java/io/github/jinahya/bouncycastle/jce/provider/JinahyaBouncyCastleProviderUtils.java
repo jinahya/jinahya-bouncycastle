@@ -26,6 +26,26 @@ public final class JinahyaBouncyCastleProviderUtils {
         }
     }
 
+    // ------------------------------------------------------------------------------------------------------------ name
+
+    /**
+     * The name of the Bouncy Castle provider. The value is {@value}.
+     */
+    public static final String BOUNCY_CASTLE_PROVIDER_NAME = "BC";
+
+    static {
+        final String name = "PROVIDER_NAME";
+        try {
+            final var field = BOUNCY_CASTLE_PROVIDER_CLASS.getField(name);
+            assert field.canAccess(null);
+            assert BOUNCY_CASTLE_PROVIDER_NAME.equals(field.get(null));
+        } catch (final ReflectiveOperationException roe) {
+            throw new ExceptionInInitializerError(
+                    "failed to find/get '" + name + "' field from " + BOUNCY_CASTLE_PROVIDER_CLASS
+                            + "; " + roe.getMessage());
+        }
+    }
+
     // -------------------------------------------------------------------------------------------------------- instance
     private static final Provider BOUNCY_CASTLE_PROVIDER;
 
@@ -37,37 +57,21 @@ public final class JinahyaBouncyCastleProviderUtils {
         }
     }
 
-    // ------------------------------------------------------------------------------------------------------------ name
-
-    /**
-     * The name of the Bouncy Castle provider. The value is {@value}.
-     */
-    public static final String BOUNCY_CASTLE_PROVIDER_NAME = "BC";
-
-    static {
-        try {
-            final var field = BOUNCY_CASTLE_PROVIDER_CLASS.getField("PROVIDER_NAME");
-            assert field.canAccess(null);
-            assert BOUNCY_CASTLE_PROVIDER_NAME.equals(field.get(null));
-        } catch (final ReflectiveOperationException roe) {
-            throw new ExceptionInInitializerError(roe.getMessage());
-        }
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
-    private static volatile boolean added = false;
 
     /**
      * Adds the {@value #BOUNCY_CASTLE_PROVIDER_NAME} provider to the {@link Security}.
      *
+     * @return the result of the {@link Security#addProvider(Provider)} method.
      * @see Security#addProvider(Provider)
      */
-    public static synchronized void addBouncyCastleProvider() {
-        if (added) {
-            return;
+    // https://stackoverflow.com/a/45198599/330457
+    // https://bugs.openjdk.org/browse/JDK-8168469
+    public static synchronized int addBouncyCastleProvider() {
+        if (Security.getProvider(BOUNCY_CASTLE_PROVIDER_NAME) != null) {
+            return -1;
         }
-        Security.addProvider(BOUNCY_CASTLE_PROVIDER);
-        added = true;
+        return Security.addProvider(BOUNCY_CASTLE_PROVIDER);
     }
 
 //    /**
