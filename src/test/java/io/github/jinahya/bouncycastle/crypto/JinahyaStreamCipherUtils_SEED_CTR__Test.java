@@ -26,7 +26,7 @@ class JinahyaStreamCipherUtils_SEED_CTR__Test {
     @DisplayName("processBytes(cipher, in, inoff, inlen, out, outoff)")
     @MethodSource({"getCipherAndParamsArgumentsStream"})
     @ParameterizedTest
-    void processBytesAndDoFinal__(final StreamCipher cipher, final CipherParameters params) {
+    void processBytes__(final StreamCipher cipher, final CipherParameters params) {
         JinahyaStreamCipherUtils_TestUtils.processBytes__(
                 cipher,
                 params
