@@ -26,7 +26,7 @@ public final class _CipherParameters_TestUtils {
         if (params instanceof AEADParameters p) {
             return _AEADParameters_TestUtils.paramsName(p);
         }
-        throw new RuntimeException("failed to get name of " + params);
+        throw new IllegalArgumentException("failed to get name of " + params);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

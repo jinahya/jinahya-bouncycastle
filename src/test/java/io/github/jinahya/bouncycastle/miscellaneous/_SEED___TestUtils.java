@@ -12,11 +12,11 @@ import java.util.stream.Stream;
 public final class _SEED___TestUtils {
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-        return _SEED___Constants.ALLOWED_KEY_BYTES_LIST.stream().map(kb -> {
+        return _SEED___Constants.ALLOWED_KEY_SIZE_LIST.stream().map(ks -> {
             return Arguments.of(
                     _BlockCipher_TestUtils.named(new SEEDEngine()),
                     _KeyParameters_TestUtils.named(
-                            new KeyParameter(_Random_TestUtils.newRandomBytes(kb))
+                            new KeyParameter(_Random_TestUtils.newRandomBytes(ks >> 3))
                     )
             );
         });

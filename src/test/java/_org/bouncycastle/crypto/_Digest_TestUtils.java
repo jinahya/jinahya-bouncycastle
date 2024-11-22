@@ -1,4 +1,4 @@
-package _org.bouncycastle;
+package _org.bouncycastle.crypto;
 
 public final class _Digest_TestUtils {
 

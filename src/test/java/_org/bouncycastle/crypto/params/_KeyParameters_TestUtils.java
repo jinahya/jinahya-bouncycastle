@@ -2,13 +2,26 @@ package _org.bouncycastle.crypto.params;
 
 import io.github.jinahya.bouncycastle.crypto.params.JinahyaKeyParametersUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.junit.jupiter.api.Named;
 
 import java.util.Objects;
 
 @Slf4j
 public final class _KeyParameters_TestUtils {
+
+    public static CipherParameters getKeyParameters(final CipherParameters params) {
+        Objects.requireNonNull(params, "params is null");
+        if (params instanceof KeyParameter) {
+            return params;
+        }
+        if (params instanceof ParametersWithIV parametersWithIV) {
+            return getKeyParameters(parametersWithIV.getParameters());
+        }
+        throw new IllegalArgumentException("unable to get the key parameter from " + params);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     public static String keyName(final byte[] key) {

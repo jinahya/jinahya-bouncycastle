@@ -1,12 +1,12 @@
 package __symmetric.aes;
 
-import io.github.jinahya.bouncycastle.miscellaneous.__CCM__Constants;
 import __symmetric._CCM_TestUtils;
 import __symmetric._JCEProviderTest;
 import _javax.crypto._Cipher_TestUtils;
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto.modes._AEADCipher_TestUtils;
 import io.github.jinahya.bouncycastle.miscellaneous._AES___Constants;
+import io.github.jinahya.bouncycastle.miscellaneous.__CCM__Constants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

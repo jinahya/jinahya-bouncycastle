@@ -23,14 +23,14 @@ public final class _AES___TestUtils {
         });
     }
 
-    static int randomKeyBytes() {
-        return _AES___Constants.ALLOWED_KEY_BYTES_LIST.get(
-                ThreadLocalRandom.current().nextInt(_AES___Constants.ALLOWED_KEY_BYTES_LIST.size())
+    static int randomKeySize() {
+        return _AES___Constants.ALLOWED_KEY_SIZE_LIST.get(
+                ThreadLocalRandom.current().nextInt(_AES___Constants.ALLOWED_KEY_SIZE_LIST.size())
         );
     }
 
     static byte[] randomKey() {
-        return _Random_TestUtils.newRandomBytes(randomKeyBytes());
+        return _Random_TestUtils.newRandomBytes(randomKeySize() >> 3);
     }
 
     private _AES___TestUtils() {

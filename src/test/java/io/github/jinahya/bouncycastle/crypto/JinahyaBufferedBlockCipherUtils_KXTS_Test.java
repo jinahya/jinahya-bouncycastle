@@ -50,8 +50,7 @@ class JinahyaBufferedBlockCipherUtils_KXTS_Test {
             throws InvalidCipherTextException {
         JinahyaBufferedBlockCipherUtils_TestUtils.processBytesAndDoFinal__(
                 cipher,
-                params,
-                p -> ((ParametersWithIV) p).getParameters()
+                params
         );
     }
 
@@ -62,8 +61,7 @@ class JinahyaBufferedBlockCipherUtils_KXTS_Test {
             throws IOException, InvalidCipherTextException {
         JinahyaBufferedBlockCipherUtils_TestUtils.processAllBytesAndDoFinal__(
                 cipher,
-                params,
-                p -> ((ParametersWithIV) p).getParameters()
+                params
         );
     }
 }

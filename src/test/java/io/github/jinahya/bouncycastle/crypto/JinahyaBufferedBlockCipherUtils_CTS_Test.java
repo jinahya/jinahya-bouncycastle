@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 class JinahyaBufferedBlockCipherUtils_CTS_Test {
@@ -41,8 +40,7 @@ class JinahyaBufferedBlockCipherUtils_CTS_Test {
             throws InvalidCipherTextException {
         JinahyaBufferedBlockCipherUtils_TestUtils.processBytesAndDoFinal__(
                 cipher,
-                params,
-                Function.identity()
+                params
         );
     }
 
@@ -53,8 +51,7 @@ class JinahyaBufferedBlockCipherUtils_CTS_Test {
             throws IOException, InvalidCipherTextException {
         JinahyaBufferedBlockCipherUtils_TestUtils.processAllBytesAndDoFinal__(
                 cipher,
-                params,
-                Function.identity()
+                params
         );
     }
 }

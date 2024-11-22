@@ -17,17 +17,18 @@ class JinahyaBlockCipherUtils_AES_Test {
         return _AES___TestUtils.getCipherAndParamsArgumentsStream();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @DisplayName("processBlock(cipher, in, inoff, out, outoff)")
     @MethodSource("getCipherAndParamsArgumentsStream")
     @ParameterizedTest
     void processBlock__(final BlockCipher cipher, final CipherParameters params) {
-        JinahyaBlockCipherUtils_TestUtils._processBlock__(cipher, params);
+        JinahyaBlockCipherUtils_TestUtils.processBlock__(cipher, params);
     }
 
     @DisplayName("processAllBlocks(cipher, in, out, inbuf, outbuf, inconsumer, outconsumer)")
     @MethodSource("getCipherAndParamsArgumentsStream")
     @ParameterizedTest
-    void processAllBlock__(final BlockCipher cipher, final CipherParameters params) throws IOException {
-        JinahyaBlockCipherUtils_TestUtils._processAllBlocks__(cipher, params);
+    void processAllBlocks__(final BlockCipher cipher, final CipherParameters params) throws IOException {
+        JinahyaBlockCipherUtils_TestUtils.processAllBlocks__(cipher, params);
     }
 }
