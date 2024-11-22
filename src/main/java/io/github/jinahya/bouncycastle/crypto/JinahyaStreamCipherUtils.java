@@ -1,17 +1,18 @@
 package io.github.jinahya.bouncycastle.crypto;
 
-import org.bouncycastle.crypto.DataLengthException;
+import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.StreamCipher;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
 
 /**
- * A utility class for {@link StreamCipher}.
+ * A utility class for {@link StreamCipher} interface.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see <a
@@ -20,6 +21,15 @@ import java.util.Objects;
  */
 public final class JinahyaStreamCipherUtils {
 
+    /**
+     * Processes, using specified cipher, specified range of specified array, and returns the result.
+     *
+     * @param cipher the cipher which should be {@link StreamCipher#init(boolean, CipherParameters) initialized}.
+     * @param in     the input array.
+     * @param inoff  a starting index of {@code in}.
+     * @param inlen  a number of bytes to process from the {@code inoff}.
+     * @return an array of processed bytes.
+     */
     public static byte[] processBytes(final StreamCipher cipher, final byte[] in, final int inoff, final int inlen) {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(in, "in is null");
@@ -29,29 +39,21 @@ public final class JinahyaStreamCipherUtils {
         if (inlen < 0) {
             throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
         }
-        if (inoff + inlen > in.length) {
+        if ((inoff + inlen) > in.length) {
             throw new IllegalArgumentException(
-                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")"
+                    "(inoff(" + inoff + ") + inlen(" + inlen + ")) > in.length(" + in.length + ")"
             );
         }
-        for (var out = new byte[in.length == 0 ? 1 : in.length]; ; ) {
-            try {
-                final var outlen = cipher.processBytes(in, inoff, inlen, out, 0);
-                return Arrays.copyOf(out, outlen);
-            } catch (final DataLengthException dle) {
-                System.err.println("doubling up out.length(" + out.length + ")");
-                out = new byte[out.length << 1];
-            }
-        }
+        return JinahyaStreamCipherUtils_.processBytes(cipher, in, inoff, inlen);
     }
 
     /**
-     * Process, using specified cipher, remaining bytes of specified input buffer, and put processed bytes to specified
-     * output buffer.
+     * Process, using specified cipher, all remaining bytes of specified input buffer, and puts processed bytes to
+     * specified output buffer.
      *
-     * @param cipher the cipher.
+     * @param cipher the cipher which should be {@link StreamCipher#init(boolean, CipherParameters) initialized}.
      * @param input  the input buffer whose remaining bytes are processed.
-     * @param output the output buffer onto which processed bytes are put.
+     * @param output the output buffer on which processed bytes are put.
      * @return the number of byte put on the {@code output}.
      * @throws java.nio.BufferOverflowException when {@code output.remaining()} is not enough.
      */
@@ -59,30 +61,49 @@ public final class JinahyaStreamCipherUtils {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
-        final byte[] in;
-        final int inoff;
-        final int inlen = input.remaining();
-        if (input.hasArray()) {
-            in = input.array();
-            inoff = input.arrayOffset() + input.position();
-        } else {
-            in = new byte[inlen];
-//            input.get(0, in); // Since 13
-            for (int p = input.position(), i = 0; i < in.length; p++, i++) {
-                in[i] = input.get(p);
-            }
-            inoff = 0;
-        }
-        final var out = processBytes(cipher, in, inoff, inlen);
-        output.put(out); // BufferOverflowException
-        // input's position should be modified only after the output.put(out) succeeded
-        input.position(input.position() + inlen);
-        return out.length;
+        return JinahyaStreamCipherUtils_.processBytes(cipher, input, output);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Processes, using specified cipher, all bytes from specified input stream, and writes processed bytes to specified
+     * output stream.
+     * {@snippet lang = "java":
+     * byte[] inbuf = new byte[1];
+     * byte[] outbuf = new byte[1]; // may be null
+     * processAllBytes(
+     *         cipher,
+     *         in,
+     *         out,
+     *         inbuf,
+     *         outbuf,
+     *         l -> {
+     *             // consume unprocessed bytes read from <in>
+     *             digest.update(inbuf, 0, l);
+     *         },
+     *         b -> l -> {
+     *             // <b> is not necessarily same as the <outbuf>
+     *             // consume processed bytes written to the <out>
+     *             mac.update(b, 0, l);
+     *         }
+     * );
+     *}
+     *
+     * @param cipher      the cipher which should be {@link StreamCipher#init(boolean, CipherParameters) initialized}.
+     * @param in          the input stream from which unprocessed bytes are read.
+     * @param out         the output stream to which processed bytes are written.
+     * @param inbuf       a buffer for reading unprocessed bytes from the input stream.
+     * @param outbuf      a buffer for processed bytes; may be {@code null}.
+     * @param inconsumer  a consumer continuously accepts the number of bytes set on the {@code inbuf}.
+     * @param outconsumer a function, continuously applies with an output buffer (not necessarily same as
+     *                    {@code outbuf}), results a consumer accepts the number of bytes set on the output buffer.
+     * @return the number of bytes written to the {@code out}.
+     * @throws IOException if an I/O error occurs.
+     */
     public static long processAllBytes(final StreamCipher cipher, final InputStream in, final OutputStream out,
-                                       final byte[] inbuf, byte[] outbuf)
+                                       final byte[] inbuf, byte[] outbuf, final IntConsumer inconsumer,
+                                       final Function<? super byte[], ? extends IntConsumer> outconsumer)
             throws IOException {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(in, "in is null");
@@ -90,25 +111,10 @@ public final class JinahyaStreamCipherUtils {
         if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
             throw new IllegalArgumentException("inbuf.length is zero");
         }
-        if (outbuf == null || outbuf.length == 0) {
-            outbuf = new byte[inbuf.length];
+        if (outbuf != null && outbuf.length == 0) {
+            throw new IllegalArgumentException("outbuf.length is zero");
         }
-        var bytes = 0L;
-        for (int outlen, r; (r = in.read(inbuf)) != -1; ) {
-            while (true) {
-                try {
-                    outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
-                    out.write(outbuf, 0, outlen);
-                    bytes += outlen;
-                    break;
-                } catch (final DataLengthException dle) {
-                    System.err.println("doubling up outbuf.length(" + outbuf.length + ")");
-                    Arrays.fill(outbuf, (byte) 0);
-                    outbuf = new byte[outbuf.length << 1];
-                }
-            }
-        }
-        return bytes;
+        return JinahyaStreamCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf, inconsumer, outconsumer);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

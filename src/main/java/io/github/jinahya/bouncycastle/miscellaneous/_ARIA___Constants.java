@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-final class _ARIA___Constants {
+public final class _ARIA___Constants {
 
     /**
      * The name of the algorithm. The value is {@value}.
@@ -32,7 +32,7 @@ final class _ARIA___Constants {
     /**
      * A list of allowed key sizes.
      */
-    static final List<Integer> ALLOWED_KEY_SIZES_LIST = List.of(
+    public static final List<Integer> ALLOWED_KEY_SIZES_LIST = List.of(
             128,
             192,
             256

@@ -1,8 +1,13 @@
 package io.github.jinahya.bouncycastle.miscellaneous;
 
 import java.util.Objects;
+import java.util.stream.IntStream;
 
-final class _SEED___Utils {
+public final class _SEED___Utils {
+
+    public static IntStream getAllowedKeySizeStream() {
+        return _SEED___Constants.ALLOWED_KEY_SIZE_LIST.stream().mapToInt(Integer::intValue);
+    }
 
     static byte[] requireValidKey(final byte[] key) {
         if (!_SEED___Constants.ALLOWED_KEY_BYTES_LIST.contains(Objects.requireNonNull(key, "key is null").length)) {

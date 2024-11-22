@@ -1,11 +1,11 @@
-package __symmetric;
+package io.github.jinahya.bouncycastle.miscellaneous;
 
 import _javax.security._Random_TestUtils;
-import _org.bouncycastle.crypto._StreamBlockCipher_TestUtils;
+import _org.bouncycastle.crypto._BlockCipher_TestUtils;
 import _org.bouncycastle.crypto.params._ParametersWithIV_TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.BlockCipher;
-import org.bouncycastle.crypto.modes.OFBBlockCipher;
+import org.bouncycastle.crypto.modes.CFBBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.junit.jupiter.api.Named;
@@ -18,27 +18,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
-public final class _OFB_Tests {
-
-    public static final String MODE = "OFB";
-
-    public static IntStream getBitWidthStream() {
-        return IntStream.of(
-                1,
-                8,
-                64,
-                128
-        );
-    }
-
-    public static String mode(final int bitWidth) {
-        return MODE + bitWidth;
-    }
+public final class __CFB__TestUtils {
 
     public static Stream<Arguments> getKeySizeAndBitWidthArgumentsStream(
             final Supplier<? extends IntStream> keySizeStreamSupplier) {
         return keySizeStreamSupplier.get().mapToObj(ks -> {
-            return getBitWidthStream().mapToObj(bw -> {
+            return __CFB__Utils.getBitWidthStream().mapToObj(bw -> {
                 return Arguments.of(
                         Named.named("keySize: " + ks, ks),
                         Named.named("bitWidth: " + bw, bw)
@@ -47,44 +32,33 @@ public final class _OFB_Tests {
         }).flatMap(Function.identity());
     }
 
-    public static Stream<Arguments> getBitWidthAndKeySizeArgumentsStream(
-            final Supplier<? extends IntStream> keyStreamSupplier) {
-        return getBitWidthStream().mapToObj(bw -> {
-            return keyStreamSupplier.get().mapToObj(ks -> {
-                return Arguments.of(bw, ks);
-            });
-        }).flatMap(Function.identity());
-    }
-
     public static Stream<Arguments> getCipherAndParamsArgumentsStream(
-            final Supplier<? extends IntStream> keyStreamSupplier,
+            final Supplier<? extends IntStream> keySizeStreamSupplier,
             final Supplier<? extends BlockCipher> cipherSupplier) {
-        return getBitWidthStream().mapToObj(bs -> {
+        return __CFB__Utils.getBitWidthStream()
+                .mapToObj(bw -> {
                     final var engine = cipherSupplier.get();
                     try {
-                        return new OFBBlockCipher(engine, bs);
+                        return CFBBlockCipher.newInstance(engine, bw);
                     } catch (final Exception e) {
-                        log.error("failed to create CFBBlockCipher with cipher({}) and bit width: {}", engine, bs, e);
+                        log.error("failed to create cipher for bitWidth: {}", bw, e);
                         return null;
                     }
                 })
                 .filter(Objects::nonNull)
-                .flatMap(c -> keyStreamSupplier.get().mapToObj(ks -> {
+                .flatMap(c -> keySizeStreamSupplier.get().mapToObj(ks -> {
                     final var key = _Random_TestUtils.newRandomBytes(ks >> 3);
                     final var iv = _Random_TestUtils.newRandomBytes(c.getBlockSize());
-                    final var params = new ParametersWithIV(
-                            new KeyParameter(key),
-                            iv
-                    );
+                    final var params = new ParametersWithIV(new KeyParameter(key), iv);
                     return Arguments.of(
-                            _StreamBlockCipher_TestUtils.named(c),
+                            _BlockCipher_TestUtils.named(c),
                             _ParametersWithIV_TestUtils.named(params)
                     );
                 }));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _OFB_Tests() {
+    private __CFB__TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

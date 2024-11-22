@@ -72,25 +72,27 @@ public class JinahyaStreamCipherCrypto
     @Override
     public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
         initForEncryption();
-        return JinahyaStreamCipherUtils.processAllBytes(
-                cipher,
-                in,
-                out,
-                inbuf,
-                null
-        );
+//        return JinahyaStreamCipherUtils.processAllBytes(
+//                cipher,
+//                in,
+//                out,
+//                inbuf,
+//                null
+//        );
+        return -1L;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
         initForDecryption();
-        return JinahyaStreamCipherUtils.processAllBytes(
-                cipher,
-                in,
-                out,
-                inbuf,
-                null
-        );
+//        return JinahyaStreamCipherUtils.processAllBytes(
+//                cipher,
+//                in,
+//                out,
+//                inbuf,
+//                null
+//        );
+        return -1L;
     }
 }

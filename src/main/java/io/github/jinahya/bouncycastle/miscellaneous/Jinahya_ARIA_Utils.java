@@ -25,8 +25,8 @@ public final class Jinahya_ARIA_Utils {
 
     // ----------------------------------------------------------------------------------------------- /CBC/PKCS7Padding
     private static JinahyaCrypto _CBC_PKCS7Padding(final byte[] key, final byte[] iv) {
-        _ARIA__Utils.requireValidKey(key);
-        _ARIA__Utils.requireValidIv(iv);
+        _ARIA___Utils.requireValidKey(key);
+        _ARIA___Utils.requireValidIv(iv);
         final var cipher = new PaddedBufferedBlockCipher(
                 CBCBlockCipher.newInstance(new ARIAEngine()),
                 new PKCS7Padding()
@@ -104,7 +104,7 @@ public final class Jinahya_ARIA_Utils {
 
     // -------------------------------------------------------------------------------------------------- /GCM/NoPadding
     private static JinahyaCrypto _GCM_NoPadding(final byte[] key, final int tLen, final byte[] iv, final byte[] aad) {
-        _ARIA__Utils.requireValidKey(key);
+        _ARIA___Utils.requireValidKey(key);
         __GCM__Utils.requireValid_tLen_GCM(tLen);
         __GCM__Utils.requireValid_iv_GCM(iv);
         final var cipher = GCMBlockCipher.newInstance(new ARIAEngine());

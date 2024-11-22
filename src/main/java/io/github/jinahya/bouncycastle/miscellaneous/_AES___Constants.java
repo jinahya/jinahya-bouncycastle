@@ -27,7 +27,7 @@ public final class _AES___Constants {
     /**
      * An unmodifiable list of allowed key sizes.
      */
-    static final List<Integer> ALLOWED_KEY_SIZE_LIST = List.of(
+    public static final List<Integer> ALLOWED_KEY_SIZE_LIST = List.of(
             128,
             192,
             256
@@ -35,7 +35,10 @@ public final class _AES___Constants {
 
     /**
      * An unmodifiable list of allowed key sizes, in bytes.
+     *
+     * @deprecated Use {@link #ALLOWED_KEY_SIZE_LIST}.
      */
+    @Deprecated(forRemoval = true)
     public static final List<Integer> ALLOWED_KEY_BYTES_LIST =
             _AES___Constants.ALLOWED_KEY_SIZE_LIST.stream()
                     .map(ks -> ks >> 3)

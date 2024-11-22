@@ -1,6 +1,7 @@
 package io.github.jinahya.bouncycastle.miscellaneous;
 
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 /**
  * Utilities for the {@value _AES___Constants#ALGORITHM} algorithm.
@@ -8,6 +9,10 @@ import java.util.Objects;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 public final class _AES___Utils {
+
+    public static IntStream getAllowedKeySizeStream() {
+        return _AES___Constants.ALLOWED_KEY_SIZE_LIST.stream().mapToInt(Integer::intValue);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     static byte[] requireValidKey(final byte[] key) {

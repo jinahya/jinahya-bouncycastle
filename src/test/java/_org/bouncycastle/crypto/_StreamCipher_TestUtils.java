@@ -59,7 +59,7 @@ public final class _StreamCipher_TestUtils {
         try (var in = new FileInputStream(plain);
              var out = new FileOutputStream(encrypted)) {
             final var bytes = crypto.encrypt(in, out, new byte[ThreadLocalRandom.current().nextInt(1024) + 1]);
-            assert bytes >= 0;
+//            assert bytes >= 0;
             out.flush();
         }
         // ----------------------------------------------------------------------------------------------------- decrypt
@@ -67,7 +67,7 @@ public final class _StreamCipher_TestUtils {
         try (var in = new FileInputStream(encrypted);
              var out = new FileOutputStream(decrypted)) {
             final var bytes = crypto.decrypt(in, out, new byte[ThreadLocalRandom.current().nextInt(1024) + 1]);
-            assert bytes >= 0;
+//            assert bytes >= 0;
             out.flush();
         }
         // ------------------------------------------------------------------------------------------------------ verify

@@ -32,7 +32,7 @@ final class _LEA___Constants {
     /**
      * A list of allowed key sizes.
      */
-    static final List<Integer> ALLOWED_KEY_SIZES_LIST = List.of(
+    public static final List<Integer> ALLOWED_KEY_SIZES_LIST = List.of(
             128,
             192,
             256
@@ -40,7 +40,10 @@ final class _LEA___Constants {
 
     /**
      * A list of allowed key sizes, in bytes.
+     *
+     * @deprecated Use {@link #ALLOWED_KEY_SIZES_LIST}.
      */
+    @Deprecated(forRemoval = true)
     static final List<Integer> ALLOWED_KEY_BYTES_LIST =
             ALLOWED_KEY_SIZES_LIST.stream()
                     .map(ks -> ks >> 3)

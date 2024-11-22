@@ -33,7 +33,10 @@ public final class _SEED___Constants {
 
     /**
      * An unmodifiable list of allowed key sizes, in bytes.
+     *
+     * @deprecated Use {@link #ALLOWED_KEY_SIZE_LIST}
      */
+    @Deprecated(forRemoval = true)
     public static final List<Integer> ALLOWED_KEY_BYTES_LIST =
             _SEED___Constants.ALLOWED_KEY_SIZE_LIST.stream()
                     .map(ks -> ks >> 3)

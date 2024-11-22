@@ -1,4 +1,4 @@
-package __symmetric;
+package io.github.jinahya.bouncycastle.miscellaneous;
 
 import _javax.security._Random_TestUtils;
 import _org.bouncycastle.crypto._StreamBlockCipher_TestUtils;
@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
-public final class _CTR_TestUtils {
+public final class __CTR__TestUtils {
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream(
             final Supplier<? extends IntStream> keyStreamSupplier,
@@ -34,7 +34,7 @@ public final class _CTR_TestUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _CTR_TestUtils() {
+    private __CTR__TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

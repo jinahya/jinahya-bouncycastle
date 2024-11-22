@@ -1,13 +1,18 @@
 package io.github.jinahya.bouncycastle.miscellaneous;
 
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 /**
- * Utilities for the {@value _ARIA___Constants#ALGORITHM} algorithm.
+ * Utilities for the {@value _LEA___Constants#ALGORITHM} algorithm.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-final class _ARIA__Utils {
+public final class _LEA___Utils {
+
+    public static IntStream getAllowedKeySizeStream() {
+        return _LEA___Constants.ALLOWED_KEY_SIZES_LIST.stream().mapToInt(Integer::intValue);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     static byte[] requireValidKey(final byte[] key) {
@@ -25,7 +30,7 @@ final class _ARIA__Utils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _ARIA__Utils() {
+    private _LEA___Utils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }
