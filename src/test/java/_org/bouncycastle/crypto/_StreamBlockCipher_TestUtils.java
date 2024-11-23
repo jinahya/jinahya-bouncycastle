@@ -10,7 +10,7 @@ public final class _StreamBlockCipher_TestUtils {
     public static String cipherName(final StreamBlockCipher cipher) {
         Objects.requireNonNull(cipher, "cipher is null");
         return _StreamCipher_TestUtils.cipherName(cipher)
-                + '/' + _BlockCipher_TestUtils.cipherName(cipher.getUnderlyingCipher());
+                + '/' + _BlockCipher_TestUtils.name(cipher.getUnderlyingCipher());
     }
 
     public static <T extends StreamBlockCipher> Named<T> named(final T cipher) {

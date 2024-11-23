@@ -53,13 +53,13 @@ public class _BlockCipher_TestUtils {
         throw new RuntimeException("failed to get key from " + parameters);
     }
 
-    public static String cipherName(final BlockCipher cipher) {
+    public static String name(final BlockCipher cipher) {
         Objects.requireNonNull(cipher, "cipher is null");
         return String.format("%1$s", cipher.getAlgorithmName());
     }
 
     public static <T extends BlockCipher> Named<T> named(final T cipher) {
-        return Named.of(cipherName(cipher), cipher);
+        return Named.of(name(cipher), cipher);
     }
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream() {
@@ -89,9 +89,9 @@ public class _BlockCipher_TestUtils {
                     out,
                     new byte[cipher.getBlockSize()],
                     new byte[cipher.getBlockSize()],
-                    b -> l -> {
+                    l -> {
                     },
-                    b -> l -> {
+                    l -> {
                     }
             );
             assertThat(blocks).isEqualTo(plain.length / cipher.getBlockSize());

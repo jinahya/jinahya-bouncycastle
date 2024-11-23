@@ -12,7 +12,7 @@ public final class _PaddedBufferedBlockCipher_TestUtils {
     // -----------------------------------------------------------------------------------------------------------------
     public static String cipherName(final PaddedBufferedBlockCipher cipher) {
         Objects.requireNonNull(cipher, "cipher is null");
-        return _BlockCipher_TestUtils.cipherName(cipher.getUnderlyingCipher()) +
+        return _BlockCipher_TestUtils.name(cipher.getUnderlyingCipher()) +
                 '/' +
                 _BlockCipherPadding_TestUtils.paddingName(JinahyaPaddedBufferedBlockCipherUtils.getPadding(cipher));
     }

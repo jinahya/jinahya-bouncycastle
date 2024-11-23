@@ -1,6 +1,6 @@
 package io.github.jinahya.bouncycastle.crypto;
 
-import io.github.jinahya.bouncycastle.miscellaneous._LEA__TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._DESede___TestUtils;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.junit.jupiter.api.DisplayName;
@@ -11,10 +11,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-class JinahyaBlockCipherUtils_LEA_Test {
+class JinahyaBlockCipherUtils_DESede_Test {
 
     static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-        return _LEA__TestUtils.getCipherAndParamsArgumentsStream();
+        return _DESede___TestUtils.getCipherAndParamsArgumentsStream();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

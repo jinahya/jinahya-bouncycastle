@@ -5,7 +5,6 @@ import org.bouncycastle.crypto.BlockCipher;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.function.Function;
 import java.util.function.IntConsumer;
 
 final class JinahyaBlockCipherUtils_ {
@@ -39,9 +38,8 @@ final class JinahyaBlockCipherUtils_ {
     }
 
     static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out,
-                                 final byte[] inbuf, final byte[] outbuf,
-                                 final Function<? super byte[], ? extends IntConsumer> inlenconsumer,
-                                 final Function<? super byte[], ? extends IntConsumer> outlenconsumer)
+                                 final byte[] inbuf, final byte[] outbuf, final IntConsumer inlenconsumer,
+                                 final IntConsumer outlenconsumer)
             throws IOException {
         assert cipher != null;
         final var blockSize = cipher.getBlockSize();
@@ -72,8 +70,8 @@ final class JinahyaBlockCipherUtils_ {
             );
             assert outlen == blockSize;
             out.write(outbuf, 0, outlen);
-            inlenconsumer.apply(inbuf).accept(blockSize);
-            outlenconsumer.apply(outbuf).accept(outlen);
+            inlenconsumer.accept(blockSize);
+            outlenconsumer.accept(outlen);
         }
         return blocks;
     }

@@ -112,7 +112,7 @@ final class JinahyaBufferedBlockCipherUtils_TestUtils {
                     out,
                     inbuf,
                     outbuf,
-                    b -> l -> {
+                    l -> {
                         digest.update(inbuf, 0, l);
                         mac.update(inbuf, 0, l);
                     },
@@ -143,7 +143,7 @@ final class JinahyaBufferedBlockCipherUtils_TestUtils {
                     out,
                     inbuf,
                     outbuf,
-                    b -> l -> {
+                    l -> {
                     },
                     b -> l -> {
                         digest.update(b, 0, l);

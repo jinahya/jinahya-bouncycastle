@@ -69,11 +69,11 @@ class Jinahya_SEED_Utils_Test {
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
             final var key = _Random_TestUtils.newRandomBytes(_SEED___Constants.BLOCK_BYTES);
-            final var tLen = __GCM__Constants.ALLOWED_T_LEN_LIST_GCM.get(
-                    ThreadLocalRandom.current().nextInt(__GCM__Constants.ALLOWED_T_LEN_LIST_GCM.size())
+            final var tLen = __GCM__Constants.ALLOWED_T_LEN_LIST.get(
+                    ThreadLocalRandom.current().nextInt(__GCM__Constants.ALLOWED_T_LEN_LIST.size())
             );
             final var iv = _Random_TestUtils.newRandomBytes(
-                    ThreadLocalRandom.current().nextInt(128) + __GCM__Constants.IV_SIZE_GCM_MINIMUM
+                    ThreadLocalRandom.current().nextInt(128) + __GCM__Constants.IV_SIZE_MINIMUM
             );
             final var aad = ThreadLocalRandom.current().nextBoolean()
                     ? null
@@ -90,11 +90,11 @@ class Jinahya_SEED_Utils_Test {
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
             final var key = _Random_TestUtils.newRandomBytes(_SEED___Constants.BLOCK_BYTES);
-            final var tLen = __GCM__Constants.ALLOWED_T_LEN_LIST_GCM.get(
-                    ThreadLocalRandom.current().nextInt(__GCM__Constants.ALLOWED_T_LEN_LIST_GCM.size())
+            final var tLen = __GCM__Constants.ALLOWED_T_LEN_LIST.get(
+                    ThreadLocalRandom.current().nextInt(__GCM__Constants.ALLOWED_T_LEN_LIST.size())
             );
             final var iv = _Random_TestUtils.newRandomBytes(
-                    ThreadLocalRandom.current().nextInt(128) + __GCM__Constants.IV_SIZE_GCM_MINIMUM
+                    ThreadLocalRandom.current().nextInt(128) + __GCM__Constants.IV_SIZE_MINIMUM
             );
             final var aad = ThreadLocalRandom.current().nextBoolean()
                     ? null

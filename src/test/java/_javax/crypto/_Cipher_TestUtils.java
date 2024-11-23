@@ -103,7 +103,7 @@ public final class _Cipher_TestUtils {
                         break;
                     } catch (final ShortBufferException sbe) {
                         assert inbuf.position() == p; // TODO: remove!
-                        System.err.printf("doubling up outbuf.capacity(%1$d)%n", outbuf.capacity());
+                        System.out.printf("doubling up outbuf.capacity(%1$d)%n", outbuf.capacity());
                         outbuf = ByteBuffer.allocate(outbuf.capacity() << 1);
                     }
                 }

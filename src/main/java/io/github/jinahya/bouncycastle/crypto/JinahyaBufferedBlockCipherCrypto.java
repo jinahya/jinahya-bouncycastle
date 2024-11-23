@@ -120,7 +120,7 @@ public class JinahyaBufferedBlockCipherCrypto
                     out,
                     inbuf,
                     null,
-                    b -> l -> {
+                    l -> {
                     },
                     b -> l -> {
                     }
@@ -146,7 +146,7 @@ public class JinahyaBufferedBlockCipherCrypto
                     out,
                     inbuf,
                     null,
-                    b -> l -> {
+                    l -> {
                     },
                     b -> l -> {
                     }

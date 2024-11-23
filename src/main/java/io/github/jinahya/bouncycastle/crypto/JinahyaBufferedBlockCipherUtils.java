@@ -117,7 +117,7 @@ public final class JinahyaBufferedBlockCipherUtils {
      */
     public static long processAllBytesAndDoFinal(final BufferedBlockCipher cipher, final InputStream in,
                                                  final OutputStream out, final byte[] inbuf, final byte[] outbuf,
-                                                 final Function<? super byte[], ? extends IntConsumer> inconsumer,
+                                                 final IntConsumer inconsumer,
                                                  final Function<? super byte[], ? extends IntConsumer> outconsumer)
             throws IOException, InvalidCipherTextException {
         Objects.requireNonNull(cipher, "cipher is null");

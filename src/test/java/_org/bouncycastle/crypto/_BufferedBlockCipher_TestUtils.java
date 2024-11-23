@@ -29,7 +29,7 @@ public final class _BufferedBlockCipher_TestUtils {
 
     public static String name(final BufferedBlockCipher cipher) {
         Objects.requireNonNull(cipher, "cipher is null");
-        return _BlockCipher_TestUtils.cipherName(cipher.getUnderlyingCipher());
+        return _BlockCipher_TestUtils.name(cipher.getUnderlyingCipher());
     }
 
     public static <T extends BufferedBlockCipher> Named<T> named(final T cipher) {

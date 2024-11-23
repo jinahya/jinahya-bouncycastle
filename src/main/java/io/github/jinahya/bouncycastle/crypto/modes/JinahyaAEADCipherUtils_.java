@@ -8,9 +8,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 
+@SuppressWarnings({
+        "java:S101",  // Class names should comply with a naming convention
+        "java:S106",  // Standard outputs should not be used directly to log anything
+        "java:S107",  // Methods should not have too many parameters
+        "java:S1874", // "@Deprecated" code should not be used
+        "java:S4274"  // Asserts should not be used to check the parameters of a public method
+})
 final class JinahyaAEADCipherUtils_ {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -47,6 +55,7 @@ final class JinahyaAEADCipherUtils_ {
             _ByteBufferUtils.get(input, input.position(), in);
             inoff = 0;
         }
+        // -------------------------------------------------------------------------------------------------------------
         final byte[] out;
         final int outoff;
         if (output.hasArray()) {
@@ -56,6 +65,7 @@ final class JinahyaAEADCipherUtils_ {
             out = new byte[output.remaining()];
             outoff = 0;
         }
+        // -------------------------------------------------------------------------------------------------------------
         final var outlen = processBytesAndDoFinal(cipher, in, inoff, inlen, out, outoff);
         if (output.hasArray()) {
             output.position(output.position() + outlen);
@@ -68,8 +78,7 @@ final class JinahyaAEADCipherUtils_ {
 
     // -----------------------------------------------------------------------------------------------------------------
     public static long processAllBytesAndDoFinal(final AEADCipher cipher, final InputStream in, final OutputStream out,
-                                                 final byte[] inbuf, final int inoff, final int inlen, byte[] outbuf,
-                                                 final Function<? super byte[], ? extends IntConsumer> inconsumer,
+                                                 final byte[] inbuf, byte[] outbuf, final IntConsumer inconsumer,
                                                  final Function<? super byte[], ? extends IntConsumer> outconsumer)
             throws IOException, InvalidCipherTextException {
         assert cipher != null;
@@ -83,26 +92,31 @@ final class JinahyaAEADCipherUtils_ {
         assert outconsumer != null;
         // -------------------------------------------------------------------------------------------------------------
         var bytes = 0L;
+        // ------------------------------------------------------------------------------------------------ processBytes
         for (int r; (r = in.read(inbuf)) != -1; ) {
-            for (final var uos = cipher.getUpdateOutputSize(r); outbuf.length < uos; ) {
-                System.err.println("re-allocating outbuf(" + outbuf.length +
-                                           ") for an intermediate update output size: " + uos);
-                outbuf = new byte[uos];
+            for (final var l = cipher.getUpdateOutputSize(r); outbuf.length < l; ) {
+                System.out.println("re-allocating outbuf(" + outbuf.length +
+                                           ") for an intermediate update-output-size: " + l);
+                Arrays.fill(outbuf, (byte) 0);
+                outbuf = new byte[l];
             }
             final var outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0); // DataLengthException
             out.write(outbuf, 0, outlen);
-            inconsumer.apply(inbuf).accept(r);
+            inconsumer.accept(r);
             outconsumer.apply(outbuf).accept(outlen);
             bytes += outlen;
         }
-        for (final var os = cipher.getOutputSize(0); outbuf.length < os; ) {
-            System.err.println("re-allocating outbuf(" + outbuf.length + ") for the final output size: " + os);
-            outbuf = new byte[os];
+        // ----------------------------------------------------------------------------------------------------- doFinal
+        for (final var l = cipher.getOutputSize(0); outbuf.length < l; ) {
+            System.out.println("re-allocating outbuf(" + outbuf.length + ") for the final output-size: " + l);
+            Arrays.fill(outbuf, (byte) 0);
+            outbuf = new byte[l];
         }
         final var outlen = cipher.doFinal(outbuf, 0); // InvalidCipherTextException
         out.write(outbuf, 0, outlen);
         outconsumer.apply(outbuf).accept(outlen);
         bytes += outlen;
+        // -------------------------------------------------------------------------------------------------------------
         return bytes;
     }
 

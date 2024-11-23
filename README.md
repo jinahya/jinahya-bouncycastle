@@ -153,7 +153,9 @@ class Test {
     * [NIST SP 800-38G Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf)
 * [IETF Datatracker](https://datatracker.ietf.org)
     * [RFC: 2437 / PKCS #1: RSA Cryptography Specifications Version 2.0](https://datatracker.ietf.org/doc/html/rfc2437)
+    * [RFC: 5297 / Synthetic Initialization Vector (SIV) Authenticated Encryption Using the Advanced Encryption Standard (AES)](https://datatracker.ietf.org/doc/html/rfc5297)
     * [RFC: 8017 / PKCS #1: RSA Cryptography Specifications Version 2.2](https://datatracker.ietf.org/doc/html/rfc8017)
+    * [RFC: 8452 / AES-GCM-SIV: Nonce Misuse-Resistant Authenticated Encryption](https://datatracker.ietf.org/doc/html/rfc8452)
 * Wikipedia
     * [Block cipher mode of operation](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation)
         * [Cipher block chaining (CBC)](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_block_chaining_(CBC))

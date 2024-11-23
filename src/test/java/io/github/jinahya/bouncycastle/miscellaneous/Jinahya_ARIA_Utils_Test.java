@@ -69,9 +69,9 @@ class Jinahya_ARIA_Utils_Test {
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
             final var key = _ARIA__TestUtils.randomKey();
-            final var tLen = __GCM_TestUtils.randomTLen();
-            final var iv = __GCM_TestUtils.randomIv();
-            final var aad = __GCM_TestUtils.randomAad();
+            final var tLen = __GCM__TestUtils.randomTLen();
+            final var iv = __GCM__TestUtils.randomIv();
+            final var aad = __GCM__TestUtils.randomAad();
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
             final var encrypted = Jinahya_ARIA_Utils.encrypt_GCM_NoPadding(key, tLen, iv, aad, plain);
@@ -84,9 +84,9 @@ class Jinahya_ARIA_Utils_Test {
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
             final var key = _ARIA__TestUtils.randomKey();
-            final var tLen = __GCM_TestUtils.randomTLen();
-            final var iv = __GCM_TestUtils.randomIv();
-            final var aad = __GCM_TestUtils.randomAad();
+            final var tLen = __GCM__TestUtils.randomTLen();
+            final var iv = __GCM__TestUtils.randomIv();
+            final var aad = __GCM__TestUtils.randomAad();
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1048576));
             // ---------------------------------------------------------------------------------------------------- when
             final byte[] encrypted;

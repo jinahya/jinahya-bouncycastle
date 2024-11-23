@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.IntConsumer;
 
 /**
@@ -62,9 +61,8 @@ public final class JinahyaBlockCipherUtils {
     }
 
     public static long processAllBlocks(final BlockCipher cipher, final InputStream in, final OutputStream out,
-                                        final byte[] inbuf, final byte[] outbuf,
-                                        final Function<? super byte[], ? extends IntConsumer> inconsumer,
-                                        final Function<? super byte[], ? extends IntConsumer> outconsumer)
+                                        final byte[] inbuf, final byte[] outbuf, final IntConsumer inconsumer,
+                                        final IntConsumer outconsumer)
             throws IOException {
         Objects.requireNonNull(cipher, "cipher is null");
         if (!Objects.requireNonNull(in, "in is null").markSupported()) {

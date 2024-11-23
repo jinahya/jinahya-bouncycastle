@@ -3,6 +3,7 @@ package _org.bouncycastle.crypto.params;
 import io.github.jinahya.bouncycastle.crypto.params.JinahyaKeyParametersUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.CipherParameters;
+import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.junit.jupiter.api.Named;
@@ -17,8 +18,11 @@ public final class _KeyParameters_TestUtils {
         if (params instanceof KeyParameter) {
             return params;
         }
-        if (params instanceof ParametersWithIV parametersWithIV) {
-            return getKeyParameters(parametersWithIV.getParameters());
+        if (params instanceof ParametersWithIV p) {
+            return getKeyParameters(p.getParameters());
+        }
+        if (params instanceof AEADParameters p) {
+            return p.getKey();
         }
         throw new IllegalArgumentException("unable to get the key parameter from " + params);
     }

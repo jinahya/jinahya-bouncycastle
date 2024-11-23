@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 class JinahyaBlockCipherUtils_SEED_Test {
 
-    private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
+    static Stream<Arguments> getCipherAndParamsArgumentsStream() {
         return _SEED___TestUtils.getCipherAndParamsArgumentsStream();
     }
 

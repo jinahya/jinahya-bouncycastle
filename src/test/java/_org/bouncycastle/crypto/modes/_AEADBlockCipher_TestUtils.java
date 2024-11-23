@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Named;
 
 public final class _AEADBlockCipher_TestUtils {
 
-    public static String cipherName(final AEADBlockCipher cipher) {
+    public static String name(final AEADBlockCipher cipher) {
         return cipher.getAlgorithmName() +
                 '/' +
-                _BlockCipher_TestUtils.cipherName(cipher.getUnderlyingCipher());
+                _BlockCipher_TestUtils.name(cipher.getUnderlyingCipher());
     }
 
     public static <T extends AEADBlockCipher> Named<T> named(final T cipher) {
-        return Named.of(cipherName(cipher), cipher);
+        return Named.of(name(cipher), cipher);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -94,9 +94,11 @@ public class JinahyaAEADCipherCrypto
                     in,
                     out,
                     inbuf,
-                    0,
-                    inbuf.length,
-                    null
+                    null,
+                    l -> {
+                    },
+                    b -> l -> {
+                    }
             );
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofEncryptionFailure(icte);
@@ -113,9 +115,11 @@ public class JinahyaAEADCipherCrypto
                     in,
                     out,
                     inbuf,
-                    0,
-                    inbuf.length,
-                    null
+                    null,
+                    l -> {
+                    },
+                    b -> l -> {
+                    }
             );
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofDecryptionFailure(icte);

@@ -123,7 +123,7 @@ public final class Jinahya_ARIA_Utils {
      * @param key  a key.
      * @param tLen a length (in bits) of authentication tag.
      * @param iv   an initialization vector whose length should be greater than or equals to
-     *             {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
+     *             {@value __GCM__Constants#IV_SIZE_MINIMUM}.
      * @param aad  an additional authenticated data. may be {@code null}.
      * @param in   the input bytes to encrypt.
      * @return an array of encrypted bytes.
@@ -140,7 +140,7 @@ public final class Jinahya_ARIA_Utils {
      * @param key  a key.
      * @param tLen a length (in bits) of authentication tag.
      * @param iv   an initialization vector whose length should be greater than or equals to
-     *             {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
+     *             {@value __GCM__Constants#IV_SIZE_MINIMUM}.
      * @param aad  an additional authenticated data. may be {@code null}.
      * @param in   the input bytes to decrypt.
      * @return an array of decrypted bytes.
@@ -157,7 +157,7 @@ public final class Jinahya_ARIA_Utils {
      * @param key   the key.
      * @param tLen  a length (in bits) of authentication tag.
      * @param iv    an initialization vector whose length should be greater than or equals to
-     *              {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
+     *              {@value __GCM__Constants#IV_SIZE_MINIMUM}.
      * @param aad   an additional authenticated data. may be {@code null}.
      * @param in    the input stream from which plain bytes are read.
      * @param out   the output stream to which encrypted bytes are written.
@@ -178,7 +178,7 @@ public final class Jinahya_ARIA_Utils {
      * @param key   the key.
      * @param tLen  a length (in bits) of authentication tag.
      * @param iv    an initialization vector whose length should be greater than or equals to
-     *              {@value __GCM__Constants#IV_SIZE_GCM_MINIMUM}.
+     *              {@value __GCM__Constants#IV_SIZE_MINIMUM}.
      * @param aad   an additional authenticated data. may be {@code null}.
      * @param in    the input stream from which plain bytes are read.
      * @param out   the output stream to which decrypted bytes are written.

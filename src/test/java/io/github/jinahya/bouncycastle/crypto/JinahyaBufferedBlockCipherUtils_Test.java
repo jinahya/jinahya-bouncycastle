@@ -170,7 +170,7 @@ public class JinahyaBufferedBlockCipherUtils_Test {
                             out,
                             inbuf,
                             outbuf,
-                            b -> l -> {
+                            l -> {
                                 digest.update(inbuf, 0, l);
                                 mac.update(inbuf, 0, l);
                             },
@@ -203,7 +203,7 @@ public class JinahyaBufferedBlockCipherUtils_Test {
                             out,
                             inbuf,
                             outbuf,
-                            b -> l -> {
+                            l -> {
                             },
                             b -> l -> {
                                 digest.update(b, 0, l);
@@ -308,7 +308,7 @@ public class JinahyaBufferedBlockCipherUtils_Test {
                     out,
                     new byte[ThreadLocalRandom.current().nextInt(128) + cipher.getBlockSize()],
                     new byte[ThreadLocalRandom.current().nextInt(128) + cipher.getBlockSize()],
-                    b -> l -> {
+                    l -> {
                     },
                     b -> l -> {
                     }
@@ -328,7 +328,7 @@ public class JinahyaBufferedBlockCipherUtils_Test {
                     out,
                     new byte[ThreadLocalRandom.current().nextInt(128) + cipher.getBlockSize()],
                     null,
-                    b -> l -> {
+                    l -> {
                     },
                     b -> l -> {
                     }

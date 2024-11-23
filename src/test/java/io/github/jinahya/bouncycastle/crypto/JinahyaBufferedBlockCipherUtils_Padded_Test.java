@@ -20,17 +20,26 @@ import java.util.stream.Stream;
 class JinahyaBufferedBlockCipherUtils_Padded_Test {
 
     private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-        return Stream.concat(
-                JinahyaBlockCipherUtils_AES_Test.getCipherAndParamsArgumentsStream(),
-                JinahyaBlockCipherUtils_ARIA_Test.getCipherAndParamsArgumentsStream()
-        ).map(a -> _Arguments_TestUtils.ofPayloadsMapped(
-                a,
-                i -> p -> switch (i) {
-                    case 0 -> _BufferedBlockCipher_TestUtils.named(new PaddedBufferedBlockCipher((BlockCipher) p));
-                    case 1 -> _KeyParameters_TestUtils.named((KeyParameter) p);
-                    default -> p;
-                }
-        ));
+        // https://stackoverflow.com/a/22743697/330457
+        return Stream.of(
+                        JinahyaBlockCipherUtils_AES_Test.getCipherAndParamsArgumentsStream(),
+                        JinahyaBlockCipherUtils_ARIA_Test.getCipherAndParamsArgumentsStream(),
+                        JinahyaBlockCipherUtils_LEA_Test.getCipherAndParamsArgumentsStream(),
+                        JinahyaBlockCipherUtils_SEED_Test.getCipherAndParamsArgumentsStream()
+                )
+                .reduce(Stream::concat)
+                .orElseGet(Stream::empty)
+                .map(a -> {
+                    return _Arguments_TestUtils.ofPayloadsMapped(
+                            a,
+                            i -> p -> switch (i) {
+                                case 0 -> _BufferedBlockCipher_TestUtils.named(
+                                        new PaddedBufferedBlockCipher((BlockCipher) p));
+                                case 1 -> _KeyParameters_TestUtils.named((KeyParameter) p);
+                                default -> p;
+                            }
+                    );
+                });
     }
 
     // -----------------------------------------------------------------------------------------------------------------
