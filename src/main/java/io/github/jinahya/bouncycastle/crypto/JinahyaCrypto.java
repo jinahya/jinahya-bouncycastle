@@ -68,9 +68,4 @@ public interface JinahyaCrypto {
      * @throws IOException if an I/O error occurs.
      */
     long decrypt(InputStream in, OutputStream out, byte[] inbuf) throws IOException;
-
-    // -----------------------------------------------------------------------------------------------------------------
-//    byte[] sign(final byte[] input);
-//
-//    boolean verify(final byte[] input);
 }

@@ -22,7 +22,7 @@ class Jinahya_ARIA_Utils_Test {
         void _CBC_PKCS7Padding_bytes() {
             // ------------------------------------------------------------------------------------------------------- given
             final var key = _ARIA__TestUtils.randomKey();
-            final var iv = __CBC_TestUtils.newRandomIv(_ARIA___Constants.BLOCK_BYTES);
+            final var iv = __CBC__TestUtils.newRandomIv(_ARIA___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // -------------------------------------------------------------------------------------------------------- when
             final var encrypted = Jinahya_ARIA_Utils.encrypt_CBC_PKCS7Padding(key, iv, plain);
@@ -35,7 +35,7 @@ class Jinahya_ARIA_Utils_Test {
         void _CBC_PKCS7Padding_stream() throws IOException {
             // ------------------------------------------------------------------------------------------------------- given
             final var key = _ARIA__TestUtils.randomKey();
-            final var iv = __CBC_TestUtils.newRandomIv(_ARIA___Constants.BLOCK_BYTES);
+            final var iv = __CBC__TestUtils.newRandomIv(_ARIA___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1048576));
             // -------------------------------------------------------------------------------------------------------- when
             final byte[] encrypted;

@@ -37,18 +37,18 @@ public final class JinahyaBlockCipherUtils {
         if (inoff < 0) {
             throw new IllegalArgumentException("inoff(" + inoff + ") is negative");
         }
-        if ((in.length - inoff) < blockSize) {
+        if ((inoff + blockSize) > in.length) {
             throw new IllegalArgumentException(
-                    "in.length(" + in.length + ") - inoff(" + inoff + ") > cipher.blockSize(" + blockSize + ")"
+                    "(inoff(" + inoff + ") + cipher.blockSize(" + blockSize + ")) > in.length(" + in.length + ")"
             );
         }
         Objects.requireNonNull(out, "out is null");
         if (outoff < 0) {
             throw new IllegalArgumentException("outoff(" + outoff + ") is negative");
         }
-        if ((out.length - outoff) < blockSize) {
+        if ((outoff + blockSize) > out.length) {
             throw new IllegalArgumentException(
-                    "out.length(" + out.length + ") - outoff(" + outoff + ") > cipher.blockSize(" + blockSize + ")"
+                    "(outoff(" + outoff + ") + cipher.blockSize(" + blockSize + ") > out.length(" + out.length + ")"
             );
         }
         return JinahyaBlockCipherUtils_.processBlock(
