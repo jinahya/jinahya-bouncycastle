@@ -334,9 +334,9 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
                         baos,
                         inbuf,
                         outbuf,
-                        b -> o -> l -> {
+                        l -> {
                         },
-                        b -> o -> l -> {
+                        l -> {
                         }
                 );
                 assertThat(bytes)
@@ -360,9 +360,9 @@ class JinahyaAsymmetricBlockCipherUtils_RSA_ECB_PKCS1Padding_Test {
                         baos,
                         inbuf,
                         outbuf,
-                        b -> o -> l -> {
+                        l -> {
                         },
-                        b -> o -> l -> {
+                        l -> {
                         }
                 );
                 assertThat(bytes)

@@ -22,7 +22,7 @@ final class JinahyaBlockCipherUtils_TestUtils {
         final var blockSize = cipher.getBlockSize();
         final var plain = _Random_TestUtils.newRandomBytes(blockSize);
         final var digest = ThreadLocalRandom.current().nextBoolean() ? new SHA256Digest() : new SHA1Digest();
-        final var mac = new HMac(new SHA1Digest());
+        final var mac = new HMac(ThreadLocalRandom.current().nextBoolean() ? new SHA256Digest() : new SHA1Digest());
         mac.init(_KeyParameters_TestUtils.getKeyParameters(params));
         // ----------------------------------------------------------------------------------------------------- encrypt
         final byte[] encrypted;

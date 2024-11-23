@@ -26,7 +26,6 @@ final class JinahyaBlockCipherUtils_ {
 
     static int processBlock(final BlockCipher cipher, final byte[] in, final int inoff, final byte[] out,
                             final int outoff) {
-        assert cipher != null;
         return processBlock(
                 cipher,
                 cipher.getBlockSize(),

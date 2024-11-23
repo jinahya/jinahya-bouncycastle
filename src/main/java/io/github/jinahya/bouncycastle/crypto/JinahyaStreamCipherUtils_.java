@@ -64,8 +64,8 @@ final class JinahyaStreamCipherUtils_ {
 
     // -----------------------------------------------------------------------------------------------------------------
     static long processAllBytes(final StreamCipher cipher, final InputStream in, final OutputStream out,
-                                final byte[] inbuf, byte[] outbuf, final IntConsumer inconsumer,
-                                final Function<? super byte[], ? extends IntConsumer> outconsumer)
+                                final byte[] inbuf, byte[] outbuf, final IntConsumer inlenconsumer,
+                                final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
             throws IOException {
         assert cipher != null;
         assert in != null;
@@ -76,8 +76,8 @@ final class JinahyaStreamCipherUtils_ {
             outbuf = new byte[inbuf.length << 1];
         }
         assert outbuf.length > 0;
-        assert inconsumer != null;
-        assert outconsumer != null;
+        assert inlenconsumer != null;
+        assert outbufconsumer != null;
         // -------------------------------------------------------------------------------------------------------------
         var bytes = 0L;
         for (int outlen, r; (r = in.read(inbuf)) != -1; ) {
@@ -85,8 +85,8 @@ final class JinahyaStreamCipherUtils_ {
                 try {
                     outlen = cipher.processBytes(inbuf, 0, r, outbuf, 0);
                     out.write(outbuf, 0, outlen);
-                    inconsumer.accept(r);
-                    outconsumer.apply(outbuf).accept(outlen);
+                    inlenconsumer.accept(r);
+                    outbufconsumer.apply(outbuf).accept(outlen);
                     bytes += outlen;
                     break;
                 } catch (final DataLengthException dle) {

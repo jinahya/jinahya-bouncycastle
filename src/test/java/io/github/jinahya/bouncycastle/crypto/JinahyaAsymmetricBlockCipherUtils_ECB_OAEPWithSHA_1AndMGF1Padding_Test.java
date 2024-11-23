@@ -162,9 +162,9 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSHA_1AndMGF1Padding_Test {
                         baos,
                         inbuf,
                         outbuf,
-                        b -> o -> l -> {
+                        l -> {
                         },
-                        b -> o -> l -> {
+                        l -> {
                         }
                 );
                 assert bytes >= plain.length;
@@ -186,9 +186,9 @@ class JinahyaAsymmetricBlockCipherUtils_ECB_OAEPWithSHA_1AndMGF1Padding_Test {
                         baos,
                         inbuf,
                         outbuf,
-                        b -> o -> l -> {
+                        l -> {
                         },
-                        b -> o -> l -> {
+                        l -> {
                         }
                 );
                 assert bytes <= encrypted.length;

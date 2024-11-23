@@ -8,18 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.function.Function;
 import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
 
 final class JinahyaAsymmetricBlockCipherUtils_ {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static int processBlock(final AsymmetricBlockCipher cipher, final int inputBlockSize,
                                     final int outputBlockSize, final byte[] in, final int inoff, final int inlen,
-                                    final byte[] out, final int outoff,
-                                    final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
-                                    final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
+                                    final byte[] out, final int outoff)
             throws InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
@@ -30,47 +26,22 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         assert out != null;
         assert outoff >= 0;
         assert (out.length - outoff) >= outputBlockSize;
-        assert inconsumer != null;
-        assert outconsumer != null;
         // -------------------------------------------------------------------------------------------------------------
         final var block = cipher.processBlock(in, inoff, inlen); // InvalidCipherTextException, DataLengthException
         assert block.length <= outputBlockSize;
         System.arraycopy(block, 0, out, outoff, block.length); // IndexOutOfBoundsException
-        inconsumer.apply(in).apply(inoff).accept(inlen);
-        outconsumer.apply(out).apply(outoff).accept(block.length);
         return block.length;
-    }
-
-    static int processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
-                            final int inlen, final byte[] out, final int outoff,
-                            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
-                            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
-            throws InvalidCipherTextException {
-        assert cipher != null;
-        return processBlock(
-                cipher, cipher.getInputBlockSize(), cipher.getOutputBlockSize(),
-                in, inoff, inlen,
-                out, outoff,
-                inconsumer, outconsumer
-        );
     }
 
     static int processBlock(final AsymmetricBlockCipher cipher, final byte[] in, final int inoff,
                             final int inlen, final byte[] out, final int outoff)
             throws InvalidCipherTextException {
         assert cipher != null;
-        assert in != null;
-        assert inoff >= 0;
-        assert inlen >= 0;
-        assert inlen <= cipher.getInputBlockSize();
-        assert (inoff + inlen) <= in.length;
-        assert out != null;
-        assert outoff >= 0;
-        assert (out.length - outoff) >= cipher.getOutputBlockSize();
-        final var block = cipher.processBlock(in, inoff, inlen); // InvalidCipherTextException, DataLengthException
-        assert block.length <= cipher.getOutputBlockSize();
-        System.arraycopy(block, 0, out, outoff, block.length); // IndexOutOfBoundsException
-        return block.length;
+        return processBlock(
+                cipher, cipher.getInputBlockSize(), cipher.getOutputBlockSize(),
+                in, inoff, inlen,
+                out, outoff
+        );
     }
 
     static int processBlock(final AsymmetricBlockCipher cipher, final ByteBuffer input, final ByteBuffer output)
@@ -111,10 +82,8 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
     }
 
     static long processAllBlocks(
-            final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
-            final byte[] inbuf, final byte[] outbuf,
-            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
-            final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
+            final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out, final byte[] inbuf,
+            final byte[] outbuf, final IntConsumer inlenconsumer, final IntConsumer outlenconsumer)
             throws IOException, InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
@@ -126,8 +95,8 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
         assert inbuf.length >= inputBlockSize;
         final var outputBlockSize = cipher.getOutputBlockSize();
         assert outbuf.length >= outputBlockSize;
-        assert inconsumer != null;
-        assert outconsumer != null;
+        assert inlenconsumer != null;
+        assert outlenconsumer != null;
         // -------------------------------------------------------------------------------------------------------------
         var blocks = 0L;
         for (int outlen; true; blocks = Math.addExact(blocks, 1L)) {
@@ -142,22 +111,20 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
                     0,
                     inputBlockSize,
                     outbuf,
-                    0,
-                    inconsumer,
-                    outconsumer
+                    0
             );
             assert outlen <= outputBlockSize;
             out.write(outbuf, 0, outlen);
-
+            inlenconsumer.accept(inputBlockSize);
+            outlenconsumer.accept(outlen);
         }
         return blocks;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     static long processAllBytes(final AsymmetricBlockCipher cipher, final InputStream in, final OutputStream out,
-                                final byte[] inbuf, final byte[] outbuf,
-                                final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inconsumer,
-                                final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outconsumer)
+                                final byte[] inbuf, final byte[] outbuf, final IntConsumer inlenconsumer,
+                                final IntConsumer outlenconsumer)
             throws IOException, InvalidCipherTextException {
         assert cipher != null;
         assert in != null;
@@ -175,8 +142,8 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
                 out,
                 inbuf,
                 outbuf,
-                inconsumer,
-                outconsumer
+                inlenconsumer,
+                outlenconsumer
         );
         var bytes = Math.multiplyExact(blocks, cipher.getOutputBlockSize());
         // process last remaining bytes
@@ -193,8 +160,8 @@ final class JinahyaAsymmetricBlockCipherUtils_ {
             );
             assert outlen <= cipher.getOutputBlockSize();
             out.write(outbuf, 0, outlen);
-            inconsumer.apply(inbuf).apply(0).accept(inlen);
-            outconsumer.apply(outbuf).apply(0).accept(outlen);
+            inlenconsumer.accept(inlen);
+            outlenconsumer.accept(outlen);
             bytes = Math.addExact(bytes, inlen);
         }
         assert in.read() == -1;

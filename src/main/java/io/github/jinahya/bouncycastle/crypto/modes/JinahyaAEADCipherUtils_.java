@@ -86,8 +86,9 @@ final class JinahyaAEADCipherUtils_ {
         assert out != null;
         assert inbuf != null;
         assert inbuf.length > 0;
-        assert outbuf != null;
-        assert outbuf.length > 0;
+        if (outbuf == null || outbuf.length == 0) {
+            outbuf = new byte[1];
+        }
         assert inconsumer != null;
         assert outconsumer != null;
         // -------------------------------------------------------------------------------------------------------------

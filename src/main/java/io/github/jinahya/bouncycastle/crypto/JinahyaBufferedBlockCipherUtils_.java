@@ -79,7 +79,7 @@ final class JinahyaBufferedBlockCipherUtils_ {
         assert out != null;
         assert inbuf != null;
         assert inbuf.length > 0;
-        if (outbuf == null) {
+        if (outbuf == null || outbuf.length == 0) {
             outbuf = new byte[cipher.getOutputSize(inbuf.length)];
         }
         assert outbuf.length > 0;

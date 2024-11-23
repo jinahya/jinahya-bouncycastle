@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 class JinahyaBufferedBlockCipherUtils_Padded_Test {
 
-    private static Stream<Arguments> getCipherAndParamsArgumentsStream() {
+    static Stream<Arguments> getCipherAndParamsArgumentsStream() {
         // https://stackoverflow.com/a/22743697/330457
         return Stream.of(
                         JinahyaBlockCipherUtils_AES_Test.getCipherAndParamsArgumentsStream(),

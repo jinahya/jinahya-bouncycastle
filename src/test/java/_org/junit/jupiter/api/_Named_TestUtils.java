@@ -81,7 +81,7 @@ public final class _Named_TestUtils {
     }
 
     public static <T extends CipherParameters> Named<T> named(final T params) {
-        return Named.of(_CipherParameters_TestUtils.paramsName(params), params);
+        return Named.of(_CipherParameters_TestUtils.name(params), params);
     }
 
     public static <T> T payload(final Object argument) {

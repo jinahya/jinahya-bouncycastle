@@ -18,7 +18,7 @@ public final class _ParametersWithIV_TestUtils {
     public static String paramsName(final ParametersWithIV params) {
         Objects.requireNonNull(params, "params is null");
         final var iv = params.getIV();
-        return _CipherParameters_TestUtils.paramsName(params.getParameters())
+        return _CipherParameters_TestUtils.name(params.getParameters())
                 + " / "
                 + ivName(iv);
     }

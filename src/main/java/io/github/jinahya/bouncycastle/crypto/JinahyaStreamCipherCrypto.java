@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
 
 public class JinahyaStreamCipherCrypto
         extends JinahyaCipherCrypto<StreamCipher> {
@@ -69,30 +71,89 @@ public class JinahyaStreamCipherCrypto
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
     @Override
-    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf,
+                        final IntConsumer inlenconsumer,
+                        final Function<? super byte[], ? extends IntConsumer> outbufconsumer) throws IOException {
+        Objects.requireNonNull(in, "in is null");
+        Objects.requireNonNull(out, "out is null");
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+            throw new IllegalArgumentException("inbuf.length(" + inbuf.length + ") is zero");
+        }
+        Objects.requireNonNull(inlenconsumer, "inlenconsumer is null");
+        Objects.requireNonNull(outbufconsumer, "outbufconsumer is null");
         initForEncryption();
-//        return JinahyaStreamCipherUtils.processAllBytes(
-//                cipher,
-//                in,
-//                out,
-//                inbuf,
-//                null
-//        );
-        return -1L;
+        final var outbuf = new byte[inbuf.length];
+        return JinahyaStreamCipherUtils_.processAllBytes(
+                cipher,
+                in,
+                out,
+                inbuf,
+                outbuf,
+                inlenconsumer,
+                outbufconsumer
+        );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    @Override
-    public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
-        initForDecryption();
-//        return JinahyaStreamCipherUtils.processAllBytes(
+//    @Override
+//    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+//        Objects.requireNonNull(in, "in is null");
+//        Objects.requireNonNull(out, "out is null");
+//        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+//            throw new IllegalArgumentException("inbuf.length(" + inbuf.length + ") is zero");
+//        }
+//        initForEncryption();
+//        final var outbuf = new byte[inbuf.length];
+//        return JinahyaStreamCipherUtils_.processAllBytes(
 //                cipher,
 //                in,
 //                out,
 //                inbuf,
-//                null
+//                outbuf,
+//                l -> {
+//                },
+//                b -> l -> {
+//                }
 //        );
-        return -1L;
+//    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf,
+                        final IntConsumer inlenconsumer,
+                        final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+            throws IOException {
+        Objects.requireNonNull(in, "in is null");
+        Objects.requireNonNull(out, "out is null");
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+            throw new IllegalArgumentException("inbuf.length(" + inbuf.length + ") is zero");
+        }
+        Objects.requireNonNull(inlenconsumer, "inlenconsumer is null");
+        Objects.requireNonNull(outbufconsumer, "outbufconsumer is null");
+        initForDecryption();
+        return JinahyaStreamCipherUtils_.processAllBytes(
+                cipher,
+                in,
+                out,
+                inbuf,
+                new byte[inbuf.length],
+                inlenconsumer,
+                outbufconsumer
+        );
     }
+
+//    @Override
+//    public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+//        initForDecryption();
+////        return JinahyaStreamCipherUtils.processAllBytes(
+////                cipher,
+////                in,
+////                out,
+////                inbuf,
+////                null
+////        );
+//        return -1L;
+//    }
 }

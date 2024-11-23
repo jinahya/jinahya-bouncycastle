@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
 
 /**
  * A crypto for a {@link AsymmetricBlockCipher}.
@@ -168,11 +170,20 @@ public class JinahyaAsymmetricBlockCipherCrypto
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf,
+                        final IntConsumer inlenconsumer,
+                        final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+            throws IOException {
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         Objects.requireNonNull(inbuf, "inbuf is null");
         initForEncryption();
+        final var inputBlockSize = cipher.getInputBlockSize();
+        if (inbuf.length < inputBlockSize) {
+            throw new IllegalArgumentException(
+                    "inbuf.length(" + inbuf.length + ") < cipher.inputBlockSize(" + inputBlockSize + ")"
+            );
+        }
         final var outbuf = new byte[cipher.getOutputBlockSize()];
         try {
             return JinahyaAsymmetricBlockCipherUtils.processAllBytes(
@@ -181,9 +192,9 @@ public class JinahyaAsymmetricBlockCipherCrypto
                     out,
                     inbuf,
                     outbuf,
-                    b -> o -> l -> {
-                    },
-                    b -> o -> l -> {
+                    inlenconsumer,
+                    l -> {
+                        outbufconsumer.apply(outbuf).accept(l);
                     }
             );
         } catch (final InvalidCipherTextException e) {
@@ -191,9 +202,37 @@ public class JinahyaAsymmetricBlockCipherCrypto
         }
     }
 
+//    @Override
+//    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+//        Objects.requireNonNull(in, "in is null");
+//        Objects.requireNonNull(out, "out is null");
+//        Objects.requireNonNull(inbuf, "inbuf is null");
+//        initForEncryption();
+//        final var outbuf = new byte[cipher.getOutputBlockSize()];
+//        try {
+//            return JinahyaAsymmetricBlockCipherUtils.processAllBytes(
+//                    cipher,
+//                    in,
+//                    out,
+//                    inbuf,
+//                    outbuf,
+//                    l -> {
+//                    },
+//                    l -> {
+//                    }
+//            );
+//        } catch (final InvalidCipherTextException e) {
+//            throw JinahyaCryptoException.ofEncryptionFailure(e);
+//        }
+//    }
+
     // -----------------------------------------------------------------------------------------------------------------
+
     @Override
-    public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+    public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf,
+                        final IntConsumer inlenconsumer,
+                        final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+            throws IOException {
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         Objects.requireNonNull(inbuf, "inbuf is null");
@@ -212,13 +251,41 @@ public class JinahyaAsymmetricBlockCipherCrypto
                     out,
                     inbuf,
                     outbuf,
-                    b -> o -> l -> {
-                    },
-                    b -> o -> l -> {
-                    }
+                    inlenconsumer,
+                    l -> outbufconsumer.apply(outbuf).accept(l)
             );
         } catch (final InvalidCipherTextException e) {
             throw JinahyaCryptoException.ofEncryptionFailure(e);
         }
     }
+
+//    @Override
+//    public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf) throws IOException {
+//        Objects.requireNonNull(in, "in is null");
+//        Objects.requireNonNull(out, "out is null");
+//        Objects.requireNonNull(inbuf, "inbuf is null");
+//        initForDecryption();
+//        final var inputBlockSize = cipher.getInputBlockSize();
+//        if (Objects.requireNonNull(inbuf, "inbuf is null").length < inputBlockSize) {
+//            throw new IllegalArgumentException(
+//                    "inbuf.length(" + inbuf.length + " < cipher.inputBlockSize(" + inputBlockSize + ")"
+//            );
+//        }
+//        final var outbuf = new byte[cipher.getOutputBlockSize()];
+//        try {
+//            return JinahyaAsymmetricBlockCipherUtils.processAllBytes(
+//                    cipher,
+//                    in,
+//                    out,
+//                    inbuf,
+//                    outbuf,
+//                    l -> {
+//                    },
+//                    l -> {
+//                    }
+//            );
+//        } catch (final InvalidCipherTextException e) {
+//            throw JinahyaCryptoException.ofEncryptionFailure(e);
+//        }
+//    }
 }

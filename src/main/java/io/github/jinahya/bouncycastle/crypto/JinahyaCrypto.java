@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
 
 public interface JinahyaCrypto {
 
@@ -44,6 +46,9 @@ public interface JinahyaCrypto {
     int decrypt(final ByteBuffer input, final ByteBuffer output);
 
     // -----------------------------------------------------------------------------------------------------------------
+    long encrypt(InputStream in, OutputStream out, byte[] inbuf, IntConsumer inlenconsumer,
+                 Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+            throws IOException;
 
     /**
      * Encrypts all bytes from specified input stream, and writes encrypted bytes to specified output stream.
@@ -53,10 +58,23 @@ public interface JinahyaCrypto {
      * @param inbuf a buffer for reading bytes from the {@code in}.
      * @return the number of bytes written to the {@code out}.
      * @throws IOException if an I/O error occurs.
+     * @deprecated Use {@link #encrypt(InputStream, OutputStream, byte[], IntConsumer, Function)}
      */
-    long encrypt(InputStream in, OutputStream out, byte[] inbuf) throws IOException;
+    @Deprecated(forRemoval = true)
+    default long encrypt(InputStream in, OutputStream out, byte[] inbuf) throws IOException {
+        return encrypt(
+                in,
+                out,
+                inbuf,
+                JinahyaCrypto_Utils.emptyInlenconsumer(),
+                JinahyaCrypto_Utils.emptyOutbufconsumer()
+        );
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
+    long decrypt(InputStream in, OutputStream out, byte[] inbuf, IntConsumer inlenconsumer,
+                 Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+            throws IOException;
 
     /**
      * Decrypts all bytes from specified input stream, and writes decrypted bytes to specified output stream.
@@ -66,6 +84,16 @@ public interface JinahyaCrypto {
      * @param inbuf a buffer for reading bytes from the {@code in}.
      * @return the number of bytes written to the {@code out}.
      * @throws IOException if an I/O error occurs.
+     * @deprecated Use {@link #decrypt(InputStream, OutputStream, byte[], IntConsumer, Function)}
      */
-    long decrypt(InputStream in, OutputStream out, byte[] inbuf) throws IOException;
+    @Deprecated
+    default long decrypt(InputStream in, OutputStream out, byte[] inbuf) throws IOException {
+        return decrypt(
+                in,
+                out,
+                inbuf,
+                JinahyaCrypto_Utils.emptyInlenconsumer(),
+                JinahyaCrypto_Utils.emptyOutbufconsumer()
+        );
+    }
 }

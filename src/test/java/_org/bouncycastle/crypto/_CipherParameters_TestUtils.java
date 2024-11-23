@@ -15,7 +15,7 @@ import java.util.Objects;
 public final class _CipherParameters_TestUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static String paramsName(final CipherParameters params) {
+    public static String name(final CipherParameters params) {
         Objects.requireNonNull(params, "params is null");
         if (params instanceof KeyParameter p) {
             return _KeyParameters_TestUtils.paramsName(p);

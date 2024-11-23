@@ -1,7 +1,7 @@
 package io.github.jinahya.bouncycastle.crypto.modes;
 
-import io.github.jinahya.bouncycastle.miscellaneous._AES_GCM_SIV__Utils;
 import io.github.jinahya.bouncycastle.miscellaneous._AES_GCM_SIV__TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._AES_GCM_SIV__Utils;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.AESEngine;

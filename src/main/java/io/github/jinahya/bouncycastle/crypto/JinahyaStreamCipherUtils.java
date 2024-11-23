@@ -90,20 +90,21 @@ public final class JinahyaStreamCipherUtils {
      * );
      *}
      *
-     * @param cipher      the cipher which should be {@link StreamCipher#init(boolean, CipherParameters) initialized}.
-     * @param in          the input stream from which unprocessed bytes are read.
-     * @param out         the output stream to which processed bytes are written.
-     * @param inbuf       a buffer for reading unprocessed bytes from the input stream.
-     * @param outbuf      a buffer for processed bytes; may be {@code null}.
-     * @param inconsumer  a consumer continuously accepts the number of bytes set on the {@code inbuf}.
-     * @param outconsumer a function, continuously applies with an output buffer (not necessarily same as
-     *                    {@code outbuf}), results a consumer accepts the number of bytes set on the output buffer.
+     * @param cipher         the cipher which should be
+     *                       {@link StreamCipher#init(boolean, CipherParameters) initialized}.
+     * @param in             the input stream from which unprocessed bytes are read.
+     * @param out            the output stream to which processed bytes are written.
+     * @param inbuf          a buffer for reading unprocessed bytes from the input stream.
+     * @param outbuf         a buffer for processed bytes; may be {@code null}.
+     * @param inlenconsumer  a consumer continuously accepts the number of bytes set on the {@code inbuf}.
+     * @param outbufconsumer a function, continuously applies with an output buffer (not necessarily same as
+     *                       {@code outbuf}), results a consumer accepts the number of bytes set on the output buffer.
      * @return the number of bytes written to the {@code out}.
      * @throws IOException if an I/O error occurs.
      */
     public static long processAllBytes(final StreamCipher cipher, final InputStream in, final OutputStream out,
-                                       final byte[] inbuf, byte[] outbuf, final IntConsumer inconsumer,
-                                       final Function<? super byte[], ? extends IntConsumer> outconsumer)
+                                       final byte[] inbuf, byte[] outbuf, final IntConsumer inlenconsumer,
+                                       final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
             throws IOException {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(in, "in is null");
@@ -114,7 +115,7 @@ public final class JinahyaStreamCipherUtils {
         if (outbuf != null && outbuf.length == 0) {
             throw new IllegalArgumentException("outbuf.length is zero");
         }
-        return JinahyaStreamCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf, inconsumer, outconsumer);
+        return JinahyaStreamCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf, inlenconsumer, outbufconsumer);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
