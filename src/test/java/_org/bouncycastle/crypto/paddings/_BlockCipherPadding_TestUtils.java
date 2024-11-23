@@ -44,7 +44,7 @@ public final class _BlockCipherPadding_TestUtils {
                 )));
     }
 
-    public static String paddingName(final BlockCipherPadding padding) {
+    public static String name(final BlockCipherPadding padding) {
         Objects.requireNonNull(padding, "padding is null");
         return padding.getPaddingName();
     }

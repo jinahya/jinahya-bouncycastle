@@ -10,15 +10,15 @@ import java.util.Objects;
 public final class _PaddedBufferedBlockCipher_TestUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static String cipherName(final PaddedBufferedBlockCipher cipher) {
+    public static String name(final PaddedBufferedBlockCipher cipher) {
         Objects.requireNonNull(cipher, "cipher is null");
         return _BlockCipher_TestUtils.name(cipher.getUnderlyingCipher()) +
                 '/' +
-                _BlockCipherPadding_TestUtils.paddingName(JinahyaPaddedBufferedBlockCipherUtils.getPadding(cipher));
+                _BlockCipherPadding_TestUtils.name(JinahyaPaddedBufferedBlockCipherUtils.getPadding(cipher));
     }
 
     public static <T extends PaddedBufferedBlockCipher> Named<T> named(final T cipher) {
-        return Named.of(cipherName(cipher), cipher);
+        return Named.of(name(cipher), cipher);
     }
 
     private _PaddedBufferedBlockCipher_TestUtils() {
