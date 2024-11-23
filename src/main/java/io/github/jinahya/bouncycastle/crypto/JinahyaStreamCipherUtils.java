@@ -39,12 +39,17 @@ public final class JinahyaStreamCipherUtils {
         if (inlen < 0) {
             throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
         }
-        if ((inoff + inlen) > in.length) {
+        if (in.length < (inoff + inlen)) {
             throw new IllegalArgumentException(
-                    "(inoff(" + inoff + ") + inlen(" + inlen + ")) > in.length(" + in.length + ")"
+                    "in.length(" + in.length + ") < (inoff(" + inoff + ") + inlen(" + inlen + "))"
             );
         }
-        return JinahyaStreamCipherUtils_.processBytes(cipher, in, inoff, inlen);
+        return JinahyaStreamCipherUtils_.processBytes(
+                cipher,
+                in,
+                inoff,
+                inlen
+        );
     }
 
     /**
@@ -61,7 +66,11 @@ public final class JinahyaStreamCipherUtils {
         Objects.requireNonNull(cipher, "cipher is null");
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
-        return JinahyaStreamCipherUtils_.processBytes(cipher, input, output);
+        return JinahyaStreamCipherUtils_.processBytes(
+                cipher,
+                input,
+                output
+        );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -112,10 +121,15 @@ public final class JinahyaStreamCipherUtils {
         if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
             throw new IllegalArgumentException("inbuf.length is zero");
         }
-        if (outbuf != null && outbuf.length == 0) {
-            throw new IllegalArgumentException("outbuf.length is zero");
-        }
-        return JinahyaStreamCipherUtils_.processAllBytes(cipher, in, out, inbuf, outbuf, inlenconsumer, outbufconsumer);
+        return JinahyaStreamCipherUtils_.processAllBytes(
+                cipher,
+                in,
+                out,
+                inbuf,
+                outbuf,
+                inlenconsumer,
+                outbufconsumer
+        );
     }
 
     // -----------------------------------------------------------------------------------------------------------------

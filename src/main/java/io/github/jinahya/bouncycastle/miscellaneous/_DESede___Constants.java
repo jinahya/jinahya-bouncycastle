@@ -24,7 +24,7 @@ public final class _DESede___Constants {
     public static final int BLOCK_BYTES = BLOCK_SIZE >> 3;
 
     /**
-     * An unmodifiable list of allowed key sizes.
+     * An unmodifiable list of allowed key-sizes.
      */
     public static final List<Integer> ALLOWED_KEY_SIZE_LIST = List.of(
             128,

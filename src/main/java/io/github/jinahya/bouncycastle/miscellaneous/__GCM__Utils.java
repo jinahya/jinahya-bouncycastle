@@ -2,6 +2,9 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 
 import java.util.Objects;
 
+@SuppressWarnings({
+        "java:S101" // Class names should comply with a naming convention
+})
 final class __GCM__Utils {
 
     static int requireValid_tLen_GCM(final int tLen) {

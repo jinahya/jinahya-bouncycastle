@@ -1,5 +1,5 @@
 package io.github.jinahya.bouncycastle.miscellaneous;
 
-class _ARIA__UtilsTest {
+class _ARIA___UtilsTest {
 
 }

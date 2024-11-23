@@ -3,6 +3,9 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({
+        "java:S101" // Class names should comply with a naming convention
+})
 public final class _SEED___Constants {
 
     /**
@@ -31,14 +34,8 @@ public final class _SEED___Constants {
             128
     );
 
-    /**
-     * An unmodifiable list of allowed key sizes, in bytes.
-     *
-     * @deprecated Use {@link #ALLOWED_KEY_SIZE_LIST}
-     */
-    @Deprecated(forRemoval = true)
-    public static final List<Integer> ALLOWED_KEY_BYTES_LIST =
-            _SEED___Constants.ALLOWED_KEY_SIZE_LIST.stream()
+    static final List<Integer> ALLOWED_KEY_BYTES_LIST =
+            ALLOWED_KEY_SIZE_LIST.stream()
                     .map(ks -> ks >> 3)
                     .collect(Collectors.toUnmodifiableList());
 

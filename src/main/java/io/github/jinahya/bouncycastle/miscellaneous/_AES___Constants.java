@@ -3,6 +3,9 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({
+        "java:S101" // Class names should comply with a naming convention
+})
 public final class _AES___Constants {
 
     /**

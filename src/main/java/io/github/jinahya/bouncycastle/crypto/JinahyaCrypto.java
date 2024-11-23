@@ -7,6 +7,11 @@ import java.nio.ByteBuffer;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 
+/**
+ * An interface for encrypting/decrypting bytes.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public interface JinahyaCrypto {
 
     /**
@@ -18,11 +23,11 @@ public interface JinahyaCrypto {
     byte[] encrypt(final byte[] in);
 
     /**
-     * Encrypts all remaining bytes of specified input buffer, and puts encrypted bytes to specified output buffer.
+     * Encrypts all remaining bytes of specified input buffer, and puts encrypted bytes onto specified output buffer.
      *
      * @param input  the input buffer whose remaining bytes are encrypted.
      * @param output the output buffer onto which encrypted bytes are put.
-     * @return the number of bytes put on the {@code output}.
+     * @return the number of bytes put onto the {@code output}.
      */
     int encrypt(final ByteBuffer input, final ByteBuffer output);
 
@@ -37,11 +42,11 @@ public interface JinahyaCrypto {
     byte[] decrypt(final byte[] in);
 
     /**
-     * Decrypts all remaining bytes of specified input buffer, and puts decrypted bytes to specified output buffer.
+     * Decrypts all remaining bytes of specified input buffer, and puts decrypted bytes onto specified output buffer.
      *
      * @param input  the input buffer whose remaining bytes are decrypted.
      * @param output the output buffer onto which decrypted bytes are put.
-     * @return the number of bytes put on the {@code output}.
+     * @return the number of bytes put onto the {@code output}.
      */
     int decrypt(final ByteBuffer input, final ByteBuffer output);
 

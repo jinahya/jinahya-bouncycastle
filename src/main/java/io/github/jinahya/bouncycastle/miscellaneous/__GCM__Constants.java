@@ -2,6 +2,9 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 
 import java.util.List;
 
+@SuppressWarnings({
+        "java:S101" // Class names should comply with a naming convention
+})
 public final class __GCM__Constants {
 
     /**
@@ -10,7 +13,7 @@ public final class __GCM__Constants {
     public static final String MODE = "GCM";
 
     /**
-     * An unmodifiable list of allowed tag lengths.
+     * An unmodifiable list of allowed tag-lengths.
      */
     static final List<Integer> ALLOWED_T_LEN_LIST = List.of(
             128, 120, 112, 104, 96,

@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
+@SuppressWarnings({
+        "java:S101" // Class names should comply with a naming convention
+})
 final class _LEA___Constants {
 
     /**

@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
  * @see <a href="https://datatracker.ietf.org/doc/html/rfc8452">RFC 8452: AES-GCM-SIV: Nonce Misuse-Resistant
  * Authenticated Encryption</a>
  */
+@SuppressWarnings({
+        "java:S101" // Class names should comply with a naming convention
+})
 public final class _AES_GCM_SIV___Constants {
 
     /**

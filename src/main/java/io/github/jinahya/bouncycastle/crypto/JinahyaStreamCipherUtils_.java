@@ -72,10 +72,9 @@ final class JinahyaStreamCipherUtils_ {
         assert out != null;
         assert inbuf != null;
         assert inbuf.length > 0;
-        if (outbuf == null) {
-            outbuf = new byte[inbuf.length << 1];
+        if (outbuf == null || outbuf.length == 0) {
+            outbuf = new byte[inbuf.length];
         }
-        assert outbuf.length > 0;
         assert inlenconsumer != null;
         assert outbufconsumer != null;
         // -------------------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ class Jinahya_ARIA_Utils_Test {
         @Test
         void _CBC_PKCS7Padding_bytes() {
             // ------------------------------------------------------------------------------------------------------- given
-            final var key = _ARIA__TestUtils.randomKey();
+            final var key = _ARIA___TestUtils.randomKey();
             final var iv = __CBC__TestUtils.newRandomIv(_ARIA___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // -------------------------------------------------------------------------------------------------------- when
@@ -34,7 +34,7 @@ class Jinahya_ARIA_Utils_Test {
         @Test
         void _CBC_PKCS7Padding_stream() throws IOException {
             // ------------------------------------------------------------------------------------------------------- given
-            final var key = _ARIA__TestUtils.randomKey();
+            final var key = _ARIA___TestUtils.randomKey();
             final var iv = __CBC__TestUtils.newRandomIv(_ARIA___Constants.BLOCK_BYTES);
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(1048576));
             // -------------------------------------------------------------------------------------------------------- when
@@ -68,7 +68,7 @@ class Jinahya_ARIA_Utils_Test {
         @Test
         void __bytes() {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _ARIA__TestUtils.randomKey();
+            final var key = _ARIA___TestUtils.randomKey();
             final var tLen = __GCM__TestUtils.randomTLen();
             final var iv = __GCM__TestUtils.randomIv();
             final var aad = __GCM__TestUtils.randomAad();
@@ -83,7 +83,7 @@ class Jinahya_ARIA_Utils_Test {
         @Test
         void __stream() throws IOException {
             // --------------------------------------------------------------------------------------------------- given
-            final var key = _ARIA__TestUtils.randomKey();
+            final var key = _ARIA___TestUtils.randomKey();
             final var tLen = __GCM__TestUtils.randomTLen();
             final var iv = __GCM__TestUtils.randomIv();
             final var aad = __GCM__TestUtils.randomAad();

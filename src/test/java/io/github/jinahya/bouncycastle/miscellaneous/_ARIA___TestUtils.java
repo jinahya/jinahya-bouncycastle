@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-public final class _ARIA__TestUtils {
+public final class _ARIA___TestUtils {
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream() {
         return _ARIA___Constants.ALLOWED_KEY_BYTES_LIST.stream().map(kb -> {
@@ -33,7 +33,7 @@ public final class _ARIA__TestUtils {
         return _Random_TestUtils.newRandomBytes(randomKeyBytes());
     }
 
-    private _ARIA__TestUtils() {
+    private _ARIA___TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

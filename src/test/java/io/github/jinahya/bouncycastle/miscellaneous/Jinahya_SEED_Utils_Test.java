@@ -43,7 +43,17 @@ class Jinahya_SEED_Utils_Test {
                 final var in = new ByteArrayInputStream(plain);
                 final var out = new ByteArrayOutputStream();
                 final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-                final var bytes = Jinahya_SEED_Utils.encrypt_CBC_PKCS7Padding(key, iv, in, out, inbuf);
+                final var bytes = Jinahya_SEED_Utils.encrypt_CBC_PKCS7Padding(
+                        key,
+                        iv,
+                        in,
+                        out,
+                        inbuf,
+                        l -> {
+                        },
+                        b -> l -> {
+                        }
+                );
                 assert bytes >= plain.length;
                 encrypted = out.toByteArray();
             }
@@ -52,7 +62,17 @@ class Jinahya_SEED_Utils_Test {
                 final var in = new ByteArrayInputStream(encrypted);
                 final var out = new ByteArrayOutputStream();
                 final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-                final var bytes = Jinahya_SEED_Utils.decrypt_CBC_PKCS7Padding(key, iv, in, out, inbuf);
+                final var bytes = Jinahya_SEED_Utils.decrypt_CBC_PKCS7Padding(
+                        key,
+                        iv,
+                        in,
+                        out,
+                        inbuf,
+                        l -> {
+                        },
+                        b -> l -> {
+                        }
+                );
                 assert bytes <= encrypted.length;
                 decrypted = out.toByteArray();
             }
@@ -106,7 +126,19 @@ class Jinahya_SEED_Utils_Test {
                 final var in = new ByteArrayInputStream(plain);
                 final var out = new ByteArrayOutputStream();
                 final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-                final var bytes = Jinahya_SEED_Utils.encrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inbuf);
+                final var bytes = Jinahya_SEED_Utils.encrypt_GMM_NoPadding(
+                        key,
+                        tLen,
+                        iv,
+                        aad,
+                        in,
+                        out,
+                        inbuf,
+                        l -> {
+                        },
+                        b -> l -> {
+                        }
+                );
                 assert bytes >= plain.length;
                 encrypted = out.toByteArray();
             }
@@ -115,7 +147,19 @@ class Jinahya_SEED_Utils_Test {
                 final var in = new ByteArrayInputStream(encrypted);
                 final var out = new ByteArrayOutputStream();
                 final var inbuf = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-                final var bytes = Jinahya_SEED_Utils.decrypt_GMM_NoPadding(key, tLen, iv, aad, in, out, inbuf);
+                final var bytes = Jinahya_SEED_Utils.decrypt_GMM_NoPadding(
+                        key,
+                        tLen,
+                        iv,
+                        aad,
+                        in,
+                        out,
+                        inbuf,
+                        l -> {
+                        },
+                        b -> l -> {
+                        }
+                );
                 assert bytes <= encrypted.length;
                 decrypted = out.toByteArray();
             }

@@ -5,6 +5,9 @@ package io.github.jinahya.bouncycastle.miscellaneous;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
+@SuppressWarnings({
+        "java:S101" // Class names should comply with a naming convention
+})
 public final class _RSA___Constants {
 
     /**

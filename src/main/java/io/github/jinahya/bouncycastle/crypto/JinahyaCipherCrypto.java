@@ -5,13 +5,13 @@ import org.bouncycastle.crypto.CipherParameters;
 import java.util.Objects;
 
 /**
- * An abstract crypto clas for a specified type of cipher.
+ * An abstract crypto class for a specific type of cipher.
  *
  * @param <CIPHER> cipher type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({
-        "java:S119" // <CIPHER>
+        "java:S119" // Type parameter names should comply with a naming convention
 })
 public abstract class JinahyaCipherCrypto<CIPHER>
         implements JinahyaCrypto {
@@ -20,7 +20,7 @@ public abstract class JinahyaCipherCrypto<CIPHER>
      * Creates a new instance with specified cipher and initialization parameters.
      *
      * @param cipher the cipher.
-     * @param params the params.
+     * @param params the initialization parameters for the {@code cipher}.
      * @see #cipher
      * @see #params
      */
@@ -56,6 +56,12 @@ public abstract class JinahyaCipherCrypto<CIPHER>
     // ---------------------------------------------------------------------------------------------------------- cipher
 
     // ---------------------------------------------------------------------------------------------------------- params
+
+    /**
+     * Returns the value of {@code params} property.
+     *
+     * @return the value of {@code params} property
+     */
     public CipherParameters getParams() {
         return params;
     }

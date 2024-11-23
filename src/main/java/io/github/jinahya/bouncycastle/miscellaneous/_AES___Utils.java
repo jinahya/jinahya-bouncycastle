@@ -8,6 +8,9 @@ import java.util.stream.IntStream;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
+@SuppressWarnings({
+        "java:S101" // Class names should comply with a naming convention
+})
 public final class _AES___Utils {
 
     public static IntStream getAllowedKeySizeStream() {
