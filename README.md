@@ -150,7 +150,7 @@ class Test {
         * [API Documentation](https://downloads.bouncycastle.org/java/docs/bcprov-jdk18on-javadoc/)
         * [org.bouncycastle.crypto.modes.CFBBlockCipher](https://downloads.bouncycastle.org/java/docs/bcprov-jdk18on-javadoc/org/bouncycastle/crypto/modes/CFBBlockCipher.html)
 * [NIST](https://www.nist.gov/)
-    * [NIST SP 800-38G Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38G.pdf)
+    * [NIST SP 800-38G Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption](https://csrc.nist.gov/pubs/sp/800/38/g/upd1/final)
 * [IETF Datatracker](https://datatracker.ietf.org)
     * [RFC: 2437 / PKCS #1: RSA Cryptography Specifications Version 2.0](https://datatracker.ietf.org/doc/html/rfc2437)
     * [RFC: 5297 / Synthetic Initialization Vector (SIV) Authenticated Encryption Using the Advanced Encryption Standard (AES)](https://datatracker.ietf.org/doc/html/rfc5297)
