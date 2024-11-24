@@ -1,6 +1,12 @@
 package io.github.jinahya.bouncycastle.crypto;
 
+import java.util.Objects;
+
 final class _ApiHelper {
+
+    private static <T> T requireNonNull(final T v, final String name) {
+        return Objects.requireNonNull(v, name + " is null");
+    }
 
     private static void validate_(final String prefix, final byte[] a, final int off) {
         if (a == null) {
