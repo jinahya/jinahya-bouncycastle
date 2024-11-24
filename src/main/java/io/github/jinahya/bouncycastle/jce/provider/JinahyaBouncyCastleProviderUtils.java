@@ -14,11 +14,11 @@ public final class JinahyaBouncyCastleProviderUtils {
     private static final String BOUNCY_CASTLE_PROVIDER_CLASS_NAME =
             "org.bouncycastle.jce.provider.BouncyCastleProvider";
 
-    private static final Class<?> BOUNCY_CASTLE_PROVIDER_CLASS;
+    private static final Class<? extends Provider> BOUNCY_CASTLE_PROVIDER_CLASS;
 
     static {
         try {
-            BOUNCY_CASTLE_PROVIDER_CLASS = Class.forName(BOUNCY_CASTLE_PROVIDER_CLASS_NAME);
+            BOUNCY_CASTLE_PROVIDER_CLASS = Class.forName(BOUNCY_CASTLE_PROVIDER_CLASS_NAME).asSubclass(Provider.class);
         } catch (final ReflectiveOperationException roe) {
             throw new ExceptionInInitializerError(
                     "failed to find the class for '" + BOUNCY_CASTLE_PROVIDER_CLASS_NAME + "'; " + roe.getMessage()
@@ -34,7 +34,7 @@ public final class JinahyaBouncyCastleProviderUtils {
     public static final String BOUNCY_CASTLE_PROVIDER_NAME = "BC";
 
     static {
-        final String name = "PROVIDER_NAME";
+        final var name = "PROVIDER_NAME";
         try {
             final var field = BOUNCY_CASTLE_PROVIDER_CLASS.getField(name);
             assert field.canAccess(null);
@@ -47,13 +47,15 @@ public final class JinahyaBouncyCastleProviderUtils {
     }
 
     // -------------------------------------------------------------------------------------------------------- instance
-    private static final Provider BOUNCY_CASTLE_PROVIDER;
+    private static final Provider BOUNCY_CASTLE_PROVIDER_INSTANCE;
 
     static {
         try {
-            BOUNCY_CASTLE_PROVIDER = (Provider) BOUNCY_CASTLE_PROVIDER_CLASS.getConstructor().newInstance();
+            BOUNCY_CASTLE_PROVIDER_INSTANCE = BOUNCY_CASTLE_PROVIDER_CLASS.getConstructor().newInstance();
         } catch (final ReflectiveOperationException roe) {
-            throw new ExceptionInInitializerError("failed to get provider;" + roe.getMessage());
+            throw new ExceptionInInitializerError(
+                    "failed to instantiate " + BOUNCY_CASTLE_PROVIDER_CLASS + "; " + roe.getMessage()
+            );
         }
     }
 
@@ -71,19 +73,8 @@ public final class JinahyaBouncyCastleProviderUtils {
         if (Security.getProvider(BOUNCY_CASTLE_PROVIDER_NAME) != null) {
             return -1;
         }
-        return Security.addProvider(BOUNCY_CASTLE_PROVIDER);
+        return Security.addProvider(BOUNCY_CASTLE_PROVIDER_INSTANCE);
     }
-
-//    /**
-//     * Removes the {@value #BOUNCY_CASTLE_PROVIDER_NAME} provider from the {@link Security}.
-//     *
-//     * @see Security#removeProvider(String)
-//     * @see #addBouncyCastleProvider()
-//     */
-//    public static synchronized void removeBouncyCastleProvider() {
-//        Security.removeProvider(BOUNCY_CASTLE_PROVIDER_NAME);
-//        added = false;
-//    }
 
     // -----------------------------------------------------------------------------------------------------------------
     private JinahyaBouncyCastleProviderUtils() {

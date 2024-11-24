@@ -36,7 +36,7 @@ public class JinahyaAEADCipherCrypto
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public byte[] encrypt(final byte[] in) {
+    protected byte[] encrypt_(final byte[] in) {
         initForEncryption();
         final var out = new byte[Math.max(cipher.getOutputSize(in.length), 1)];
         try {
@@ -55,7 +55,7 @@ public class JinahyaAEADCipherCrypto
     }
 
     @Override
-    public int encrypt(final ByteBuffer input, final ByteBuffer output) {
+    protected int encrypt_(final ByteBuffer input, final ByteBuffer output) {
         initForEncryption();
         try {
             return JinahyaAEADCipherUtils.processBytesAndDoFinal(cipher, input, output);
@@ -66,7 +66,7 @@ public class JinahyaAEADCipherCrypto
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public byte[] decrypt(byte[] in) {
+    protected byte[] decrypt_(byte[] in) {
         initForDecryption();
         final var out = new byte[Math.max(cipher.getOutputSize(in.length), 1)];
         try {
@@ -78,7 +78,7 @@ public class JinahyaAEADCipherCrypto
     }
 
     @Override
-    public int decrypt(final ByteBuffer input, final ByteBuffer output) {
+    protected int decrypt_(final ByteBuffer input, final ByteBuffer output) {
         initForDecryption();
         try {
             return JinahyaAEADCipherUtils.processBytesAndDoFinal(cipher, input, output);
@@ -88,11 +88,10 @@ public class JinahyaAEADCipherCrypto
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-
     @Override
-    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf,
-                        final IntConsumer inlenconsumer,
-                        final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+    protected long encrypt_(final InputStream in, final OutputStream out, final byte[] inbuf,
+                            final IntConsumer inlenconsumer,
+                            final Function<? super byte[], ? extends IntConsumer> outbuffunction)
             throws IOException {
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
@@ -100,7 +99,7 @@ public class JinahyaAEADCipherCrypto
             throw new IllegalArgumentException("inbuf.length is zero");
         }
         Objects.requireNonNull(inlenconsumer, "inlenconsumer is null");
-        Objects.requireNonNull(outbufconsumer, "outbufconsumer is null");
+        Objects.requireNonNull(outbuffunction, "outbufconsumer is null");
         initForEncryption();
         try {
             return JinahyaAEADCipherUtils.processAllBytesAndDoFinal(
@@ -110,7 +109,7 @@ public class JinahyaAEADCipherCrypto
                     inbuf,
                     null,
                     inlenconsumer,
-                    outbufconsumer
+                    outbuffunction
             );
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofEncryptionFailure(icte);
@@ -140,8 +139,8 @@ public class JinahyaAEADCipherCrypto
     // -----------------------------------------------------------------------------------------------------------------
 
     @Override
-    public long decrypt(InputStream in, OutputStream out, byte[] inbuf, IntConsumer inlenconsumer,
-                        Function<? super byte[], ? extends IntConsumer> outbufconsumer) throws IOException {
+    protected long decrypt_(InputStream in, OutputStream out, byte[] inbuf, IntConsumer inlenconsumer,
+                            Function<? super byte[], ? extends IntConsumer> outbuffunction) throws IOException {
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
@@ -156,7 +155,7 @@ public class JinahyaAEADCipherCrypto
                     inbuf,
                     null,
                     inlenconsumer,
-                    outbufconsumer
+                    outbuffunction
             );
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofDecryptionFailure(icte);

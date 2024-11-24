@@ -92,7 +92,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public byte[] encrypt(final byte[] in) {
+    protected byte[] encrypt_(final byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForEncryption();
         validate(in);
@@ -113,7 +113,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
     }
 
     @Override
-    public int encrypt(final ByteBuffer input, final ByteBuffer output) {
+    protected int encrypt_(final ByteBuffer input, final ByteBuffer output) {
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
         initForEncryption();
@@ -131,7 +131,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public byte[] decrypt(byte[] in) {
+    protected byte[] decrypt_(final byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForDecryption();
         validate(in);
@@ -152,7 +152,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
     }
 
     @Override
-    public int decrypt(final ByteBuffer input, final ByteBuffer output) {
+    protected int decrypt_(final ByteBuffer input, final ByteBuffer output) {
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
         initForDecryption();
@@ -170,9 +170,9 @@ public class JinahyaAsymmetricBlockCipherCrypto
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf,
-                        final IntConsumer inlenconsumer,
-                        final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+    protected long encrypt_(final InputStream in, final OutputStream out, final byte[] inbuf,
+                            final IntConsumer inlenconsumer,
+                            final Function<? super byte[], ? extends IntConsumer> outbuffunction)
             throws IOException {
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
@@ -194,7 +194,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
                     outbuf,
                     inlenconsumer,
                     l -> {
-                        outbufconsumer.apply(outbuf).accept(l);
+                        outbuffunction.apply(outbuf).accept(l);
                     }
             );
         } catch (final InvalidCipherTextException e) {
@@ -229,9 +229,9 @@ public class JinahyaAsymmetricBlockCipherCrypto
     // -----------------------------------------------------------------------------------------------------------------
 
     @Override
-    public long decrypt(final InputStream in, final OutputStream out, final byte[] inbuf,
-                        final IntConsumer inlenconsumer,
-                        final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+    protected long decrypt_(final InputStream in, final OutputStream out, final byte[] inbuf,
+                            final IntConsumer inlenconsumer,
+                            final Function<? super byte[], ? extends IntConsumer> outbuffunction)
             throws IOException {
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
@@ -252,7 +252,7 @@ public class JinahyaAsymmetricBlockCipherCrypto
                     inbuf,
                     outbuf,
                     inlenconsumer,
-                    l -> outbufconsumer.apply(outbuf).accept(l)
+                    l -> outbuffunction.apply(outbuf).accept(l)
             );
         } catch (final InvalidCipherTextException e) {
             throw JinahyaCryptoException.ofEncryptionFailure(e);

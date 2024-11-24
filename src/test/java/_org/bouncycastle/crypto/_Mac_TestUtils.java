@@ -9,7 +9,7 @@ import org.bouncycastle.crypto.digests.SHA256Digest;
 import java.util.List;
 
 @Slf4j
-public final class _Digest_TestUtils {
+public final class _Mac_TestUtils {
 
     private static final List<Class<? extends Digest>> CLASSES = List.of(
             SHA1Digest.class,
@@ -31,7 +31,7 @@ public final class _Digest_TestUtils {
         }
     }
 
-    private _Digest_TestUtils() {
+    private _Mac_TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

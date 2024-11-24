@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 @SuppressWarnings({
         "java:S101" // Class names should comply with a naming convention
 })
-public final class _AES___Constants {
+public final class _Camellia___Constants {
 
     /**
      * The name of the algorithm. The value is {@value}.
      */
-    public static final String ALGORITHM = "AES";
+    public static final String ALGORITHM = "Camellia";
 
     /**
      * The block size of the {@value #ALGORITHM} algorithm. The value is {@value}.
@@ -40,12 +40,12 @@ public final class _AES___Constants {
      * An unmodifiable list of allowed key sizes, in bytes.
      */
     static final List<Integer> ALLOWED_KEY_BYTES_LIST =
-            _AES___Constants.ALLOWED_KEY_SIZE_LIST.stream()
+            _Camellia___Constants.ALLOWED_KEY_SIZE_LIST.stream()
                     .map(ks -> ks >> 3)
                     .collect(Collectors.toUnmodifiableList());
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _AES___Constants() {
+    private _Camellia___Constants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

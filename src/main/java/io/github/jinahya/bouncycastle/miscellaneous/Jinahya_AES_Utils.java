@@ -15,6 +15,9 @@ import org.bouncycastle.crypto.params.ParametersWithIV;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
 
 /**
  * Utilities for the {@value _AES___Constants#ALGORITHM} algorithm.
@@ -56,7 +59,7 @@ public final class Jinahya_AES_Utils {
     }
 
     /**
-     * decrypts, in {@value __CBC__Constants#MODE} mode with {@code PKCS7Padding}, specified input bytes, and returns
+     * Decrypts, in {@value __CBC__Constants#MODE} mode with {@code PKCS7Padding}, specified input bytes, and returns
      * the result.
      *
      * @param key an array of key bytes.
@@ -72,39 +75,141 @@ public final class Jinahya_AES_Utils {
     /**
      * Encrypts, using specified key and iv, all bytes from specified input stream, and writes encrypted bytes to
      * specified output stream.
+     * <p>
+     * {@snippet lang = java:
+     * encrypt_CBC_PKCS7Padding(
+     *         key,
+     *         iv,
+     *         in,
+     *         out,
+     *         inbuf,
+     *         l -> {
+     *             // consume plain bytes read from the <in>
+     *             digest.update(inbuf, 0, l);
+     *         },
+     *         b -> l -> {
+     *             // consume encrypted bytes written to the <out>
+     *             mac.update(b, 0, l);
+     *         }
+     * );
+     *}
      *
-     * @param key   the key.
-     * @param iv    the iv.
-     * @param in    the input stream from which plain bytes are read.
-     * @param out   the output stream to which encrypted bytes are written.
-     * @param inbuf a buffer for reading bytes from the input stream.
+     * @param key            the key.
+     * @param iv             the iv.
+     * @param in             the input stream from which plain bytes are read.
+     * @param out            the output stream to which encrypted bytes are written.
+     * @param inbuf          a buffer for reading bytes from the input stream whose {@code length} should be positive.
+     * @param inlenconsumer  a consumer, continuously, accepts the number of bytes set on the {@code inbuf}.
+     * @param outlenfunction a function, continuously, applies with a byte buffer of encrypted bytes, yields a consumer
+     *                       accepts the number of bytes set on the buffer.
      * @return the number of bytes written to the output stream.
      * @throws IOException if an I/O error occurs.
      */
     public static long encrypt_CBC_PKCS7Padding(final byte[] key, final byte[] iv, final InputStream in,
-                                                final OutputStream out, final byte[] inbuf)
+                                                final OutputStream out, final byte[] inbuf,
+                                                final IntConsumer inlenconsumer,
+                                                final Function<? super byte[], ? extends IntConsumer> outlenfunction)
             throws IOException {
-        return _CBC_PKCS7Padding(key, iv)
-                .encrypt(in, out, inbuf);
+        final var crypto = _CBC_PKCS7Padding(key, iv);
+        final Function<byte[], IntFunction<IntConsumer>> inbuffunction = b -> o -> l -> {
+            assert b == inbuf;
+            assert o == 0;
+            inlenconsumer.accept(l);
+        };
+        final Function<byte[], IntFunction<IntConsumer>> outbuffunction = b -> o -> l -> {
+            assert o == 0;
+            outlenfunction.apply(b).accept(l);
+        };
+        try {
+            {
+                final var added = crypto.addInbuffunction(inbuffunction);
+                assert added;
+            }
+            {
+                final var added = crypto.addOutbuffunction(outbuffunction);
+                assert added;
+            }
+            return crypto.encrypt(in, out, inbuf);
+        } finally {
+            {
+                final var removed = crypto.removeInbuffunction(inbuffunction);
+                assert removed;
+            }
+            {
+                final var removed = crypto.removeOutbuffunction(outbuffunction);
+                assert removed;
+            }
+        }
     }
 
     /**
      * Decrypts, using specified key and iv, all bytes from specified input stream, and writes decrypted bytes to
      * specified output stream.
+     * <p>
+     * {@snippet lang = java:
+     * decrypt_CBC_PKCS7Padding(
+     *         key,
+     *         iv,
+     *         in,
+     *         out,
+     *         inbuf,
+     *         l -> {
+     *             // consume encrypted bytes read from the <in>
+     *             digest.update(inbuf, 0, l);
+     *         },
+     *         b -> l -> {
+     *             // consume decrypted bytes written to the <out>
+     *             mac.update(b, 0, l);
+     *         }
+     * );
+     *}
      *
-     * @param key   the key.
-     * @param iv    the iv.
-     * @param in    the input stream from which encrypted bytes are read.
-     * @param out   the output stream to which decrypted bytes are written.
-     * @param inbuf a buffer for reading bytes from the input stream.
+     * @param key            the key.
+     * @param iv             the iv.
+     * @param in             the input stream from which encrypted bytes are read.
+     * @param out            the output stream to which decrypted bytes are written.
+     * @param inbuf          a buffer for reading bytes from the input stream whose {@code length} should be positive.
+     * @param inlenconsumer  a consumer, continuously, accepts the number of bytes set on the {@code inbuf}.
+     * @param outlenfunction a function, continuously, applies with a byte buffer of encrypted bytes, yields a consumer
+     *                       accepts the number of bytes set on the buffer.
      * @return the number of bytes written to the output stream.
      * @throws IOException if an I/O error occurs.
      */
     public static long decrypt_CBC_PKCS7Padding(final byte[] key, final byte[] iv, final InputStream in,
-                                                final OutputStream out, final byte[] inbuf)
+                                                final OutputStream out, final byte[] inbuf,
+                                                final IntConsumer inlenconsumer,
+                                                final Function<? super byte[], ? extends IntConsumer> outlenfunction)
             throws IOException {
-        return _CBC_PKCS7Padding(key, iv)
-                .decrypt(in, out, inbuf);
+        final var crypto = _CBC_PKCS7Padding(key, iv);
+        final Function<byte[], IntFunction<IntConsumer>> inbuffunction = b -> o -> l -> {
+            assert b == inbuf;
+            assert o == 0;
+            inlenconsumer.accept(l);
+        };
+        final Function<byte[], IntFunction<IntConsumer>> outbuffunction = b -> o -> l -> {
+            assert o == 0;
+            outlenfunction.apply(b).accept(l);
+        };
+        try {
+            {
+                final var added = crypto.addInbuffunction(inbuffunction);
+                assert added;
+            }
+            {
+                final var added = crypto.addOutbuffunction(outbuffunction);
+                assert added;
+            }
+            return crypto.decrypt(in, out, inbuf);
+        } finally {
+            {
+                final var removed = crypto.removeInbuffunction(inbuffunction);
+                assert removed;
+            }
+            {
+                final var removed = crypto.removeOutbuffunction(outbuffunction);
+                assert removed;
+            }
+        }
     }
 
     // -------------------------------------------------------------------------------------------------- /GCM/NoPadding
@@ -159,43 +264,109 @@ public final class Jinahya_AES_Utils {
     /**
      * Encrypts all bytes from specified input stream, and writes encrypted bytes to specified output stream.
      *
-     * @param key   the key.
-     * @param tLen  a length (in bits) of authentication tag.
-     * @param iv    an initialization vector whose length should be greater than or equals to
-     *              {@value __GCM__Constants#IV_SIZE_MINIMUM}.
-     * @param aad   an additional authenticated data. may be {@code null}.
-     * @param in    the input stream from which plain bytes are read.
-     * @param out   the output stream to which encrypted bytes are written.
-     * @param inbuf a buffer for reading bytes from the input stream.
+     * @param key            the key.
+     * @param tLen           a length (in bits) of authentication tag.
+     * @param iv             an initialization vector whose length should be greater than or equals to
+     *                       {@value __GCM__Constants#IV_SIZE_MINIMUM}.
+     * @param aad            an additional authenticated data. may be {@code null}.
+     * @param in             the input stream from which plain bytes are read.
+     * @param out            the output stream to which encrypted bytes are written.
+     * @param inbuf          a buffer for reading bytes from the input stream.
+     * @param inlenconsumer  a consumer, continuously, accepts the number of bytes set on the {@code inbuf}.
+     * @param outlenfunction a function, continuously, applies with a byte buffer of encrypted bytes, yields a consumer
+     *                       accepts the number of bytes set on the buffer.
      * @return the number of bytes written to the output stream.
      * @throws IOException if an I/O error occurs.
      */
     public static long encrypt_GMM_NoPadding(final byte[] key, final int tLen, final byte[] iv, final byte[] aad,
-                                             final InputStream in, final OutputStream out, final byte[] inbuf)
+                                             final InputStream in, final OutputStream out, final byte[] inbuf,
+                                             final IntConsumer inlenconsumer,
+                                             final Function<? super byte[], ? extends IntConsumer> outlenfunction)
             throws IOException {
-        return _GCM_NoPadding(key, tLen, iv, aad)
-                .encrypt(in, out, inbuf);
+        final var crypto = _GCM_NoPadding(key, tLen, iv, aad);
+        final Function<byte[], IntFunction<IntConsumer>> inbuffunction = b -> o -> l -> {
+            assert b == inbuf;
+            assert o == 0;
+            inlenconsumer.accept(l);
+        };
+        final Function<byte[], IntFunction<IntConsumer>> outbuffunction = b -> o -> l -> {
+            assert o == 0;
+            outlenfunction.apply(b).accept(l);
+        };
+        try {
+            {
+                final var added = crypto.addInbuffunction(inbuffunction);
+                assert added;
+            }
+            {
+                final var added = crypto.addOutbuffunction(outbuffunction);
+                assert added;
+            }
+            return crypto.encrypt(in, out, inbuf);
+        } finally {
+            {
+                final var removed = crypto.removeInbuffunction(inbuffunction);
+                assert removed;
+            }
+            {
+                final var removed = crypto.removeOutbuffunction(outbuffunction);
+                assert removed;
+            }
+        }
     }
 
     /**
      * Decrypts all bytes from specified input stream, and writes decrypted bytes to specified output stream.
      *
-     * @param key   the key.
-     * @param tLen  a length (in bits) of authentication tag.
-     * @param iv    an initialization vector whose length should be greater than or equals to
-     *              {@value __GCM__Constants#IV_SIZE_MINIMUM}.
-     * @param aad   an additional authenticated data. may be {@code null}.
-     * @param in    the input stream from which plain bytes are read.
-     * @param out   the output stream to which decrypted bytes are written.
-     * @param inbuf a buffer for reading bytes from the input stream.
+     * @param key            the key.
+     * @param tLen           a length (in bits) of authentication tag.
+     * @param iv             an initialization vector whose length should be greater than or equals to
+     *                       {@value __GCM__Constants#IV_SIZE_MINIMUM}.
+     * @param aad            an additional authenticated data. may be {@code null}.
+     * @param in             the input stream from which plain bytes are read.
+     * @param out            the output stream to which decrypted bytes are written.
+     * @param inbuf          a buffer for reading bytes from the input stream.
+     * @param inlenconsumer  a consumer, continuously, accepts the number of bytes set on the {@code inbuf}.
+     * @param outlenfunction a function, continuously, applies with a byte buffer of encrypted bytes, yields a consumer
+     *                       accepts the number of bytes set on the buffer.
      * @return the number of bytes written to the output stream.
      * @throws IOException if an I/O error occurs.
      */
     public static long decrypt_GMM_NoPadding(final byte[] key, final int tLen, final byte[] iv, final byte[] aad,
-                                             final InputStream in, final OutputStream out, final byte[] inbuf)
+                                             final InputStream in, final OutputStream out, final byte[] inbuf,
+                                             final IntConsumer inlenconsumer,
+                                             final Function<? super byte[], ? extends IntConsumer> outlenfunction)
             throws IOException {
-        return _GCM_NoPadding(key, tLen, iv, aad)
-                .decrypt(in, out, inbuf);
+        final var crypto = _GCM_NoPadding(key, tLen, iv, aad);
+        final Function<byte[], IntFunction<IntConsumer>> inbuffunction = b -> o -> l -> {
+            assert b == inbuf;
+            assert o == 0;
+            inlenconsumer.accept(l);
+        };
+        final Function<byte[], IntFunction<IntConsumer>> outbuffunction = b -> o -> l -> {
+            assert o == 0;
+            outlenfunction.apply(b).accept(l);
+        };
+        try {
+            {
+                final var added = crypto.addInbuffunction(inbuffunction);
+                assert added;
+            }
+            {
+                final var added = crypto.addOutbuffunction(outbuffunction);
+                assert added;
+            }
+            return crypto.decrypt(in, out, inbuf);
+        } finally {
+            {
+                final var removed = crypto.removeInbuffunction(inbuffunction);
+                assert removed;
+            }
+            {
+                final var removed = crypto.removeOutbuffunction(outbuffunction);
+                assert removed;
+            }
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -74,11 +74,8 @@ public final class Jinahya_SEED_Utils {
      * @param in             the input stream from which plain bytes are read.
      * @param out            the output stream to which encrypted bytes are written.
      * @param inbuf          a buffer for reading bytes from the input stream.
-     * @param inlenconsumer
-     * @param outbufconsumer
      * @return the number of bytes written to the output stream.
      * @throws IOException if an I/O error occurs.
-     * @see JinahyaCrypto#encrypt(InputStream, OutputStream, byte[], IntConsumer, Function)
      */
     public static long encrypt_CBC_PKCS7Padding(final byte[] key, final byte[] iv, final InputStream in,
                                                 final OutputStream out, final byte[] inbuf,
@@ -86,7 +83,7 @@ public final class Jinahya_SEED_Utils {
                                                 final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
             throws IOException {
         return __CBC_PKCS7Padding_Utils.newJinahyaCrypto(key, iv, SEEDEngine::new)
-                .encrypt(in, out, inbuf, inlenconsumer, outbufconsumer);
+                .encrypt(in, out, inbuf);
     }
 
     /**
@@ -98,8 +95,6 @@ public final class Jinahya_SEED_Utils {
      * @param in             the input stream from which encrypted bytes are read.
      * @param out            the output stream to which decrypted bytes are written.
      * @param inbuf          a buffer for reading bytes from the input stream.
-     * @param inlenconsumer
-     * @param outbufconsumer
      * @return the number of bytes written to the output stream.
      * @throws IOException if an I/O error occurs.
      */
@@ -109,7 +104,7 @@ public final class Jinahya_SEED_Utils {
                                                 final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
             throws IOException {
         return __CBC_PKCS7Padding_Utils.newJinahyaCrypto(key, iv, SEEDEngine::new)
-                .decrypt(in, out, inbuf, inlenconsumer, outbufconsumer);
+                .decrypt(in, out, inbuf);
     }
 
     // -------------------------------------------------------------------------------------------------- /GCM/NoPadding
@@ -183,7 +178,7 @@ public final class Jinahya_SEED_Utils {
                                              final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
             throws IOException {
         return _GCM_NoPadding(key, tLen, iv, aad)
-                .encrypt(in, out, inbuf, inlenconsumer, outbufconsumer);
+                .encrypt(in, out, inbuf);
     }
 
     /**
@@ -208,7 +203,7 @@ public final class Jinahya_SEED_Utils {
                                              final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
             throws IOException {
         return _GCM_NoPadding(key, tLen, iv, aad)
-                .decrypt(in, out, inbuf, inlenconsumer, outbufconsumer);
+                .decrypt(in, out, inbuf);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

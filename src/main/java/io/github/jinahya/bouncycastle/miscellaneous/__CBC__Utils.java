@@ -19,6 +19,12 @@ public final class __CBC__Utils {
         return iv;
     }
 
+    public static String getTransformation(final String algorithm, final String padding) {
+        Objects.requireNonNull(algorithm, "algorithm is null");
+        Objects.requireNonNull(padding, "padding is null");
+        return algorithm + '/' + __CBC__Constants.MODE + '/' + padding;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     private __CBC__Utils() {
         throw new AssertionError("instantiation is not allowed");

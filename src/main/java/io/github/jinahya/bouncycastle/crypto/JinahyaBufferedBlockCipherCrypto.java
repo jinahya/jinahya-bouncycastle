@@ -51,7 +51,7 @@ public class JinahyaBufferedBlockCipherCrypto
      * @see JinahyaBufferedBlockCipherUtils#processBytesAndDoFinal(BufferedBlockCipher, byte[], int, int, byte[], int)
      */
     @Override
-    public byte[] encrypt(final byte[] in) {
+    protected byte[] encrypt_(final byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForEncryption();
         final var out = new byte[cipher.getOutputSize(in.length)];
@@ -79,7 +79,7 @@ public class JinahyaBufferedBlockCipherCrypto
      * @see JinahyaBufferedBlockCipherUtils#processBytesAndDoFinal(BufferedBlockCipher, ByteBuffer, ByteBuffer)
      */
     @Override
-    public int encrypt(final ByteBuffer input, final ByteBuffer output) {
+    protected int encrypt_(final ByteBuffer input, final ByteBuffer output) {
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
         initForEncryption();
@@ -96,7 +96,7 @@ public class JinahyaBufferedBlockCipherCrypto
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public byte[] decrypt(byte[] in) {
+    protected byte[] decrypt_(byte[] in) {
         Objects.requireNonNull(in, "in is null");
         initForDecryption();
         final var out = new byte[cipher.getOutputSize(in.length)];
@@ -116,7 +116,7 @@ public class JinahyaBufferedBlockCipherCrypto
     }
 
     @Override
-    public int decrypt(final ByteBuffer input, final ByteBuffer output) {
+    protected int decrypt_(final ByteBuffer input, final ByteBuffer output) {
         Objects.requireNonNull(input, "input is null");
         Objects.requireNonNull(output, "output is null");
         initForDecryption();
@@ -132,11 +132,10 @@ public class JinahyaBufferedBlockCipherCrypto
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-
     @Override
-    public long encrypt(final InputStream in, final OutputStream out, final byte[] inbuf,
-                        final IntConsumer inlenconsumer,
-                        final Function<? super byte[], ? extends IntConsumer> outbufconsumer)
+    protected long encrypt_(final InputStream in, final OutputStream out, final byte[] inbuf,
+                            final IntConsumer inlenconsumer,
+                            final Function<? super byte[], ? extends IntConsumer> outbuffunction)
             throws IOException {
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
@@ -152,7 +151,7 @@ public class JinahyaBufferedBlockCipherCrypto
                     inbuf,
                     null,
                     inlenconsumer,
-                    outbufconsumer
+                    outbuffunction
             );
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofEncryptionFailure(icte);
@@ -161,8 +160,9 @@ public class JinahyaBufferedBlockCipherCrypto
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public long decrypt(InputStream in, OutputStream out, byte[] inbuf, IntConsumer inlenconsumer,
-                        Function<? super byte[], ? extends IntConsumer> outbufconsumer) throws IOException {
+    protected long decrypt_(InputStream in, OutputStream out, byte[] inbuf, IntConsumer inlenconsumer,
+                            Function<? super byte[], ? extends IntConsumer> outbuffunction)
+            throws IOException {
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(out, "out is null");
         if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
@@ -177,7 +177,7 @@ public class JinahyaBufferedBlockCipherCrypto
                     inbuf,
                     null,
                     inlenconsumer,
-                    outbufconsumer
+                    outbuffunction
             );
         } catch (final InvalidCipherTextException icte) {
             throw JinahyaCryptoException.ofDecryptionFailure(icte);

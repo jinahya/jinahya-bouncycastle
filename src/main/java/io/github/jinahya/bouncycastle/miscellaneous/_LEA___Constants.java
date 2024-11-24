@@ -18,6 +18,7 @@ final class _LEA___Constants {
      */
     static final String ALGORITHM = "LEA";
 
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * The block size of the {@value _LEA___Constants#ALGORITHM} algorithm. The value is {@value}.
      *
@@ -32,6 +33,7 @@ final class _LEA___Constants {
      */
     static final int BLOCK_BYTES = BLOCK_SIZE >> 3;
 
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * A list of allowed key sizes.
      */

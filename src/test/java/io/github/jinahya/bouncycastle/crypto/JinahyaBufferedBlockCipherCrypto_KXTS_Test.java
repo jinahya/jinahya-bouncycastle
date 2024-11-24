@@ -29,7 +29,7 @@ class JinahyaBufferedBlockCipherCrypto_KXTS_Test
     @ParameterizedTest
     void __array(final BufferedBlockCipher cipher, final CipherParameters params) {
         final var crypto = newCryptoInstance(cipher, params);
-        JinahyaCrypto_TestUtils.__array(crypto);
+        JinahyaCipherCrypto_TestUtils.__array(crypto);
     }
 
     @DisplayName("decrypt(encrypt(stream))")

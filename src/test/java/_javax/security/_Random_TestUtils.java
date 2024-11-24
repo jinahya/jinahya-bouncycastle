@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -25,6 +26,10 @@ public final class _Random_TestUtils {
             }
         }
         return random;
+    }
+
+    public static <R> R applyRandom(final Function<? super SecureRandom, ? extends R> function) {
+        return Objects.requireNonNull(function, "function is null").apply(random());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
