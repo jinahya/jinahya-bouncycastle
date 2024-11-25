@@ -17,6 +17,12 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
+/**
+ * Utilities for {@link Arguments}.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see _Named_TestUtils
+ */
 public class _Arguments_TestUtils {
 
     // -----------------------------------------------------------------------------------------------------------------

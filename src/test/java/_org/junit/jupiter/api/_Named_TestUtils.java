@@ -15,6 +15,12 @@ import org.junit.jupiter.api.Named;
 
 import java.util.Objects;
 
+/**
+ * Utilities for {@link Named}.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see _org.junit.jupiter.params.provider._Arguments_TestUtils
+ */
 @Slf4j
 public final class _Named_TestUtils {
 
