@@ -1,10 +1,11 @@
 package io.github.jinahya.bouncycastle.crypto;
 
 import _javax.security._Random_TestUtils;
-import _org.bouncycastle.crypto._Digest_TestUtils;
+import _org.bouncycastle.crypto.macs._GMac_TestUtils;
+import _org.bouncycastle.crypto.macs._HMac_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bouncycastle.crypto.Digest;
+import org.bouncycastle.crypto.Mac;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,94 +19,97 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-class JinahyaDigestUtilsTest {
+class JinahyaMacUtils_Test {
 
-    private static Digest getRandomDigest() {
-        return _Digest_TestUtils.newRandomDigest();
+    private static Stream<Mac> getRandomMacStream() {
+        return Stream.of(
+                _HMac_TestUtils.newRandomInstance(),
+                _GMac_TestUtils.newRandomInstance()
+        );
     }
 
-    @DisplayName("update(digest, in, inoff, inlen)")
+    @DisplayName("update(mac, in, inoff, inlen)")
     @Nested
     class UpdateTest {
 
-        private static Stream<Digest> getRandomDigest() {
-            return Stream.of(_Digest_TestUtils.newRandomDigest());
+        private static Stream<Mac> getRandomMac() {
+            return JinahyaMacUtils_Test.getRandomMacStream();
         }
 
-        @MethodSource({"getRandomDigest"})
+        @MethodSource({"getRandomMac"})
         @ParameterizedTest
-        void __(final Digest digest) {
+        void __(final Mac mac) {
             // --------------------------------------------------------------------------------------------------- given
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
-            final var result = JinahyaDigestUtils.update(digest, plain, 0, plain.length);
+            final var result = JinahyaMacUtils.update(mac, plain, 0, plain.length);
             // ---------------------------------------------------------------------------------------------------- then
-            assertThat(result).isSameAs(digest);
+            assertThat(result).isSameAs(mac);
         }
     }
 
-    @DisplayName("update(digest, in, inoff, inlen, out, outoff)")
+    @DisplayName("update(mac, in, inoff, inlen, out, outoff)")
     @Nested
     class UpdateAndDoFinalTest {
 
-        private static Stream<Digest> getRandomDigest() {
-            return Stream.of(_Digest_TestUtils.newRandomDigest());
+        private static Stream<Mac> getRandomMac() {
+            return JinahyaMacUtils_Test.getRandomMacStream();
         }
 
-        @MethodSource({"getRandomDigest"})
+        @MethodSource({"getRandomMac"})
         @ParameterizedTest
-        void __(final Digest digest) {
+        void __(final Mac mac) {
             // --------------------------------------------------------------------------------------------------- given
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
-            final var out = new byte[digest.getDigestSize()];
+            final var out = new byte[mac.getMacSize()];
             // ---------------------------------------------------------------------------------------------------- when
-            final var bytes = JinahyaDigestUtils.updateAndDoFinal(digest, plain, 0, plain.length, out, 0);
+            final var bytes = JinahyaMacUtils.updateAndDoFinal(mac, plain, 0, plain.length, out, 0);
             // ---------------------------------------------------------------------------------------------------- then
             assertThat(bytes).isSameAs(out.length);
         }
     }
 
-    @DisplayName("updateAll(digest, in, inoff, inlen)")
+    @DisplayName("updateAll(mac, in, inoff, inlen)")
     @Nested
     class UpdateAllTest {
 
-        private static Stream<Digest> getRandomDigest() {
-            return Stream.of(_Digest_TestUtils.newRandomDigest());
+        private static Stream<Mac> getRandomMac() {
+            return JinahyaMacUtils_Test.getRandomMacStream();
         }
 
-        @MethodSource({"getRandomDigest"})
+        @MethodSource({"getRandomMac"})
         @ParameterizedTest
-        void __(final Digest digest) throws IOException {
+        void __(final Mac mac) throws IOException {
             // --------------------------------------------------------------------------------------------------- given
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
             // ---------------------------------------------------------------------------------------------------- when
-            final var result = JinahyaDigestUtils.updateAll(
-                    digest,
+            final var result = JinahyaMacUtils.updateAll(
+                    mac,
                     new ByteArrayInputStream(plain),
                     new byte[ThreadLocalRandom.current().nextInt(128) + 1]
             );
             // ---------------------------------------------------------------------------------------------------- then
-            assertThat(result).isSameAs(digest);
+            assertThat(result).isSameAs(mac);
         }
     }
 
-    @DisplayName("updateAll(digest, in, inoff, inlen, out, outoff)")
+    @DisplayName("updateAll(mac, in, inoff, inlen, out, outoff)")
     @Nested
     class UpdateAllAndDoFinalTest {
 
-        private static Stream<Digest> getRandomDigest() {
-            return Stream.of(_Digest_TestUtils.newRandomDigest());
+        private static Stream<Mac> getRandomMac() {
+            return JinahyaMacUtils_Test.getRandomMacStream();
         }
 
-        @MethodSource({"getRandomDigest"})
+        @MethodSource({"getRandomMac"})
         @ParameterizedTest
-        void __(final Digest digest) throws IOException {
+        void __(final Mac mac) throws IOException {
             // --------------------------------------------------------------------------------------------------- given
             final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
-            final var out = new byte[digest.getDigestSize()];
+            final var out = new byte[mac.getMacSize()];
             // ---------------------------------------------------------------------------------------------------- when
-            final var bytes = JinahyaDigestUtils.updateAllAndDoFinal(
-                    digest,
+            final var bytes = JinahyaMacUtils.updateAllAndDoFinal(
+                    mac,
                     new ByteArrayInputStream(plain),
                     new byte[ThreadLocalRandom.current().nextInt(128) + 1],
                     out,
