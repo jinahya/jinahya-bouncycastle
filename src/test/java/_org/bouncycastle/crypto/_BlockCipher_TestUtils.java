@@ -45,10 +45,10 @@ public class _BlockCipher_TestUtils {
     public static String paramsName(final CipherParameters parameters) {
         Objects.requireNonNull(parameters, "parameters is null");
         if (parameters instanceof KeyParameter p) {
-            return _KeyParameters_TestUtils.paramsName(p);
+            return _KeyParameters_TestUtils.paramsString(p);
         }
         if (parameters instanceof ParametersWithIV p) {
-            return _ParametersWithIV_TestUtils.paramsName(p);
+            return _ParametersWithIV_TestUtils.paramsString(p);
         }
         throw new RuntimeException("failed to get key from " + parameters);
     }

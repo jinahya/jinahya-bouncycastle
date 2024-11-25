@@ -18,13 +18,13 @@ public final class _CipherParameters_TestUtils {
     public static String name(final CipherParameters params) {
         Objects.requireNonNull(params, "params is null");
         if (params instanceof KeyParameter p) {
-            return _KeyParameters_TestUtils.paramsName(p);
+            return _KeyParameters_TestUtils.paramsString(p);
         }
         if (params instanceof ParametersWithIV p) {
-            return _ParametersWithIV_TestUtils.paramsName(p);
+            return _ParametersWithIV_TestUtils.paramsString(p);
         }
         if (params instanceof AEADParameters p) {
-            return _AEADParameters_TestUtils.paramsName(p);
+            return _AEADParameters_TestUtils.paramsString(p);
         }
         throw new IllegalArgumentException("failed to get name of " + params);
     }
