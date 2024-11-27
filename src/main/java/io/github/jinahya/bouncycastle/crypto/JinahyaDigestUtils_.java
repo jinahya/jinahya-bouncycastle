@@ -22,11 +22,6 @@ final class JinahyaDigestUtils_ {
 
     static int updateAndDoFinal(final Digest digest, final byte[] in, final int inoff, final int inlen, final byte[] out,
                                 final int outoff) {
-        assert digest != null;
-        assert in != null;
-        assert inoff >= 0;
-        assert inlen >= 0;
-        assert (inoff + inlen) <= in.length;
         assert out != null;
         assert outoff >= 0;
         assert (outoff + digest.getDigestSize()) <= out.length;
@@ -47,9 +42,6 @@ final class JinahyaDigestUtils_ {
     static int updateAllAndDoFinal(final Digest digest, final InputStream in, final byte[] inbuf, final byte[] out,
                                    final int outoff)
             throws IOException {
-        assert in != null;
-        assert inbuf != null;
-        assert inbuf.length > 0;
         assert out != null;
         assert outoff >= 0;
         assert (outoff + digest.getDigestSize()) <= out.length;

@@ -8,10 +8,6 @@ import java.util.Objects;
 
 public final class JinahyaMacUtils {
 
-    private static <T extends Mac> T requireNonNullMac(final T mac) {
-        return Objects.requireNonNull(mac, "mac is null");
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -35,8 +31,9 @@ public final class JinahyaMacUtils {
             throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
         }
         if ((inoff + inlen) > in.length) {
-            throw new IllegalArgumentException(
-                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")");
+            throw new IndexOutOfBoundsException(
+                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")"
+            );
         }
         return JinahyaMacUtils_.update(mac, in, inoff, inlen);
     }
@@ -57,7 +54,6 @@ public final class JinahyaMacUtils {
     public static int updateAndDoFinal(final Mac mac, final byte[] in, final int inoff, final int inlen,
                                        final byte[] out, final int outoff) {
         Objects.requireNonNull(mac, "mac is null");
-        Objects.requireNonNull(in, "in is null");
         if (inoff < 0) {
             throw new IllegalArgumentException("inoff(" + inoff + ") is negative");
         }
@@ -65,12 +61,15 @@ public final class JinahyaMacUtils {
             throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
         }
         if ((inoff + inlen) > in.length) {
-            throw new IllegalArgumentException(
-                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")");
+            throw new IndexOutOfBoundsException(
+                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")"
+            );
         }
-        Objects.requireNonNull(out, "out is null");
         if (outoff < 0) {
             throw new IllegalArgumentException("outoff(" + outoff + ") is negative");
+        }
+        if (outoff > out.length) {
+            throw new IndexOutOfBoundsException("outoff(" + outoff + ") > out.length(" + out.length + ")");
         }
         final var macSize = mac.getMacSize();
         if ((outoff + mac.getMacSize()) > out.length) {
