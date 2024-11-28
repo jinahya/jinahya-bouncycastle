@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-public final class _LEA__TestUtils {
+public final class _LEA___TestUtils {
 
     public static Stream<Arguments> getCipherAndParamsArgumentsStream() {
         return _LEA___Constants.ALLOWED_KEY_BYTES_LIST.stream().map(kb -> {
@@ -30,10 +30,13 @@ public final class _LEA__TestUtils {
     }
 
     static byte[] randomKey() {
-        return _Random_TestUtils.newRandomBytes(randomKeyBytes());
+        return _LEA___Utils.requireValidKey(
+                _Random_TestUtils.newRandomBytes(randomKeyBytes())
+        );
     }
 
-    private _LEA__TestUtils() {
+    // -----------------------------------------------------------------------------------------------------------------
+    private _LEA___TestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

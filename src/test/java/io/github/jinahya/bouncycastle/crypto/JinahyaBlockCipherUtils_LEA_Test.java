@@ -1,6 +1,6 @@
 package io.github.jinahya.bouncycastle.crypto;
 
-import io.github.jinahya.bouncycastle.miscellaneous._LEA__TestUtils;
+import io.github.jinahya.bouncycastle.miscellaneous._LEA___TestUtils;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 class JinahyaBlockCipherUtils_LEA_Test {
 
     static Stream<Arguments> getCipherAndParamsArgumentsStream() {
-        return _LEA__TestUtils.getCipherAndParamsArgumentsStream();
+        return _LEA___TestUtils.getCipherAndParamsArgumentsStream();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -20,7 +20,8 @@ final class JinahyaDigestUtils_ {
         return digest;
     }
 
-    static int updateAndDoFinal(final Digest digest, final byte[] in, final int inoff, final int inlen, final byte[] out,
+    static int updateAndDoFinal(final Digest digest, final byte[] in, final int inoff, final int inlen,
+                                final byte[] out,
                                 final int outoff) {
         assert out != null;
         assert outoff >= 0;

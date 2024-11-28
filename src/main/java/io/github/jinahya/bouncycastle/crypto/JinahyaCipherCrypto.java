@@ -56,19 +56,23 @@ public abstract class JinahyaCipherCrypto<CIPHER>
     @Override
     public final boolean addOutbuffunction(
             final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outbuffunction) {
-        return outbuffunctions.add(Objects.requireNonNull(outbuffunction, "outbuffunction is null"));
+        return outbuffunctions.add(
+                Objects.requireNonNull(outbuffunction, "outbuffunction is null")
+        );
     }
 
     @Override
     public final boolean removeOutbuffunction(
             final Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outbuffunction) {
-        return outbuffunctions.remove(Objects.requireNonNull(outbuffunction, "outbuffunction is null"));
+        return outbuffunctions.remove(
+                Objects.requireNonNull(outbuffunction, "outbuffunction is null")
+        );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final byte[] encrypt(byte[] in) {
+    public final byte[] encrypt(final byte[] in) {
         final var out = encrypt_(in);
         inbuffunctions.forEach(f -> f.apply(in).apply(0).accept(in.length));
         outbuffunctions.forEach(f -> f.apply(out).apply(0).accept(out.length));
@@ -117,7 +121,7 @@ public abstract class JinahyaCipherCrypto<CIPHER>
     // -----------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final byte[] decrypt(byte[] in) {
+    public final byte[] decrypt(final byte[] in) {
         final var out = decrypt_(in);
         inbuffunctions.forEach(f -> f.apply(in).apply(0).accept(in.length));
         outbuffunctions.forEach(f -> f.apply(out).apply(0).accept(out.length));

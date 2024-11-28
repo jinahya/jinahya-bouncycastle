@@ -78,11 +78,11 @@ public interface JinahyaCrypto {
     long decrypt(InputStream in, OutputStream out, byte[] inbuf) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
-    boolean addInbuffunction(Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> intConsumer);
+    boolean addInbuffunction(Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inbuffunction);
 
-    boolean removeInbuffunction(Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> intConsumer);
+    boolean removeInbuffunction(Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> inbuffunction);
 
-    boolean addOutbuffunction(Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> intConsumer);
+    boolean addOutbuffunction(Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outbuffunction);
 
-    boolean removeOutbuffunction(Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> intConsumer);
+    boolean removeOutbuffunction(Function<? super byte[], ? extends IntFunction<? extends IntConsumer>> outbuffunction);
 }

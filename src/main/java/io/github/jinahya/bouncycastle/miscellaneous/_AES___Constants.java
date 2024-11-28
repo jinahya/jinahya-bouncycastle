@@ -3,6 +3,11 @@ package io.github.jinahya.bouncycastle.miscellaneous;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Constants for the {@value _AES___Constants#ALGORITHM} algorithm.
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see _AES___Utils
+ */
 @SuppressWarnings({
         "java:S101" // Class names should comply with a naming convention
 })

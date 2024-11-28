@@ -9,7 +9,6 @@ import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -21,13 +20,6 @@ import java.util.function.Supplier;
         "java:S101" // Class names should comply with a naming convention
 })
 public final class __CBC_PKCS7Padding_Utils {
-
-    public static byte[] requireValidIv(final byte[] iv, final int blockBytes) {
-        if (Objects.requireNonNull(iv, "iv is null").length != blockBytes) {
-            throw new IllegalArgumentException("iv.length(" + iv.length + ") != blockBytes(" + blockBytes + ")");
-        }
-        return iv;
-    }
 
     static JinahyaCrypto newJinahyaCrypto(final byte[] key, final byte[] iv,
                                           final Supplier<? extends BlockCipher> cipherSupplier) {

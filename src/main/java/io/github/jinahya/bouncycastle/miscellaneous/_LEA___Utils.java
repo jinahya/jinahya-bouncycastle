@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
  * Utilities for the {@value _LEA___Constants#ALGORITHM} algorithm.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see _LEA___Constants
  */
 @SuppressWarnings({
         "java:S101" // Class names should comply with a naming convention
@@ -14,20 +15,25 @@ import java.util.stream.IntStream;
 public final class _LEA___Utils {
 
     public static IntStream getAllowedKeySizeStream() {
-        return _LEA___Constants.ALLOWED_KEY_SIZES_LIST.stream().mapToInt(Integer::intValue);
+        return _LEA___Constants.ALLOWED_KEY_SIZE_LIST.stream().mapToInt(Integer::intValue);
+    }
+
+    public static IntStream getAllowedKeyBytesStream() {
+        return _LEA___Constants.ALLOWED_KEY_BYTES_LIST.stream().mapToInt(Integer::intValue);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     static byte[] requireValidKey(final byte[] key) {
-        if (!_ARIA___Constants.ALLOWED_KEY_BYTES_LIST.contains(Objects.requireNonNull(key, "key is null").length)) {
+        Objects.requireNonNull(key, "key is null");
+        if (!_LEA___Constants.ALLOWED_KEY_BYTES_LIST.contains(key.length)) {
             throw new IllegalArgumentException("key.length(" + key.length + ") is not allowed");
         }
         return key;
     }
 
     static byte[] requireValidIv(final byte[] iv) {
-        if (Objects.requireNonNull(iv, "iv is null").length != _ARIA___Constants.BLOCK_BYTES) {
-            throw new IllegalArgumentException("iv.length(" + iv.length + ") != " + _ARIA___Constants.BLOCK_BYTES);
+        if (Objects.requireNonNull(iv, "iv is null").length != _LEA___Constants.BLOCK_BYTES) {
+            throw new IllegalArgumentException("iv.length(" + iv.length + ") != " + _LEA___Constants.BLOCK_BYTES);
         }
         return iv;
     }

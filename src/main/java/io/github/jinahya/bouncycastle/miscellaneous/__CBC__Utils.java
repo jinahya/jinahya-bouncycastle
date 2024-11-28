@@ -6,6 +6,7 @@ import java.util.Objects;
  * Utilities for the {@value __CBC__Constants#MODE} mode.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see __CBC__Constants
  */
 @SuppressWarnings({
         "java:S101" // Class names should comply with a naming convention
