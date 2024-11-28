@@ -101,7 +101,7 @@ public final class JinahyaDigestUtils {
     }
 
     /**
-     * Updates, to specified digest, all bytes from specified input stream, finalizes, and set returns to the specified
+     * Updates, to specified digest, all bytes from specified input stream, finalizes, and set result to specified
      * output array starting at specified index.
      *
      * @param digest the digest.
