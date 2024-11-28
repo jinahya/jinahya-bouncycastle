@@ -9,6 +9,13 @@ public final class _ByteBufferUtils {
 
     @Deprecated
     public static byte[] get(final ByteBuffer buffer, int index, final byte[] dst, int offset, final int length) {
+        assert buffer != null;
+        assert index >= 0;
+        assert dst != null;
+        assert offset >= 0;
+        assert length >= 0;
+        assert (offset + length) <= dst.length;
+        assert (index + length) <= buffer.capacity();
         for (int l = offset + length; offset < l; ) {
             dst[offset++] = buffer.get(index++);
         }
@@ -28,6 +35,13 @@ public final class _ByteBufferUtils {
     // -----------------------------------------------------------------------------------------------------------------
     @Deprecated
     public static ByteBuffer put(final ByteBuffer buffer, int index, final byte[] src, int offset, final int length) {
+        assert buffer != null;
+        assert index >= 0;
+        assert src != null;
+        assert offset >= 0;
+        assert length >= 0;
+        assert (offset + length) <= src.length;
+        assert (index + length) <= buffer.capacity();
         for (int l = offset + length; offset < l; ) {
             buffer.put(index++, src[offset++]);
         }

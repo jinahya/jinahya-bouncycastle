@@ -96,10 +96,10 @@ final class JinahyaSignerUtils_ {
         return outlen;
     }
 
-    static boolean verifySignature(final Signer signer, final ByteBuffer input, final ByteBuffer output) {
+    static boolean verifySignature(final Signer signer, final ByteBuffer input, final ByteBuffer signature) {
         assert signer != null;
         assert input != null;
-        assert output != null;
+        assert signature != null;
         final byte[] in;
         final int inoff;
         final var inlen = input.remaining();
@@ -110,23 +110,15 @@ final class JinahyaSignerUtils_ {
             in = _ByteBufferUtils.get(input, input.position(), new byte[inlen]);
             inoff = 0;
         }
-        final var signature = new byte[output.remaining()];
-        if (output.hasArray()) {
-            System.arraycopy(
-                    output.array(),
-                    output.arrayOffset() + output.position(),
-                    signature,
-                    0,
-                    signature.length
-            );
-        } else {
-            for (int i = 0, p = output.position(); i < signature.length; i++, p++) {
-                signature[i] = output.get(p);
-            }
-        }
-        final var verified = verifySignature(signer, in, inoff, inlen, signature);
+        final var verified = verifySignature(
+                signer,
+                in,
+                inoff,
+                inlen,
+                _ByteBufferUtils.get(signature, signature.position(), new byte[signature.remaining()])
+        );
         input.position(input.position() + inlen);
-        output.position(output.position() + inlen);
+        signature.position(signature.position() + signature.remaining());
         return verified;
     }
 
