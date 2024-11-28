@@ -6,6 +6,7 @@ import org.bouncycastle.crypto.Signer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 
 final class JinahyaSignerUtils_ {
@@ -141,6 +142,9 @@ final class JinahyaSignerUtils_ {
             outoff = 0;
         }
         final var outlen = generateSignature(signer, in, inbuf, out, outoff);
+        if (outlen > output.remaining()) {
+            throw new BufferOverflowException();
+        }
         if (output.hasArray()) {
             output.position(output.position() + outlen);
         } else {
@@ -167,11 +171,11 @@ final class JinahyaSignerUtils_ {
                     signature_.length
             );
         } else {
-            for (int i = 0, p = signature.position(); i < signature_.length; i++, p++) {
-                signature_[i] = signature.get(p);
-            }
+            _ByteBufferUtils.get(signature, signature.position(), signature_);
         }
-        return verifySignature(signer, in, inbuf, signature_);
+        final var verified = verifySignature(signer, in, inbuf, signature_);
+        signature.position(signature.position() + signature_.length);
+        return verified;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
