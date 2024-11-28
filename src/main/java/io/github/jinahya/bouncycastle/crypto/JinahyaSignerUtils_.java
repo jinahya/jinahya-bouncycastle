@@ -1,5 +1,6 @@
 package io.github.jinahya.bouncycastle.crypto;
 
+import _java.nio._ByteBufferUtils;
 import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.Signer;
 
@@ -16,7 +17,7 @@ final class JinahyaSignerUtils_ {
         assert in != null;
         signer.update(in, inoff, inlen);
         final var signature = signer.generateSignature();
-        System.arraycopy(signature, 0, out, outoff, signature.length);
+        System.arraycopy(signature, 0, out, outoff, signature.length); // IndexOutOfBoundsException
         return signature.length;
     }
 
@@ -42,7 +43,7 @@ final class JinahyaSignerUtils_ {
             signer.update(inbuf, 0, r);
         }
         final var signature = signer.generateSignature();
-        System.arraycopy(signature, 0, out, outoff, signature.length);
+        System.arraycopy(signature, 0, out, outoff, signature.length); // IndexOutOfBoundsException
         return signature.length;
     }
 
@@ -73,10 +74,7 @@ final class JinahyaSignerUtils_ {
             in = input.array();
             inoff = input.arrayOffset() + input.position();
         } else {
-            in = new byte[inlen];
-            for (int i = 0, p = input.position(); i < in.length; i++, p++) {
-                in[i] = input.get(p);
-            }
+            in = _ByteBufferUtils.get(input, input.position(), new byte[inlen]);
             inoff = 0;
         }
         final byte[] out;
@@ -98,10 +96,10 @@ final class JinahyaSignerUtils_ {
         return outlen;
     }
 
-    static boolean verifySignature(final Signer signer, final ByteBuffer input, final ByteBuffer signature) {
+    static boolean verifySignature(final Signer signer, final ByteBuffer input, final ByteBuffer output) {
         assert signer != null;
         assert input != null;
-        assert signature != null;
+        assert output != null;
         final byte[] in;
         final int inoff;
         final var inlen = input.remaining();
@@ -109,29 +107,26 @@ final class JinahyaSignerUtils_ {
             in = input.array();
             inoff = input.arrayOffset() + input.position();
         } else {
-            in = new byte[inlen];
-            for (int i = 0, p = input.position(); i < in.length; i++, p++) {
-                in[i] = input.get(p);
-            }
+            in = _ByteBufferUtils.get(input, input.position(), new byte[inlen]);
             inoff = 0;
         }
-        final var signature_ = new byte[signature.remaining()];
-        if (signature.hasArray()) {
+        final var signature = new byte[output.remaining()];
+        if (output.hasArray()) {
             System.arraycopy(
-                    signature.array(),
-                    signature.arrayOffset() + signature.position(),
-                    signature_,
+                    output.array(),
+                    output.arrayOffset() + output.position(),
+                    signature,
                     0,
-                    signature_.length
+                    signature.length
             );
         } else {
-            for (int i = 0, p = signature.position(); i < signature_.length; i++, p++) {
-                signature_[i] = signature.get(p);
+            for (int i = 0, p = output.position(); i < signature.length; i++, p++) {
+                signature[i] = output.get(p);
             }
         }
-        final var verified = verifySignature(signer, in, inoff, inlen, signature_);
+        final var verified = verifySignature(signer, in, inoff, inlen, signature);
         input.position(input.position() + inlen);
-        signature.position(signature.position() + inlen);
+        output.position(output.position() + inlen);
         return verified;
     }
 

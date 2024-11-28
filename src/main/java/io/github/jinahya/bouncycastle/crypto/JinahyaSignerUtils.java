@@ -10,6 +10,11 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
+/**
+ * Utilities for {@link Signer} interface.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public final class JinahyaSignerUtils {
 
     private static <T extends Signer> T initFor(final T signer, final boolean forSigning,
@@ -81,6 +86,8 @@ public final class JinahyaSignerUtils {
     public static int generateSignature(final Signer signer, final byte[] in, final int inoff, final int inlen,
                                         final byte[] out, final int outoff)
             throws CryptoException {
+        Objects.requireNonNull(signer, "signer is null");
+        Objects.requireNonNull(in, "in is null");
         validate(signer, in);
         return JinahyaSignerUtils_.generateSignature(signer, in, inoff, inlen, out, outoff);
     }
@@ -93,8 +100,9 @@ public final class JinahyaSignerUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static void validate(final Signer signer, final InputStream in, final byte[] inbuf, final byte[] out,
-                         final int outoff) {
+    public static int generateSignature(final Signer signer, final InputStream in, final byte[] inbuf,
+                                        final byte[] out, final int outoff)
+            throws IOException, CryptoException {
         Objects.requireNonNull(signer, "signer is null");
         Objects.requireNonNull(in, "in is null");
         Objects.requireNonNull(inbuf, "inbuf is null");
@@ -108,19 +116,17 @@ public final class JinahyaSignerUtils {
         if (outoff > out.length) {
             throw new IllegalArgumentException("outoff(" + outoff + ") > out.length(" + out.length + ")");
         }
-    }
-
-    public static int generateSignature(final Signer signer, final InputStream in, final byte[] inbuf,
-                                        final byte[] out, final int outoff)
-            throws IOException, CryptoException {
-        validate(signer, in, inbuf, out, outoff);
         return JinahyaSignerUtils_.generateSignature(signer, in, inbuf, out, outoff);
     }
 
     public static boolean verifySignature(final Signer signer, final InputStream in, final byte[] inbuf,
                                           final byte[] signature)
             throws IOException {
-        validate(signer, in, inbuf, signature, 0);
+        Objects.requireNonNull(signature, "signature is null");
+        Objects.requireNonNull(in, "in is null");
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+            throw new IllegalArgumentException("inbuf.length is zero");
+        }
         Objects.requireNonNull(signature, "signature is null");
         return JinahyaSignerUtils_.verifySignature(signer, in, inbuf, signature);
     }
