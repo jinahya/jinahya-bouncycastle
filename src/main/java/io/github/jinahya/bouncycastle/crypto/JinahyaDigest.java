@@ -38,7 +38,15 @@ public class JinahyaDigest {
     public byte[] digest(final byte[] in) {
         Objects.requireNonNull(in, "in is null");
         final var out = new byte[digestSize];
-        final var outlen = JinahyaDigestUtils_.updateAndDoFinal(digest, in, 0, in.length, out, 0, digestSize);
+        final var outlen = JinahyaDigestUtils_.updateAndDoFinal(
+                digest,
+                in,
+                0,
+                in.length,
+                out,
+                0,
+                digestSize
+        );
         assert outlen == out.length;
         return out;
     }
@@ -53,7 +61,12 @@ public class JinahyaDigest {
     public int digest(final ByteBuffer input, final ByteBuffer output) {
         Objects.requireNonNull(input, "input is null");
         JinahyaDigestUtils.requireValid_Output(output, digestSize);
-        return JinahyaDigestUtils_.updateAndDoFinal(digest, input, output, digestSize);
+        return JinahyaDigestUtils_.updateAndDoFinal(
+                digest,
+                input,
+                output,
+                digestSize
+        );
     }
 
     /**
@@ -69,13 +82,27 @@ public class JinahyaDigest {
         Objects.requireNonNull(in, "in is null");
         JinahyaDigestUtils.requireValid_Inbuf(inbuf);
         final var out = new byte[digestSize];
-        final var outlen = JinahyaDigestUtils_.updateAllAndDoFinal(digest, in, inbuf, out, 0, digestSize);
+        final var outlen = JinahyaDigestUtils_.updateAllAndDoFinal(
+                digest,
+                in,
+                inbuf,
+                out,
+                0,
+                digestSize
+        );
         assert outlen == out.length;
         return out;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The digest instance holds.
+     */
     protected final Digest digest;
 
+    /**
+     * The digest size of {@link #digest}.
+     */
     protected final int digestSize;
 }
