@@ -1,6 +1,7 @@
 package _java.nio;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 @SuppressWarnings({
         "java:S101" // Class names should comply with a naming convention
@@ -8,8 +9,9 @@ import java.nio.ByteBuffer;
 public final class _ByteBufferUtils {
 
     /**
-     * Absolute bulk get method equivalent to the {@link ByteBuffer#get(int, byte[], int, int)} method which is
-     * available {@code 13+}.
+     * Absolute bulk get method equivalent to the <a
+     * href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html#get(int,byte%5B%5D,int,int)">ByteBuffer#get(int,
+     * byte[], int, int)</a> method which is available {@code 13+}.
      *
      * @param buffer the buffer.
      * @param index  a value of the {@code index} parameter.
@@ -17,11 +19,15 @@ public final class _ByteBufferUtils {
      * @param offset a value for the {@code offset} parameter.
      * @param length a value for the {@code length} parameter.
      * @return the result of the invocation.
-     * @see ByteBuffer#get(int, byte[], int, int)
+     * @see <a
+     * href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html#get(int,byte%5B%5D,int,int)">ByteBuffer#get(int,
+     * byte[], int, int)</a>
      */
     @Deprecated(forRemoval = false)
     public static byte[] get(final ByteBuffer buffer, int index, final byte[] dst, int offset, final int length) {
         /*
+         * buffer.get(index, dst, offset, length);
+         *
          * index – The index in this buffer from which the first byte will be read;
          *         must be non-negative and less than <limit()>
          * offset – The offset within the array of the first byte to be written;
@@ -42,11 +48,30 @@ public final class _ByteBufferUtils {
         return dst;
     }
 
+    /**
+     * Invokes {@link #get(ByteBuffer, int, byte[], int, int)} method with specified arguments and
+     * {@code dst.length - offset} for the {@code length} parameter.
+     *
+     * @param buffer the buffer.
+     * @param index  a value of the {@code index} parameter.
+     * @param dst    a value for the {@code dst} parameter.
+     * @param offset a value for the {@code offset} parameter.
+     * @return the result of the {@link #get(ByteBuffer, int, byte[], int, int)} method.
+     */
     @Deprecated(forRemoval = false)
     public static byte[] get(final ByteBuffer buffer, int index, final byte[] dst, final int offset) {
         return get(buffer, index, dst, offset, dst.length - offset);
     }
 
+    /**
+     * Invokes {@link #get(ByteBuffer, int, byte[], int)} method with specified arguments and {@code 0} for the
+     * {@code offset} parameter.
+     *
+     * @param buffer the buffer.
+     * @param index  a value of the {@code index} parameter.
+     * @param dst    a value for the {@code dst} parameter.
+     * @return the result of the {@link #get(ByteBuffer, int, byte[], int)} method.
+     */
     @Deprecated(forRemoval = false)
     public static byte[] get(final ByteBuffer buffer, final int index, final byte[] dst) {
         return get(buffer, index, dst, 0);
