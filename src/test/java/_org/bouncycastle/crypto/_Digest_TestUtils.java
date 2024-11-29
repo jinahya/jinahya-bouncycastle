@@ -7,6 +7,7 @@ import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 public final class _Digest_TestUtils {
@@ -29,6 +30,13 @@ public final class _Digest_TestUtils {
         } catch (ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }
+    }
+
+    public static Stream<Digest> getDigestStream() {
+        return Stream.of(
+                new SHA1Digest(),
+                new SHA256Digest()
+        );
     }
 
     private _Digest_TestUtils() {

@@ -35,7 +35,7 @@ class JinahyaDigestTest {
 
     @DisplayName("digest(in)")
     @Nested
-    class DigestTest {
+    class DigestArrayTest {
 
         @DisplayName("should throw <NullPointerException> when <in> is <null>")
         @Test
@@ -88,9 +88,9 @@ class JinahyaDigestTest {
         }
     }
 
-    @DisplayName("digest(in, inbuf)")
+    @DisplayName("digestAll(in, inbuf)")
     @Nested
-    class DigestAllTest {
+    class DigestAllToArrayTest {
 
         @Test
         void __() throws IOException {
@@ -138,4 +138,5 @@ class JinahyaDigestTest {
                     .isEqualTo(MessageDigest.getInstance("SHA256").digest(in));
         }
     }
+
 }

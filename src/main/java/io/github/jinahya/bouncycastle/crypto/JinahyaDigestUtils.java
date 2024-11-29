@@ -4,9 +4,59 @@ import org.bouncycastle.crypto.Digest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
+/**
+ * Utilities related to {@link Digest} interface.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see JinahyaDigest
+ */
 public final class JinahyaDigestUtils {
+
+    private static int requireNonNegative(final int value, final String name) {
+        if (value < 0) {
+            throw new IllegalArgumentException(name + "(" + value + ") is negative");
+        }
+        return value;
+    }
+
+    private static void validate(final byte[] in, final int inoff, final int inlen) {
+        Objects.requireNonNull(in, "in is null");
+        requireNonNegative(inoff, "inoff");
+        requireNonNegative(inlen, "inlen");
+        if ((inoff + inlen) > in.length) {
+            throw new IllegalArgumentException(
+                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")");
+        }
+    }
+
+    private static void validate(final byte[] out, final int outoff, final Digest digest) {
+        Objects.requireNonNull(out, "out is null");
+        requireNonNegative(outoff, "outoff");
+        final var digestSize = digest.getDigestSize();
+        if ((outoff + digest.getDigestSize()) > out.length) {
+            throw new IllegalArgumentException(
+                    "(outoff(" + outoff + ") + digest.digestSize(" + digestSize + ")) > out.length(" + out.length + ")"
+            );
+        }
+    }
+
+    private static void validate(final InputStream in, final byte[] inbuf) {
+        Objects.requireNonNull(in, "in is null");
+        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
+            throw new IllegalArgumentException("inbuf.length is zero");
+        }
+    }
+
+    private static void validate(final ByteBuffer output, final Digest digest) {
+        if (Objects.requireNonNull(output, "output is null").remaining() < digest.getDigestSize()) {
+            throw new IllegalArgumentException(
+                    "output.remaining(" + output.remaining() + ") < digest.digestSize(" + digest.getDigestSize() + ")"
+            );
+        }
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -15,25 +65,16 @@ public final class JinahyaDigestUtils {
      *
      * @param digest the digest.
      * @param in     the byte array to be updated to the {@code digest}.
-     * @param inoff  starting index of {@code in}.
-     * @param inlen  number of bytes from the {@code inoff} to update.
+     * @param inoff  a starting index of {@code in}.
+     * @param inlen  a number of bytes from the {@code inoff} to update.
      * @param <T>    digest type parameter
      * @return given {@code digest}.
      * @see #updateAndDoFinal(Digest, byte[], int, int, byte[], int)
+     * @see #update(Digest, ByteBuffer)
      */
     public static <T extends Digest> T update(final T digest, final byte[] in, final int inoff, final int inlen) {
         Objects.requireNonNull(digest, "digest is null");
-        Objects.requireNonNull(in, "in is null");
-        if (inoff < 0) {
-            throw new IllegalArgumentException("inoff(" + inoff + ") is negative");
-        }
-        if (inlen < 0) {
-            throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
-        }
-        if ((inoff + inlen) > in.length) {
-            throw new IllegalArgumentException(
-                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")");
-        }
+        validate(in, inoff, inlen);
         return JinahyaDigestUtils_.update(digest, in, inoff, inlen);
     }
 
@@ -53,27 +94,8 @@ public final class JinahyaDigestUtils {
     public static int updateAndDoFinal(final Digest digest, final byte[] in, final int inoff, final int inlen,
                                        final byte[] out, final int outoff) {
         Objects.requireNonNull(digest, "digest is null");
-        Objects.requireNonNull(in, "in is null");
-        if (inoff < 0) {
-            throw new IllegalArgumentException("inoff(" + inoff + ") is negative");
-        }
-        if (inlen < 0) {
-            throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
-        }
-        if ((inoff + inlen) > in.length) {
-            throw new IllegalArgumentException(
-                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")");
-        }
-        Objects.requireNonNull(out, "out is null");
-        if (outoff < 0) {
-            throw new IllegalArgumentException("outoff(" + outoff + ") is negative");
-        }
-        final var digestSize = digest.getDigestSize();
-        if ((outoff + digest.getDigestSize()) > out.length) {
-            throw new IllegalArgumentException(
-                    "(outoff(" + outoff + ") + digest.digestSize(" + digestSize + ")) > out.length(" + out.length + ")"
-            );
-        }
+        validate(in, inoff, inlen);
+        validate(out, outoff, digest);
         return JinahyaDigestUtils_.updateAndDoFinal(digest, in, inoff, inlen, out, outoff);
     }
 
@@ -93,10 +115,7 @@ public final class JinahyaDigestUtils {
     public static <T extends Digest> T updateAll(final T digest, final InputStream in, final byte[] inbuf)
             throws IOException {
         Objects.requireNonNull(digest, "digest is null");
-        Objects.requireNonNull(in, "in is null");
-        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
-            throw new IllegalArgumentException("inbuf.length is zero");
-        }
+        validate(in, inbuf);
         return JinahyaDigestUtils_.updateAll(digest, in, inbuf);
     }
 
@@ -117,21 +136,70 @@ public final class JinahyaDigestUtils {
                                           final byte[] out, final int outoff)
             throws IOException {
         Objects.requireNonNull(digest, "digest is null");
-        Objects.requireNonNull(in, "in is null");
-        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
-            throw new IllegalArgumentException("inbuf.length is zero");
-        }
-        Objects.requireNonNull(out, "out is null");
-        if (outoff < 0) {
-            throw new IllegalArgumentException("outoff(" + outoff + ") is negative");
-        }
-        final var digestSize = digest.getDigestSize();
-        if ((outoff + digest.getDigestSize()) > out.length) {
-            throw new IllegalArgumentException(
-                    "(outoff(" + outoff + ") + digest.digestSize(" + digestSize + ")) > out.length(" + out.length + ")"
-            );
-        }
+        validate(in, inbuf);
+        validate(out, outoff, digest);
         return JinahyaDigestUtils_.updateAllAndDoFinal(digest, in, inbuf, out, outoff);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Updates, to specified digest, remaining bytes of specified input buffer.
+     *
+     * @param digest the digest.
+     * @param input  the input byte buffer whose remaining bytes are updated to the {@code digest}.
+     * @param <T>    digest type parameter
+     * @return given {@code digest}.
+     * @throws NullPointerException if any of specified arguments is {@code null}.
+     * @see #updateAndDoFinal(Digest, ByteBuffer, ByteBuffer)
+     * @see #update(Digest, byte[], int, int)
+     */
+    public static <T extends Digest> T update(final T digest, final ByteBuffer input) {
+        Objects.requireNonNull(digest, "digest is null");
+        Objects.requireNonNull(input, "input is null");
+        return JinahyaDigestUtils_.update(digest, input);
+    }
+
+    /**
+     * Updates, to specified digest, remaining bytes of specified input buffer, finalizes, and put the result to
+     * specified output buffer.
+     *
+     * @param digest the digest.
+     * @param input  the input byte buffer whose remaining bytes are updated to the {@code digest}.
+     * @param output the output byte buffer onto which the finalization result are put.
+     * @return the number of bytes put on the {@code output}.
+     * @throws NullPointerException     if any of specified arguments is {@code null}.
+     * @throws IllegalArgumentException when {@link ByteBuffer#remaining() output.remaining} is less than
+     *                                  {@link Digest#getDigestSize() cipher.digestSize}.
+     */
+    public static int updateAndDoFinal(final Digest digest, final ByteBuffer input, final ByteBuffer output) {
+        Objects.requireNonNull(digest, "digest is null");
+        Objects.requireNonNull(input, "input is null");
+        validate(output, digest);
+        return JinahyaDigestUtils_.updateAndDoFinal(digest, input, output);
+    }
+
+    /**
+     * Updates, to specified digest, all bytes from specified input stream, finalizes, and put the result to specified
+     * output buffer.
+     *
+     * @param digest the digest.
+     * @param in     the input stream.
+     * @param output the output byte buffer onto which the finalization result are put.
+     * @return the number of bytes put on the {@code output}.
+     * @throws NullPointerException     if any of specified arguments is {@code null}.
+     * @throws IllegalArgumentException when {@code inbuf.length} is zero.
+     * @throws IllegalArgumentException when {@link ByteBuffer#remaining() output.remaining} is less than
+     *                                  {@link Digest#getDigestSize() cipher.digestSize}.
+     * @throws IOException              when an I/O error occurs while reading bytes from the {@code in}.
+     */
+    public static int updateAllAndDoFinal(final Digest digest, final InputStream in, final byte[] inbuf,
+                                          final ByteBuffer output)
+            throws IOException {
+        Objects.requireNonNull(digest, "digest is null");
+        validate(in, inbuf);
+        validate(output, digest);
+        return JinahyaDigestUtils_.updateAllAndDoFinal(digest, in, inbuf, output);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

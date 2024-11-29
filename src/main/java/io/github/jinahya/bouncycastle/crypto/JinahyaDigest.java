@@ -4,12 +4,14 @@ import org.bouncycastle.crypto.Digest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
 /**
  * A class for working with an instance of {@link Digest} interface.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see JinahyaDigestUtils
  */
 public class JinahyaDigest {
 
@@ -39,6 +41,16 @@ public class JinahyaDigest {
         final var outlen = JinahyaDigestUtils_.updateAndDoFinal(digest, in, 0, in.length, out, 0);
         assert outlen == out.length;
         return out;
+    }
+
+    public int digest(final ByteBuffer input, final ByteBuffer output) {
+        Objects.requireNonNull(input, "input is null");
+        if (Objects.requireNonNull(output, "output is null").remaining() < digestSize) {
+            throw new IllegalArgumentException(
+                    "output.remaining(" + output.remaining() + ") < digest.digestSize(" + digestSize + ")"
+            );
+        }
+        return 0;
     }
 
     /**

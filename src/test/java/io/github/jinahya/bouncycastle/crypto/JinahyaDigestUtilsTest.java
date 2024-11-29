@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-class JinahyaDigestUtils_Test {
+class JinahyaDigestUtilsTest {
 
     private static Stream<Digest> getRandomDigest() {
         return Stream.of(_Digest_TestUtils.newRandomDigest());
@@ -34,7 +35,7 @@ class JinahyaDigestUtils_Test {
     class UpdateTest {
 
         private static Stream<Digest> getRandomDigest() {
-            return JinahyaDigestUtils_Test.getRandomDigest();
+            return JinahyaDigestUtilsTest.getRandomDigest();
         }
 
         @MethodSource({"getRandomDigest"})
@@ -54,7 +55,7 @@ class JinahyaDigestUtils_Test {
     class UpdateAndDoFinalTest {
 
         private static Stream<Digest> getRandomDigest() {
-            return JinahyaDigestUtils_Test.getRandomDigest();
+            return JinahyaDigestUtilsTest.getRandomDigest();
         }
 
         @MethodSource({"getRandomDigest"})
@@ -75,7 +76,7 @@ class JinahyaDigestUtils_Test {
     class UpdateAllTest {
 
         private static Stream<Digest> getRandomDigest() {
-            return JinahyaDigestUtils_Test.getRandomDigest();
+            return JinahyaDigestUtilsTest.getRandomDigest();
         }
 
         @MethodSource({"getRandomDigest"})
@@ -99,7 +100,7 @@ class JinahyaDigestUtils_Test {
     class UpdateAllAndDoFinalTest {
 
         private static Stream<Digest> getRandomDigest() {
-            return JinahyaDigestUtils_Test.getRandomDigest();
+            return JinahyaDigestUtilsTest.getRandomDigest();
         }
 
         @MethodSource({"getRandomDigest"})
@@ -118,6 +119,74 @@ class JinahyaDigestUtils_Test {
             );
             // ---------------------------------------------------------------------------------------------------- then
             assertThat(bytes).isSameAs(out.length);
+        }
+    }
+
+    @Nested
+    class Update_Buffer_Test {
+
+        private static Stream<Digest> getDigestStream() {
+            return _Digest_TestUtils.getDigestStream();
+        }
+
+        @MethodSource({"getDigestStream"})
+        @ParameterizedTest
+        void __(final Digest digest) {
+            // --------------------------------------------------------------------------------------------------- given
+            final var in = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(128));
+            final var input = ByteBuffer.wrap(in);
+            // ---------------------------------------------------------------------------------------------------- when
+            final var result = JinahyaDigestUtils.update(digest, input);
+            // ---------------------------------------------------------------------------------------------------- then
+            assertThat(result).isSameAs(digest);
+        }
+    }
+
+    @Nested
+    class UpdateAndDoFinal_Buffer_Test {
+
+        private static Stream<Digest> getDigestStream() {
+            return _Digest_TestUtils.getDigestStream();
+        }
+
+        @MethodSource({"getDigestStream"})
+        @ParameterizedTest
+        void __(final Digest digest) {
+            // --------------------------------------------------------------------------------------------------- given
+            final var in = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(128));
+            final var input = ByteBuffer.wrap(in);
+            final var output = ByteBuffer.allocate(digest.getDigestSize());
+            // ---------------------------------------------------------------------------------------------------- when
+            final var result = JinahyaDigestUtils.updateAndDoFinal(digest, input, output);
+            // ---------------------------------------------------------------------------------------------------- then
+            assertThat(result).isSameAs(output.capacity());
+            assertThat(output.remaining()).isZero();
+        }
+    }
+
+    @Nested
+    class UpdateAllAndDoFinal_Buffer_Test {
+
+        private static Stream<Digest> getDigestStream() {
+            return _Digest_TestUtils.getDigestStream();
+        }
+
+        @MethodSource({"getDigestStream"})
+        @ParameterizedTest
+        void __(final Digest digest) throws IOException {
+            // --------------------------------------------------------------------------------------------------- given
+            final var in = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(128));
+            final var output = ByteBuffer.allocate(digest.getDigestSize());
+            // ---------------------------------------------------------------------------------------------------- when
+            final var result = JinahyaDigestUtils.updateAllAndDoFinal(
+                    digest,
+                    new ByteArrayInputStream(in),
+                    new byte[ThreadLocalRandom.current().nextInt(128) + 1],
+                    output
+            );
+            // ---------------------------------------------------------------------------------------------------- then
+            assertThat(result).isSameAs(output.capacity());
+            assertThat(output.remaining()).isZero();
         }
     }
 }
