@@ -15,45 +15,48 @@ import java.util.Objects;
  */
 public final class JinahyaDigestUtils {
 
-    private static int requireNonNegative(final int value, final String name) {
-        if (value < 0) {
-            throw new IllegalArgumentException(name + "(" + value + ") is negative");
-        }
-        return value;
+    private static <T> T requireNonNull_Digest(final T digest) {
+        return Objects.requireNonNull(digest, "digest is null");
     }
 
-    private static void validate(final byte[] in, final int inoff, final int inlen) {
+    private static void requireValid_In_Inoff_Inlen(final byte[] in, final int inoff, final int inlen) {
         Objects.requireNonNull(in, "in is null");
-        requireNonNegative(inoff, "inoff");
-        requireNonNegative(inlen, "inlen");
+        if (inoff < 0) {
+            throw new IllegalArgumentException("inoff(" + inoff + ") is negative");
+        }
+        if (inlen < 0) {
+            throw new IllegalArgumentException("inlen(" + inlen + ") is negative");
+        }
         if ((inoff + inlen) > in.length) {
             throw new IllegalArgumentException(
-                    "inoff(" + inoff + ") + inlen(" + inlen + ") > in.length(" + in.length + ")");
+                    "(inoff(" + inoff + ") + inlen(" + inlen + ")) > in.length(" + in.length + ")"
+            );
         }
     }
 
-    private static void validate(final byte[] out, final int outoff, final Digest digest) {
+    private static void requireValid_Out_Outoff(final byte[] out, final int outoff, final int digestSize) {
         Objects.requireNonNull(out, "out is null");
-        requireNonNegative(outoff, "outoff");
-        final var digestSize = digest.getDigestSize();
-        if ((outoff + digest.getDigestSize()) > out.length) {
+        if (outoff < 0) {
+            throw new IllegalArgumentException("outoff(" + outoff + ") is negative");
+        }
+        if ((outoff + digestSize) > out.length) {
             throw new IllegalArgumentException(
                     "(outoff(" + outoff + ") + digest.digestSize(" + digestSize + ")) > out.length(" + out.length + ")"
             );
         }
     }
 
-    private static void validate(final InputStream in, final byte[] inbuf) {
-        Objects.requireNonNull(in, "in is null");
+    static void requireValid_Inbuf(final byte[] inbuf) {
         if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
             throw new IllegalArgumentException("inbuf.length is zero");
         }
     }
 
-    private static void validate(final ByteBuffer output, final Digest digest) {
-        if (Objects.requireNonNull(output, "output is null").remaining() < digest.getDigestSize()) {
+    static void requireValid_Output(final ByteBuffer output, final int digestSize) {
+        assert digestSize > 0;
+        if (Objects.requireNonNull(output, "output is null").remaining() < digestSize) {
             throw new IllegalArgumentException(
-                    "output.remaining(" + output.remaining() + ") < digest.digestSize(" + digest.getDigestSize() + ")"
+                    "output.remaining(" + output.remaining() + ") < digest.digestSize(" + digestSize + ")"
             );
         }
     }
@@ -73,8 +76,8 @@ public final class JinahyaDigestUtils {
      * @see #update(Digest, ByteBuffer)
      */
     public static <T extends Digest> T update(final T digest, final byte[] in, final int inoff, final int inlen) {
-        Objects.requireNonNull(digest, "digest is null");
-        validate(in, inoff, inlen);
+        requireNonNull_Digest(digest);
+        requireValid_In_Inoff_Inlen(in, inoff, inlen);
         return JinahyaDigestUtils_.update(digest, in, inoff, inlen);
     }
 
@@ -93,10 +96,11 @@ public final class JinahyaDigestUtils {
      */
     public static int updateAndDoFinal(final Digest digest, final byte[] in, final int inoff, final int inlen,
                                        final byte[] out, final int outoff) {
-        Objects.requireNonNull(digest, "digest is null");
-        validate(in, inoff, inlen);
-        validate(out, outoff, digest);
-        return JinahyaDigestUtils_.updateAndDoFinal(digest, in, inoff, inlen, out, outoff);
+        requireNonNull_Digest(digest);
+        requireValid_In_Inoff_Inlen(in, inoff, inlen);
+        final var digestSize = digest.getDigestSize();
+        requireValid_Out_Outoff(out, outoff, digestSize);
+        return JinahyaDigestUtils_.updateAndDoFinal(digest, in, inoff, inlen, out, outoff, digestSize);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -114,8 +118,8 @@ public final class JinahyaDigestUtils {
      */
     public static <T extends Digest> T updateAll(final T digest, final InputStream in, final byte[] inbuf)
             throws IOException {
-        Objects.requireNonNull(digest, "digest is null");
-        validate(in, inbuf);
+        requireNonNull_Digest(digest);
+        requireValid_Inbuf(inbuf);
         return JinahyaDigestUtils_.updateAll(digest, in, inbuf);
     }
 
@@ -135,10 +139,11 @@ public final class JinahyaDigestUtils {
     public static int updateAllAndDoFinal(final Digest digest, final InputStream in, final byte[] inbuf,
                                           final byte[] out, final int outoff)
             throws IOException {
-        Objects.requireNonNull(digest, "digest is null");
-        validate(in, inbuf);
-        validate(out, outoff, digest);
-        return JinahyaDigestUtils_.updateAllAndDoFinal(digest, in, inbuf, out, outoff);
+        requireNonNull_Digest(digest);
+        requireValid_Inbuf(inbuf);
+        final var digestSize = digest.getDigestSize();
+        requireValid_Out_Outoff(out, outoff, digestSize);
+        return JinahyaDigestUtils_.updateAllAndDoFinal(digest, in, inbuf, out, outoff, digestSize);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -155,7 +160,7 @@ public final class JinahyaDigestUtils {
      * @see #update(Digest, byte[], int, int)
      */
     public static <T extends Digest> T update(final T digest, final ByteBuffer input) {
-        Objects.requireNonNull(digest, "digest is null");
+        requireNonNull_Digest(digest);
         Objects.requireNonNull(input, "input is null");
         return JinahyaDigestUtils_.update(digest, input);
     }
@@ -175,8 +180,9 @@ public final class JinahyaDigestUtils {
     public static int updateAndDoFinal(final Digest digest, final ByteBuffer input, final ByteBuffer output) {
         Objects.requireNonNull(digest, "digest is null");
         Objects.requireNonNull(input, "input is null");
-        validate(output, digest);
-        return JinahyaDigestUtils_.updateAndDoFinal(digest, input, output);
+        final var digestSize = digest.getDigestSize();
+        requireValid_Output(output, digestSize);
+        return JinahyaDigestUtils_.updateAndDoFinal(digest, input, output, digestSize);
     }
 
     /**
@@ -196,9 +202,9 @@ public final class JinahyaDigestUtils {
     public static int updateAllAndDoFinal(final Digest digest, final InputStream in, final byte[] inbuf,
                                           final ByteBuffer output)
             throws IOException {
-        Objects.requireNonNull(digest, "digest is null");
-        validate(in, inbuf);
-        validate(output, digest);
+        requireNonNull_Digest(digest);
+        requireValid_Inbuf(inbuf);
+        requireValid_Output(output, digest.getDigestSize());
         return JinahyaDigestUtils_.updateAllAndDoFinal(digest, in, inbuf, output);
     }
 

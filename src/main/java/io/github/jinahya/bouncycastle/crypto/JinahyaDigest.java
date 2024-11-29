@@ -29,46 +29,47 @@ public class JinahyaDigest {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * .
+     * Returns the digest of specified input byte array.
      *
-     * @param in .
-     * @return .
+     * @param in the input byte array.
+     * @return the digest of specified input byte array
      * @see JinahyaDigestUtils#updateAndDoFinal(Digest, byte[], int, int, byte[], int)
      */
     public byte[] digest(final byte[] in) {
         Objects.requireNonNull(in, "in is null");
         final var out = new byte[digestSize];
-        final var outlen = JinahyaDigestUtils_.updateAndDoFinal(digest, in, 0, in.length, out, 0);
+        final var outlen = JinahyaDigestUtils_.updateAndDoFinal(digest, in, 0, in.length, out, 0, digestSize);
         assert outlen == out.length;
         return out;
     }
 
+    /**
+     * Digests remaining bytes of specified input buffer, and put result to specified output buffer.
+     *
+     * @param input  the input buffer.
+     * @param output the output buffer.
+     * @return the number of bytes put on {@code output}.
+     */
     public int digest(final ByteBuffer input, final ByteBuffer output) {
         Objects.requireNonNull(input, "input is null");
-        if (Objects.requireNonNull(output, "output is null").remaining() < digestSize) {
-            throw new IllegalArgumentException(
-                    "output.remaining(" + output.remaining() + ") < digest.digestSize(" + digestSize + ")"
-            );
-        }
-        return 0;
+        JinahyaDigestUtils.requireValid_Output(output, digestSize);
+        return JinahyaDigestUtils_.updateAndDoFinal(digest, input, output, digestSize);
     }
 
     /**
-     * .
+     * Digests all bytes from specified input stream, and returns the result.
      *
-     * @param in    .
-     * @param inbuf .
-     * @return .
+     * @param in    the input stream.
+     * @param inbuf a buffer for reading bytes from {@code in}.
+     * @return the digest.
      * @throws IOException if an I/O error occurs.
      * @see JinahyaDigestUtils#updateAllAndDoFinal(Digest, InputStream, byte[], byte[], int)
      */
     public byte[] digestAll(final InputStream in, final byte[] inbuf) throws IOException {
         Objects.requireNonNull(in, "in is null");
-        if (Objects.requireNonNull(inbuf, "inbuf is null").length == 0) {
-            throw new IllegalArgumentException("inbuf.length is zero");
-        }
+        JinahyaDigestUtils.requireValid_Inbuf(inbuf);
         final var out = new byte[digestSize];
-        final var outlen = JinahyaDigestUtils_.updateAllAndDoFinal(digest, in, inbuf, out, 0);
+        final var outlen = JinahyaDigestUtils_.updateAllAndDoFinal(digest, in, inbuf, out, 0, digestSize);
         assert outlen == out.length;
         return out;
     }
@@ -76,5 +77,5 @@ public class JinahyaDigest {
     // -----------------------------------------------------------------------------------------------------------------
     protected final Digest digest;
 
-    private final int digestSize;
+    protected final int digestSize;
 }

@@ -23,10 +23,11 @@ final class JinahyaDigestUtils_ {
     }
 
     static int updateAndDoFinal(final Digest digest, final byte[] in, final int inoff, final int inlen,
-                                final byte[] out, final int outoff) {
+                                final byte[] out, final int outoff, final int digestSize) {
         assert out != null;
         assert outoff >= 0;
         assert (outoff + digest.getDigestSize()) <= out.length;
+        assert digestSize == digest.getDigestSize();
         return update(digest, in, inoff, inlen).doFinal(out, outoff);
     }
 
@@ -42,11 +43,12 @@ final class JinahyaDigestUtils_ {
     }
 
     static int updateAllAndDoFinal(final Digest digest, final InputStream in, final byte[] inbuf, final byte[] out,
-                                   final int outoff)
+                                   final int outoff, final int digestSize)
             throws IOException {
         assert out != null;
         assert outoff >= 0;
-        assert (outoff + digest.getDigestSize()) <= out.length;
+        assert digestSize == digest.getDigestSize();
+        assert (outoff + digestSize) <= out.length;
         return updateAll(digest, in, inbuf).doFinal(out, outoff);
     }
 
@@ -88,9 +90,11 @@ final class JinahyaDigestUtils_ {
         return outlen;
     }
 
-    static int updateAndDoFinal(final Digest digest, final ByteBuffer input, final ByteBuffer output) {
+    static int updateAndDoFinal(final Digest digest, final ByteBuffer input, final ByteBuffer output,
+                                final int digestSize) {
         assert output != null;
-        assert output.remaining() >= digest.getDigestSize();
+        assert output.remaining() >= digestSize;
+        assert digestSize == digest.getDigestSize();
         return doFinal(update(digest, input), output);
     }
 
