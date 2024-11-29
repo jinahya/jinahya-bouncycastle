@@ -88,8 +88,7 @@ final class JinahyaBufferedBlockCipherUtils_TestUtils {
         assertThat(decmac).isEqualTo(encmac);
     }
 
-    static void processAllBytesAndDoFinal__(
-            final BufferedBlockCipher cipher, final CipherParameters params)
+    static void processAllBytesAndDoFinal__(final BufferedBlockCipher cipher, final CipherParameters params)
             throws IOException, InvalidCipherTextException {
         final var blockSize = cipher.getBlockSize();
         final var blockCount = ThreadLocalRandom.current().nextInt(128) + 1;

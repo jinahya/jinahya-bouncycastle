@@ -21,7 +21,7 @@ public final class JinahyaCipherCrypto_TestUtils {
 
     static void __array(final JinahyaCipherCrypto<?> crypto) {
         // ------------------------------------------------------------------------------------------------------- given
-        final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
+        final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192) + 128);
         final var digest = _Digest_TestUtils.newRandomDigest();
         final var mac = new HMac(_Digest_TestUtils.newRandomDigest());
         mac.init(_KeyParameters_TestUtils.getKeyParameters(crypto.getParams()));
@@ -59,7 +59,7 @@ public final class JinahyaCipherCrypto_TestUtils {
 
     static void __stream(final JinahyaCipherCrypto<?> crypto) throws IOException {
         // ------------------------------------------------------------------------------------------------------- given
-        final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192));
+        final var plain = _Random_TestUtils.newRandomBytes(ThreadLocalRandom.current().nextInt(8192) + 128);
         final var inbuf = new byte[ThreadLocalRandom.current().nextInt(128) + 1];
         final var out = new ByteArrayOutputStream();
         final var digest = ThreadLocalRandom.current().nextBoolean() ? new SHA256Digest() : new SHA1Digest();
