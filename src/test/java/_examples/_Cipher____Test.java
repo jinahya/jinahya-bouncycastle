@@ -1,4 +1,4 @@
-package _javax.crypto;
+package _examples;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -28,33 +28,32 @@ import static org.assertj.core.api.Assertions.assertThat;
  * href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/javax/crypto/Cipher.html">javax.crypt.Cipher</a>
  * (Java / Java SE / 23)
  */
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Slf4j
-abstract class _Cipher_____Test {
+public abstract class _Cipher____Test {
 
     static final String PROVIDER_NAME_SUN_JCE = "SunJCE";
 
-    static final String PROVIDER_NAME_BC = "BC";
+    protected static final String PROVIDER_NAME_BC = "BC";
 
     @BeforeAll
     static void doBeforeAll() {
         final var provider = new BouncyCastleProvider();
         assertThat(provider.getName()).isEqualTo(PROVIDER_NAME_BC);
-        log.debug("adding {} provider", provider.getName());
-        Security.addProvider(provider);
+        final var result = Security.addProvider(provider);
     }
 
     @AfterAll
     static void doAfterAll() {
-        Security.removeProvider("BC");
+//        Security.removeProvider("BC");
     }
 
-    static final List<String> PROVIDER_NAME_LIST = List.of(
+    public static final List<String> PROVIDER_NAME_LIST = List.of(
             PROVIDER_NAME_SUN_JCE,
             PROVIDER_NAME_BC
     );
 
-    static Cipher getCipherInstance(final String transformation, final String provider) throws Exception {
+    protected static Cipher getCipherInstance(final String transformation, final String provider) throws Exception {
         final var cipher = Cipher.getInstance(transformation, provider);
         assertThat(cipher.getProvider().getName())
                 .as("cipher.provider.name")

@@ -1,7 +1,8 @@
-package _javax.crypto;
+package _examples.AES;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.io.TempDir;
@@ -26,13 +27,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName(_Cipher_AES___Test.ALGORITHM + '/' + _Cipher_AES_CBC__Test.MODE + "NoPadding")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Slf4j
 @SuppressWarnings({
         "java:S3577" // Test classes should comply with a naming convention
 })
-class _Cipher_AES_CBC_NoPadding_Test
+class _Cipher_AES_CBC_PKCS5Padding_Test
         extends _Cipher_AES_CBC__Test {
 
-    private static final String PADDING = "NoPadding";
+    private static final String PADDING = "PKCS5Padding";
 
     private static final String TRANSFORMATION = ALGORITHM + '/' + MODE + '/' + PADDING;
 
@@ -44,6 +46,8 @@ class _Cipher_AES_CBC_NoPadding_Test
             } catch (Exception e) {
                 throw new RuntimeException("failed to get cipher for '" + TRANSFORMATION + "'", e);
             }
+            assertThat(cipher.getBlockSize()).isEqualTo(BLOCK_BYTES);
+            assertThat(cipher.getAlgorithm()).isEqualTo(TRANSFORMATION);
             final Key key;
             {
                 final var keyBytes = new byte[ks >> 3];
@@ -66,13 +70,16 @@ class _Cipher_AES_CBC_NoPadding_Test
 
     @MethodSource({"getCipherKeyAndParamsArgumentsStream"})
     @ParameterizedTest
-    void _CBC_NoPadding(final Cipher cipher, final Key key, final AlgorithmParameterSpec params) throws Exception {
+    void __(final Cipher cipher, final Key key, final AlgorithmParameterSpec params) throws Exception {
         // ------------------------------------------------------------------------------------------------------- given
-        final var plain = new byte[ThreadLocalRandom.current().nextInt(8) * BLOCK_BYTES]; // NoPadding!!!
+        final var plain = new byte[ThreadLocalRandom.current().nextInt(8192)];
         ThreadLocalRandom.current().nextBytes(plain);
+        log.debug("plain.length: {} (% BLOCK_BYTES = {})", plain.length, (plain.length % BLOCK_BYTES));
         // ----------------------------------------------------------------------------------------------------- encrypt
         cipher.init(Cipher.ENCRYPT_MODE, key, params);
         final var encrypted = cipher.doFinal(plain);
+        log.debug("encrypted.length: {} (% BLOCK_BYTES = {})", encrypted.length, (encrypted.length % BLOCK_BYTES));
+        assertThat(encrypted).hasSizeGreaterThanOrEqualTo(plain.length);
         // ----------------------------------------------------------------------------------------------------- decrypt
         cipher.init(Cipher.DECRYPT_MODE, key, params);
         final var decrypted = cipher.doFinal(encrypted);
@@ -82,20 +89,17 @@ class _Cipher_AES_CBC_NoPadding_Test
 
     @MethodSource({"getCipherKeyAndParamsArgumentsStream"})
     @ParameterizedTest
-    void _CBC_NoPadding(final Cipher cipher, final Key key, final AlgorithmParameterSpec params,
-                        @TempDir final File tempDir) throws Exception {
+    void __(final Cipher cipher, final Key key, final AlgorithmParameterSpec params, @TempDir final File tempDir)
+            throws Exception {
         // ------------------------------------------------------------------------------------------------------- given
         final var plain = File.createTempFile("tmp", null, tempDir);
         try (var output = new FileOutputStream(plain)) {
-            final var count = ThreadLocalRandom.current().nextInt(128);
-            for (int i = 0; i < count; i++) {
-                final var bytes = new byte[BLOCK_BYTES];
-                ThreadLocalRandom.current().nextBytes(bytes);
-                output.write(bytes);
-            }
+            final var bytes = new byte[ThreadLocalRandom.current().nextInt(8192)];
+            ThreadLocalRandom.current().nextBytes(bytes);
+            output.write(bytes);
             output.flush();
         }
-        assertThat(plain.length() % BLOCK_BYTES).isZero(); // NoPadding!!!
+        log.debug("plain.length: {} (% BLOCK_BYTES = {})", plain.length(), (plain.length() % BLOCK_BYTES));
         // ----------------------------------------------------------------------------------------------------- encrypt
         cipher.init(Cipher.ENCRYPT_MODE, key, params);
         final var encrypted = File.createTempFile("tmp", null, tempDir);
@@ -107,6 +111,8 @@ class _Cipher_AES_CBC_NoPadding_Test
             }
             output.flush();
         }
+        log.debug("encrypted.length: {} (% BLOCK_BYTES = {})", encrypted.length(), (encrypted.length() % BLOCK_BYTES));
+        assertThat(encrypted.length()).isGreaterThanOrEqualTo(plain.length());
         // ----------------------------------------------------------------------------------------------------- decrypt
         cipher.init(Cipher.DECRYPT_MODE, key, params);
         final var decrypted = File.createTempFile("tmp", null, tempDir);
