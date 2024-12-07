@@ -35,35 +35,34 @@ import static org.assertj.core.api.Assertions.assertThat;
         "java:S3577" // Test classes should comply with a naming convention
 })
 class _Cipher_AES_CBC_NoPadding_Test
-        extends _examples.cipher.AES._Cipher_AES___Test {
+        extends _Cipher_AES___Test {
 
     private static final String MODE = "CBC";
 
     private static final String PADDING = "NoPadding";
 
-    static final String TRANSFORMATION =
-            _examples.cipher.AES._Cipher_AES___Test.ALGORITHM + '/' + MODE + '/' + PADDING;
+    static final String TRANSFORMATION = _Cipher_AES___Test.ALGORITHM + '/' + MODE + '/' + PADDING;
 
     private static Stream<Arguments> getCipherKeyAndParamsArgumentsStream() {
         return _Cipher____Test.PROVIDER_NAME_LIST.stream()
-                .flatMap(pn -> _examples.cipher.AES._Cipher_AES___Test.KEY_SIZES.stream().map(ks -> {
+                .flatMap(pn -> _Cipher_AES___Test.KEY_SIZES.stream().map(ks -> {
                     final Cipher cipher;
                     try {
                         cipher = _Cipher____Test.getCipherInstance(TRANSFORMATION, pn);
                     } catch (Exception e) {
                         throw new RuntimeException("failed to get cipher for '" + TRANSFORMATION + "'", e);
                     }
-                    assertThat(cipher.getBlockSize()).isEqualTo(_examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES);
+                    assertThat(cipher.getBlockSize()).isEqualTo(_Cipher_AES___Test.BLOCK_BYTES);
                     assertThat(cipher.getAlgorithm()).isEqualTo(TRANSFORMATION);
                     final Key key;
                     {
                         final var keyBytes = new byte[ks >> 3];
                         ThreadLocalRandom.current().nextBytes(keyBytes);
-                        key = new SecretKeySpec(keyBytes, _examples.cipher.AES._Cipher_AES___Test.ALGORITHM);
+                        key = new SecretKeySpec(keyBytes, _Cipher_AES___Test.ALGORITHM);
                     }
                     final AlgorithmParameterSpec params;
                     {
-                        final var iv = new byte[_examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES];
+                        final var iv = new byte[_Cipher_AES___Test.BLOCK_BYTES];
                         ThreadLocalRandom.current().nextBytes(iv);
                         params = new IvParameterSpec(iv);
                     }
@@ -80,15 +79,15 @@ class _Cipher_AES_CBC_NoPadding_Test
     void __(final Cipher cipher, final Key key, final AlgorithmParameterSpec params) throws Exception {
         // ------------------------------------------------------------------------------------------------------- given
         final var plain = new byte[ThreadLocalRandom.current()
-                .nextInt(8) * _examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES]; // NoPadding!!!
+                .nextInt(8) * _Cipher_AES___Test.BLOCK_BYTES]; // NoPadding!!!
         ThreadLocalRandom.current().nextBytes(plain);
         log.debug("plain.length: {} (% BLOCK_BYTES = {})", plain.length,
-                  (plain.length % _examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES));
+                  (plain.length % _Cipher_AES___Test.BLOCK_BYTES));
         // ----------------------------------------------------------------------------------------------------- encrypt
         cipher.init(Cipher.ENCRYPT_MODE, key, params);
         final var encrypted = cipher.doFinal(plain);
         log.debug("encrypted.length: {} (% BLOCK_BYTES = {})", encrypted.length,
-                  (encrypted.length % _examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES));
+                  (encrypted.length % _Cipher_AES___Test.BLOCK_BYTES));
         assertThat(encrypted).hasSameSizeAs(plain); // NoPadding!!!
         // ----------------------------------------------------------------------------------------------------- decrypt
         cipher.init(Cipher.DECRYPT_MODE, key, params);
@@ -106,15 +105,15 @@ class _Cipher_AES_CBC_NoPadding_Test
         try (var output = new FileOutputStream(plain)) {
             final var count = ThreadLocalRandom.current().nextInt(128);
             for (int i = 0; i < count; i++) {
-                final var bytes = new byte[_examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES];
+                final var bytes = new byte[_Cipher_AES___Test.BLOCK_BYTES];
                 ThreadLocalRandom.current().nextBytes(bytes);
                 output.write(bytes);
             }
             output.flush();
         }
         log.debug("plain.length: {} (% BLOCK_BYTES = {})", plain.length(),
-                  (plain.length() % _examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES));
-        Assertions.assertThat(plain.length() % _examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES)
+                  (plain.length() % _Cipher_AES___Test.BLOCK_BYTES));
+        Assertions.assertThat(plain.length() % _Cipher_AES___Test.BLOCK_BYTES)
                 .isZero(); // NoPadding!!!
         // ----------------------------------------------------------------------------------------------------- encrypt
         cipher.init(Cipher.ENCRYPT_MODE, key, params);
@@ -128,7 +127,7 @@ class _Cipher_AES_CBC_NoPadding_Test
             output.flush();
         }
         log.debug("encrypted.length: {} (% BLOCK_BYTES = {})", encrypted.length(),
-                  (encrypted.length() % _examples.cipher.AES._Cipher_AES___Test.BLOCK_BYTES));
+                  (encrypted.length() % _Cipher_AES___Test.BLOCK_BYTES));
         assertThat(encrypted).hasSize(plain.length());
         // ----------------------------------------------------------------------------------------------------- decrypt
         cipher.init(Cipher.DECRYPT_MODE, key, params);
