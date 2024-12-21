@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-import static _examples.message_digest.MessageDigest____Test.formatLength;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -82,7 +81,7 @@ public final class MessageDigest_TestUtils {
             try {
                 digest = MessageDigest.getInstance(algorithm, pn);
             } catch (final Exception e) {
-                log.error("failed to get digest instance for '" + algorithm + "' with '" + pn + "'");
+                log.error("failed to get digest instance for '" + algorithm + "' with '" + pn + "'" );
                 return;
             }
             final var output = digest.digest(input);
@@ -104,7 +103,7 @@ public final class MessageDigest_TestUtils {
             try {
                 digest = MessageDigest.getInstance(algorithm, pn);
             } catch (final Exception e) {
-                log.error("failed to get digest instance for '" + algorithm + "' with '" + pn + "'");
+                log.error("failed to get digest instance for '" + algorithm + "' with '" + pn + "'" );
                 return;
             }
             try (var input = new FileInputStream(file)) {
@@ -141,7 +140,11 @@ public final class MessageDigest_TestUtils {
         });
     }
 
+    static String formatLength(final int length) {
+        return String.format("%1$3d / %2$d", length, length << 3);
+    }
+
     private MessageDigest_TestUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new AssertionError("instantiation is not allowed" );
     }
 }
