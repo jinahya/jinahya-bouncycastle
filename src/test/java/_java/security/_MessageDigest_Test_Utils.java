@@ -3,7 +3,6 @@ package _java.security;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.aggregator.ArgumentsAggregationException;
 import org.junit.jupiter.params.aggregator.ArgumentsAggregator;
@@ -86,7 +85,6 @@ public final class _MessageDigest_Test_Utils {
         }
     }
 
-    @AggregateWith(MessageDigestAggregator.class)
     @MethodSource("_java.security._MessageDigest_Test_Utils#getStandardAlgorithmAndProviderNameArgumentsStream()")
     @ParameterizedTest
     @Target(ElementType.METHOD)

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
@@ -64,6 +65,7 @@ class _MessageDigest_Test {
         return result;
     }
 
+    @DisplayName("empty bytes")
     @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
     void __empty(final String algorithm) {
         final var input = new byte[0];
@@ -83,6 +85,7 @@ class _MessageDigest_Test {
         });
     }
 
+    @DisplayName("random bytes")
     @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
     void __random(final String algorithm) {
         final var input = new byte[ThreadLocalRandom.current().nextInt(32) + 1];
@@ -103,6 +106,7 @@ class _MessageDigest_Test {
         });
     }
 
+    @DisplayName("random bytes in a file")
     @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
     void __random(final String algorithm, @TempDir final File tempDir) throws IOException {
         final var file = File.createTempFile("tmp", null, tempDir);
@@ -128,17 +132,19 @@ class _MessageDigest_Test {
                 for (int r; (r = stream.read(b)) != -1; ) {
                     digest.update(b, 0, r);
                 }
-                final var result = digest.digest();
-                logResult(result);
             } catch (final IOException ioe) {
                 throw new RuntimeException(ioe);
             }
+            final var result = digest.digest();
+            logResult(result);
         });
     }
 
+    @DisplayName("avalanche effect")
     // https://en.wikipedia.org/wiki/Avalanche_effect
     @_MessageDigest_Test_Utils.ParameterizedTestWithMessageDigest
-    void __avalanche(final MessageDigest digest) {
+    void __avalanche(
+            @AggregateWith(_MessageDigest_Test_Utils.MessageDigestAggregator.class) final MessageDigest digest) {
         logDigest(digest);
         // -------------------------------------------------------------------------------------------------------------
         final var input = new byte[ThreadLocalRandom.current().nextInt(32) + 1];
@@ -148,8 +154,10 @@ class _MessageDigest_Test {
             final var result = digest.digest(input);
             logResult(result);
         }
-        log.debug("-------------------------------------------------------------------- randomizing the last byte...");
-        input[input.length - 1] = (byte) ThreadLocalRandom.current().nextInt();
+        // -------------------------------------------------------------------------------------------------------------
+        final var index = ThreadLocalRandom.current().nextInt(input.length);
+        log.debug("--------------- randomizing the byte at " + index + " (" + String.format("%2x", input[index]) + ')');
+        input[index] = (byte) ThreadLocalRandom.current().nextInt();
         {
             logInput(input);
             digest.reset();
@@ -159,6 +167,7 @@ class _MessageDigest_Test {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    @DisplayName("other algorithms")
     @ValueSource(strings = {
             "RIPEMD128",
             "RIPEMD160",
@@ -166,7 +175,7 @@ class _MessageDigest_Test {
             "WHIRLPOOL"
     })
     @ParameterizedTest
-    void __(final String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
+    void __other(final String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
         final var digest = MessageDigest.getInstance(algorithm, BouncyCastleProvider.PROVIDER_NAME);
         final var input = new byte[ThreadLocalRandom.current().nextInt(32) + 1];
         ThreadLocalRandom.current().nextBytes(input);
