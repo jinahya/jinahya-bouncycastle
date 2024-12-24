@@ -33,9 +33,10 @@ class _MessageDigest_Test {
     @DisplayName("providers and algorithms")
     @Test
     void algorithms() {
+        final var type = MessageDigest.class.getSimpleName();
         for (final var provider : Security.getProviders()) {
             for (final var service : provider.getServices()) {
-                if (!MessageDigest.class.getSimpleName().equalsIgnoreCase(service.getType())) {
+                if (!type.equalsIgnoreCase(service.getType())) {
                     continue;
                 }
                 final var algorithm = service.getAlgorithm();

@@ -1,0 +1,26 @@
+package _javax.crypto;
+
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
+@Slf4j
+public final class _KeyGenerator_Test_Constants {
+
+    public static final List<String> STANDARD_ALGORITHMS = List.of(
+            "AES",
+            "ARCFOUR",
+            "Blowfish",
+            "ChaCha20",
+            "DES",
+            "DESede",
+            "HmacMD5",
+            "HmacSHA1", "HmacSHA224", "HmacSHA256", "HmacSHA384", "HmacSHA512", "HmacSHA512/224", "HmacSHA512/256",
+            "HmacSHA3-224", "HmacSHA3-256", "HmacSHA3-384", "HmacSHA3-512",
+            "RC2"
+    );
+
+    private _KeyGenerator_Test_Constants() {
+        throw new AssertionError("instantiation is not allowed");
+    }
+}
