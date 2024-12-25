@@ -1,5 +1,7 @@
 package _javax.crypto;
 
+import _java.security._Provider__Test_Utils;
+import _java.security._Security__Test_Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,12 +16,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.Provider;
-import java.security.Security;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -32,19 +30,27 @@ public final class _Mac_Test_Utils {
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    @MethodSource("_javax.security._Mac_Test_Utils#getStandardAlgorithmStream()")
+    @MethodSource("_javax.crypto._Mac_Test_Utils#getStandardAlgorithmStream()")
     @ParameterizedTest
-    public @interface ParameterizedTestWithStandardMessageDigestAlgorithms {
+    public @interface ParameterizedTestWithStandardMacAlgorithms {
 
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    public static Stream<Provider.Service> getServiceStream() {
+        return _Provider__Test_Utils.getServiceStream(Mac.class.getSimpleName());
+    }
+
     public static Stream<Provider> getProviderStream() {
-        return Arrays.stream(Security.getProviders())
-                .flatMap(p -> p.getServices().stream())
-                .filter(s -> Mac.class.getSimpleName().equalsIgnoreCase(s.getType()))
-                .map(Provider.Service::getProvider)
-                .distinct();
+        return _Security__Test_Utils.getProviderStream(Mac.class.getSimpleName());
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @MethodSource("_javax.crypto._Mac_Test_Utils#getProviderStream()")
+    @ParameterizedTest
+    public @interface ParameterizedTestWithProviders {
+
     }
 
     public static Stream<String> getProviderNameStream() {
@@ -52,7 +58,28 @@ public final class _Mac_Test_Utils {
                 .map(Provider::getName);
     }
 
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @MethodSource("_javax.crypto._Mac_Test_Utils#getProviderNameStream()")
+    @ParameterizedTest
+    public @interface ParameterizedTestWithProviderNames {
+
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
+    public static Stream<Arguments> getStandardAlgorithmAndProviderArgumentsStream() {
+        return getStandardAlgorithmStream()
+                .flatMap(a -> getProviderStream().map(p -> Arguments.of(a, p)));
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @MethodSource("_javax.crypto._Mac_Test_Utils#getStandardAlgorithmAndProviderArgumentsStream()")
+    @ParameterizedTest
+    public @interface ParameterizedTestWithStandardAlgorithmsAndProviders {
+
+    }
+
     public static Stream<Arguments> getStandardAlgorithmAndProviderNameArgumentsStream() {
         return getStandardAlgorithmStream()
                 .flatMap(a -> getProviderNameStream().map(p -> Arguments.of(a, p)));
@@ -60,33 +87,33 @@ public final class _Mac_Test_Utils {
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    @MethodSource("_java.security._MessageDigest_Test_Utils#getStandardAlgorithmAndProviderNameArgumentsStream()")
+    @MethodSource("_java.crypto._Mac_Test_Utils#getStandardAlgorithmAndProviderNameArgumentsStream()")
     @ParameterizedTest
-    public @interface ParameterizedTestWithStandardMacAlgorithmsAndProviderNames {
+    public @interface ParameterizedTestWithStandardAlgorithmsAndProviderNames {
 
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class MessageDigestAggregator
+    static class MacArgumentsAggregator
             implements ArgumentsAggregator {
 
         @Override
-        public MessageDigest aggregateArguments(final ArgumentsAccessor accessor, final ParameterContext context)
+        public Mac aggregateArguments(final ArgumentsAccessor accessor, final ParameterContext context)
                 throws ArgumentsAggregationException {
             final var algorithm = accessor.getString(0);
-            final var provider = accessor.getString(1);
+            final var provider = accessor.get(1, Provider.class);
             try {
-                return MessageDigest.getInstance(algorithm, provider);
-            } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
+                return Mac.getInstance(algorithm, provider);
+            } catch (final NoSuchAlgorithmException nsae) {
                 throw new ArgumentsAggregationException(
-                        "failed to get instance with " + algorithm + ", " + provider,
-                        e
+                        "failed to get instance with " + algorithm + " and " + provider,
+                        nsae
                 );
             }
         }
     }
 
-    @MethodSource("_java.security._MessageDigest_Test_Utils#getStandardAlgorithmAndProviderNameArgumentsStream()")
+    @MethodSource("_java.crypto._Mac_Test_Utils#getStandardAlgorithmAndProviderArgumentsStream()")
     @ParameterizedTest
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)

@@ -18,11 +18,24 @@ import java.util.stream.Stream;
 @Slf4j
 public final class _KeyGenerator_Test_Utils {
 
-    static Stream<Provider> getProviderStream() {
+    // -----------------------------------------------------------------------------------------------------------------
+    static Stream<Provider.Service> getServiceStream() {
         final var type = KeyGenerator.class.getSimpleName();
         return Arrays.stream(Security.getProviders())
                 .flatMap(p -> p.getServices().stream())
-                .filter(s -> type.equalsIgnoreCase(s.getType()))
+                .filter(s -> type.equalsIgnoreCase(s.getType()));
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @MethodSource("_javax.crypto._KeyGenerator_Test_Utils#getServiceStream()")
+    @ParameterizedTest
+    public @interface ParameterizedTestWithService {
+
+    }
+
+    static Stream<Provider> getProviderStream() {
+        return getServiceStream()
                 .map(Provider.Service::getProvider)
                 .distinct();
     }
@@ -57,7 +70,7 @@ public final class _KeyGenerator_Test_Utils {
     @Retention(RetentionPolicy.RUNTIME)
     @MethodSource("_javax.crypto._KeyGenerator_Test_Utils#getStandardAlgorithmAndProviderArgumentsStream()")
     @ParameterizedTest
-    public @interface ParameterizedTestWithStandardAlgorithmAndProvider {
+    public @interface ParameterizedTestWithStandardAlgorithmsAndProviders {
 
     }
 

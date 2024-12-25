@@ -7,6 +7,17 @@ import java.util.List;
 @Slf4j
 public final class _KeyGenerator_Test_Constants {
 
+    public static final List<String> ALGORITHMS_REQUIRED_TO_SUPPORT = List.of(
+            "AES",
+            "DESede",
+            "HmacSHA1",
+            "HmacSHA256"
+    );
+
+    static {
+        assert ALGORITHMS_REQUIRED_TO_SUPPORT.containsAll(_Mac_Test_Constants.ALGORITHMS_REQUIRED_TO_SUPPORT);
+    }
+
     public static final List<String> STANDARD_ALGORITHMS = List.of(
             "AES",
             "ARCFOUR",

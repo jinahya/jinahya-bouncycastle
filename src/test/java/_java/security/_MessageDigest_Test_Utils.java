@@ -15,14 +15,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.Provider;
-import java.security.Security;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 @Slf4j
 public final class _MessageDigest_Test_Utils {
+
+    public static Stream<Provider.Service> getServiceStream() {
+        return _Provider__Test_Utils.getServiceStream(_MessageDigest_Test_Constants.SERVICE_TYPE);
+    }
+
+    public static Stream<Provider> getProviderStream() {
+        return _Security__Test_Utils.getProviderStream(_MessageDigest_Test_Constants.SERVICE_TYPE);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     public static Stream<String> getStandardAlgorithmStream() {
@@ -33,63 +38,63 @@ public final class _MessageDigest_Test_Utils {
     @Retention(RetentionPolicy.RUNTIME)
     @MethodSource("_java.security._MessageDigest_Test_Utils#getStandardAlgorithmStream()")
     @ParameterizedTest
-    public @interface ParameterizedTestWithStandardMessageDigestAlgorithms {
+    public @interface ParameterizedTestWithStandardAlgorithms {
 
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    public static Stream<Provider> getProviderStream() {
-        return Arrays.stream(Security.getProviders())
-                .flatMap(p -> p.getServices().stream())
-                .filter(s -> MessageDigest.class.getSimpleName().equalsIgnoreCase(s.getType()))
-                .map(Provider.Service::getProvider)
-                .distinct();
-    }
-
-    public static Stream<String> getProviderNameStream() {
-        return getProviderStream()
-                .map(Provider::getName);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     public static Stream<Arguments> getStandardAlgorithmAndProviderNameArgumentsStream() {
         return getStandardAlgorithmStream()
-                .flatMap(a -> getProviderNameStream().map(p -> Arguments.of(a, p)));
+                .flatMap(a -> getProviderStream().map(p -> Arguments.of(a, p.getName())));
     }
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
     @MethodSource("_java.security._MessageDigest_Test_Utils#getStandardAlgorithmAndProviderNameArgumentsStream()")
     @ParameterizedTest
-    public @interface ParameterizedTestWithStandardMessageDigestAlgorithmsAndProviderNames {
+    public @interface ParameterizedTestWithStandardAlgorithmsAndProviderNames {
 
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class MessageDigestAggregator
+    public static Stream<Arguments> getStandardAlgorithmAndProviderArgumentsStream() {
+        return getStandardAlgorithmStream()
+                .flatMap(a -> getProviderStream().map(p -> Arguments.of(a, p)));
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @MethodSource("_java.security._MessageDigest_Test_Utils#getStandardAlgorithmAndProviderArgumentsStream()")
+    @ParameterizedTest
+    public @interface ParameterizedTestWithStandardAlgorithmsAndProviders {
+
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static class AlgorithmAndProviderArgumentsAggregator
             implements ArgumentsAggregator {
 
         @Override
         public MessageDigest aggregateArguments(final ArgumentsAccessor accessor, final ParameterContext context)
                 throws ArgumentsAggregationException {
             final var algorithm = accessor.getString(0);
-            final var provider = accessor.getString(1);
+            final var provider = accessor.get(1, Provider.class);
             try {
                 return MessageDigest.getInstance(algorithm, provider);
-            } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
+            } catch (final NoSuchAlgorithmException nsae) {
                 throw new ArgumentsAggregationException(
                         "failed to get instance with " + algorithm + ", " + provider,
-                        e
+                        nsae
                 );
             }
         }
     }
 
-    @MethodSource("_java.security._MessageDigest_Test_Utils#getStandardAlgorithmAndProviderNameArgumentsStream()")
+    @MethodSource("_java.security._MessageDigest_Test_Utils#getStandardAlgorithmAndProviderArgumentsStream()")
     @ParameterizedTest
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface ParameterizedTestWithMessageDigest {
+    public @interface ParameterizedTestWithMessageDigestInstance {
 
     }
 

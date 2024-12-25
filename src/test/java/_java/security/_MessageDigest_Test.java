@@ -1,5 +1,7 @@
 package _java.security;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +22,7 @@ import java.security.Security;
 import java.util.HexFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static _java.security._MessageDigest_Test_Utils.getProviderNameStream;
-
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 class _MessageDigest_Test {
 
@@ -32,17 +33,12 @@ class _MessageDigest_Test {
 
     @DisplayName("providers and algorithms")
     @Test
-    void algorithms() {
-        final var type = MessageDigest.class.getSimpleName();
-        for (final var provider : Security.getProviders()) {
-            for (final var service : provider.getServices()) {
-                if (!type.equalsIgnoreCase(service.getType())) {
-                    continue;
-                }
-                final var algorithm = service.getAlgorithm();
-                log.debug("provider: {}, algorithm: {}", provider.getName(), algorithm);
-            }
-        }
+    void providersAndAlgorithms() {
+        _MessageDigest_Test_Utils.getServiceStream().forEach(s -> {
+            final var algorithm = s.getAlgorithm();
+            final var provider = s.getProvider();
+            log.debug("provider: {}, algorithm: {}", provider.getName(), algorithm);
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -67,49 +63,45 @@ class _MessageDigest_Test {
     }
 
     @DisplayName("empty bytes")
-    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
-    void __empty(final String algorithm) {
+    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardAlgorithmsAndProviderNames
+    void __empty(final String algorithm, final String provider) {
         final var input = new byte[0];
         logInput(input);
         // -------------------------------------------------------------------------------------------------------------
-        getProviderNameStream().forEach(p -> {
-            final MessageDigest digest;
-            try {
-                digest = MessageDigest.getInstance(algorithm, p);
-            } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-                log.error("failed to get instance for {}, {}", algorithm, p, e);
-                return;
-            }
-            logDigest(digest);
-            final var result = digest.digest(input);
-            logResult(result);
-        });
+        final MessageDigest instance;
+        try {
+            instance = MessageDigest.getInstance(algorithm, provider);
+        } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
+            log.error("failed to get instance for {}, {}", algorithm, provider, e);
+            return;
+        }
+        logDigest(instance);
+        final var result = instance.digest(input);
+        logResult(result);
     }
 
     @DisplayName("random bytes")
-    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
-    void __random(final String algorithm) {
+    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardAlgorithmsAndProviderNames
+    void __random(final String algorithm, final String provider) {
         final var input = new byte[ThreadLocalRandom.current().nextInt(32) + 1];
         ThreadLocalRandom.current().nextBytes(input);
         logInput(input);
         // -------------------------------------------------------------------------------------------------------------
-        getProviderNameStream().forEach(p -> {
-            final MessageDigest digest;
-            try {
-                digest = MessageDigest.getInstance(algorithm, p);
-            } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
-                log.error("failed to get instance for {}, {}", algorithm, p, e);
-                return;
-            }
-            logDigest(digest);
-            final var result = digest.digest(input);
-            logResult(result);
-        });
+        final MessageDigest instance;
+        try {
+            instance = MessageDigest.getInstance(algorithm, provider);
+        } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
+            log.error("failed to get instance for {}, {}", algorithm, provider, e);
+            return;
+        }
+        logDigest(instance);
+        final var result = instance.digest(input);
+        logResult(result);
     }
 
     @DisplayName("random bytes in a file")
-    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
-    void __random(final String algorithm, @TempDir final File tempDir) throws IOException {
+    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardAlgorithmsAndProviderNames
+    void __random(final String algorithm, final String provider, @TempDir final File tempDir) throws IOException {
         final var file = File.createTempFile("tmp", null, tempDir);
         try (var stream = new FileOutputStream(file)) {
             final var input = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
@@ -119,33 +111,32 @@ class _MessageDigest_Test {
         }
         logInput(file);
         // -------------------------------------------------------------------------------------------------------------
-        getProviderNameStream().forEach(p -> {
-            final MessageDigest digest;
-            try {
-                digest = MessageDigest.getInstance(algorithm, p);
-            } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
-                log.error("failed to get instance for {}, {}", algorithm, p, e);
-                return;
+        final MessageDigest instance;
+        try {
+            instance = MessageDigest.getInstance(algorithm, provider);
+        } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
+            log.error("failed to get instance for {}, {}", algorithm, provider, e);
+            return;
+        }
+        logDigest(instance);
+        try (var stream = new FileInputStream(file)) {
+            final var b = new byte[ThreadLocalRandom.current().nextInt(128) + 1];
+            for (int r; (r = stream.read(b)) != -1; ) {
+                instance.update(b, 0, r);
             }
-            logDigest(digest);
-            try (var stream = new FileInputStream(file)) {
-                final var b = new byte[ThreadLocalRandom.current().nextInt(128) + 1];
-                for (int r; (r = stream.read(b)) != -1; ) {
-                    digest.update(b, 0, r);
-                }
-            } catch (final IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
-            final var result = digest.digest();
-            logResult(result);
-        });
+        } catch (final IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+        final var result = instance.digest();
+        logResult(result);
     }
 
     @DisplayName("avalanche effect")
     // https://en.wikipedia.org/wiki/Avalanche_effect
-    @_MessageDigest_Test_Utils.ParameterizedTestWithMessageDigest
+    @_MessageDigest_Test_Utils.ParameterizedTestWithMessageDigestInstance
     void __avalanche(
-            @AggregateWith(_MessageDigest_Test_Utils.MessageDigestAggregator.class) final MessageDigest digest) {
+            @AggregateWith(_MessageDigest_Test_Utils.AlgorithmAndProviderArgumentsAggregator.class)
+            final MessageDigest digest) {
         logDigest(digest);
         // -------------------------------------------------------------------------------------------------------------
         final var input = new byte[ThreadLocalRandom.current().nextInt(32) + 1];

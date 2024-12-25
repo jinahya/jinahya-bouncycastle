@@ -1,16 +1,26 @@
 package _javax.crypto;
 
+import _java.security._Provider__Test_Utils;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestReporter;
 
+import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
-import java.io.File;
-import java.security.MessageDigest;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 import java.security.Security;
 import java.util.HexFormat;
+import java.util.concurrent.ThreadLocalRandom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 class _Mac_Test {
 
@@ -22,156 +32,84 @@ class _Mac_Test {
     @DisplayName("providers and algorithms")
     @Test
     void providersAndAlgorithms() {
-        final var type = Mac.class.getSimpleName();
-        for (final var provider : Security.getProviders()) {
-            for (final var service : provider.getServices()) {
-                if (!type.equalsIgnoreCase(service.getType())) {
-                    continue;
-                }
-                final var algorithm = service.getAlgorithm();
-                log.debug("provider: {}, algorithm: {}", provider.getName(), algorithm);
+        _Provider__Test_Utils.getServiceStream(Mac.class.getSimpleName()).forEach(s -> {
+            final var algorithm = s.getAlgorithm();
+            final var provider = s.getProvider();
+            log.debug("provider: {}, algorithm: {}", provider.getName(), algorithm);
+        });
+    }
+
+    @DisplayName("PBEWith<mac>")
+    @Test
+    void __PBEWith() {
+        _Provider__Test_Utils.getServiceStream(Mac.class.getSimpleName()).forEach(s -> {
+            final var algorithm = s.getAlgorithm();
+            if (!algorithm.startsWith("PBEWith")) {
+                return;
             }
-        }
+            final var provider = s.getProvider();
+            log.debug("provider: {}, algorithm: {}", provider, algorithm);
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private byte[] logInput(final byte[] input) {
-        log.debug("    input: [{}] ({} byte(s))", HexFormat.of().formatHex(input), input.length);
-        return input;
+    @DisplayName("getInstance(algorithm, provider)")
+    @_Mac_Test_Utils.ParameterizedTestWithStandardAlgorithmsAndProviders
+    void getInstance__(final String algorithm, final Provider provider, final TestReporter reporter) {
+        // -------------------------------------------------------------------------------------------------------- when
+        final Mac instance;
+        try {
+            instance = Mac.getInstance(algorithm, provider);
+            reporter.publishEntry("algorithm", instance.getAlgorithm());
+            reporter.publishEntry("provider", instance.getProvider().toString());
+        } catch (final NoSuchAlgorithmException nsae) {
+            log.error("failed to get instance with {}, {}", algorithm, provider, nsae);
+            return;
+        }
+        // -------------------------------------------------------------------------------------------------------- then
+        assertThat(instance.getAlgorithm()).isEqualTo(algorithm);
+        assertThat(instance.getProvider()).isSameAs(provider);
     }
 
-    private File logInput(final File input) {
-        log.debug("    input: {} bytes", input.length());
-        return input;
+    @DisplayName("HmacSHA1")
+    @_Mac_Test_Utils.ParameterizedTestWithProviders
+    void __HmacSHA1(final Provider provider, final TestReporter reporter)
+            throws NoSuchAlgorithmException, InvalidKeyException {
+        final var algorithm = "HmacSHA1";
+        final var mac = Mac.getInstance(algorithm, provider);
+        final var key = KeyGenerator.getInstance(algorithm, provider).generateKey();
+        mac.init(key);
+        final var input = new byte[ThreadLocalRandom.current().nextInt(8192)];
+        ThreadLocalRandom.current().nextBytes(input);
+        // ----------------------------------------------------------------------------------------------------------- 1
+        mac.update(input);
+        final var finalized1 = mac.doFinal();
+        reporter.publishEntry("finalized1", HexFormat.of().formatHex(finalized1));
+        // ----------------------------------------------------------------------------------------------------------- 2
+        final var finalized2 = mac.doFinal(input);
+        reporter.publishEntry("finalized2", HexFormat.of().formatHex(finalized2));
+        // -------------------------------------------------------------------------------------------------------------
+        assertThat(finalized2).isEqualTo(finalized1);
     }
 
-    private MessageDigest logDigest(final MessageDigest digest) {
-        log.debug("algorithm: {}, provider: {}", digest.getAlgorithm(), digest.getProvider());
-        return digest;
+    @DisplayName("HmacSHA256")
+    @_Mac_Test_Utils.ParameterizedTestWithProviders
+    void __HmacSHA256(final Provider provider, final TestReporter reporter)
+            throws NoSuchAlgorithmException, InvalidKeyException {
+        final var algorithm = "HmacSHA256";
+        final var mac = Mac.getInstance(algorithm, provider);
+        final var key = KeyGenerator.getInstance(algorithm, provider).generateKey();
+        mac.init(key);
+        final var input = new byte[ThreadLocalRandom.current().nextInt(8192)];
+        ThreadLocalRandom.current().nextBytes(input);
+        // ----------------------------------------------------------------------------------------------------------- 1
+        mac.update(input);
+        final var finalized1 = mac.doFinal();
+        reporter.publishEntry("finalized1", HexFormat.of().formatHex(finalized1));
+        // ----------------------------------------------------------------------------------------------------------- 2
+        final var finalized2 = mac.doFinal(input);
+        reporter.publishEntry("finalized2", HexFormat.of().formatHex(finalized2));
+        // -------------------------------------------------------------------------------------------------------------
+        assertThat(finalized2).isEqualTo(finalized1);
     }
-
-    private byte[] logResult(final byte[] result) {
-        log.debug("   result: [{}] ({} bits)", HexFormat.of().formatHex(result), result.length << 3);
-        return result;
-    }
-
-//    @DisplayName("empty bytes")
-//    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
-//    void __empty(final String algorithm) {
-//        final var input = new byte[0];
-//        logInput(input);
-//        // -------------------------------------------------------------------------------------------------------------
-//        getProviderNameStream().forEach(p -> {
-//            final MessageDigest digest;
-//            try {
-//                digest = MessageDigest.getInstance(algorithm, p);
-//            } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-//                log.error("failed to get instance for {}, {}", algorithm, p, e);
-//                return;
-//            }
-//            logDigest(digest);
-//            final var result = digest.digest(input);
-//            logResult(result);
-//        });
-//    }
-
-//    @DisplayName("random bytes")
-//    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
-//    void __random(final String algorithm) {
-//        final var input = new byte[ThreadLocalRandom.current().nextInt(32) + 1];
-//        ThreadLocalRandom.current().nextBytes(input);
-//        logInput(input);
-//        // -------------------------------------------------------------------------------------------------------------
-//        getProviderNameStream().forEach(p -> {
-//            final MessageDigest digest;
-//            try {
-//                digest = MessageDigest.getInstance(algorithm, p);
-//            } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
-//                log.error("failed to get instance for {}, {}", algorithm, p, e);
-//                return;
-//            }
-//            logDigest(digest);
-//            final var result = digest.digest(input);
-//            logResult(result);
-//        });
-//    }
-
-//    @DisplayName("random bytes in a file")
-//    @_MessageDigest_Test_Utils.ParameterizedTestWithStandardMessageDigestAlgorithms
-//    void __random(final String algorithm, @TempDir final File tempDir) throws IOException {
-//        final var file = File.createTempFile("tmp", null, tempDir);
-//        try (var stream = new FileOutputStream(file)) {
-//            final var input = new byte[ThreadLocalRandom.current().nextInt(8192) + 1];
-//            ThreadLocalRandom.current().nextBytes(input);
-//            stream.write(input);
-//            stream.flush();
-//        }
-//        logInput(file);
-//        // -------------------------------------------------------------------------------------------------------------
-//        getProviderNameStream().forEach(p -> {
-//            final MessageDigest digest;
-//            try {
-//                digest = MessageDigest.getInstance(algorithm, p);
-//            } catch (final NoSuchAlgorithmException | NoSuchProviderException e) {
-//                log.error("failed to get instance for {}, {}", algorithm, p, e);
-//                return;
-//            }
-//            logDigest(digest);
-//            try (var stream = new FileInputStream(file)) {
-//                final var b = new byte[ThreadLocalRandom.current().nextInt(128) + 1];
-//                for (int r; (r = stream.read(b)) != -1; ) {
-//                    digest.update(b, 0, r);
-//                }
-//            } catch (final IOException ioe) {
-//                throw new RuntimeException(ioe);
-//            }
-//            final var result = digest.digest();
-//            logResult(result);
-//        });
-//    }
-
-//    @DisplayName("avalanche effect")
-//    // https://en.wikipedia.org/wiki/Avalanche_effect
-//    @_MessageDigest_Test_Utils.ParameterizedTestWithMessageDigest
-//    void __avalanche(
-//            @AggregateWith(_MessageDigest_Test_Utils.MessageDigestAggregator.class) final MessageDigest digest) {
-//        logDigest(digest);
-//        // -------------------------------------------------------------------------------------------------------------
-//        final var input = new byte[ThreadLocalRandom.current().nextInt(32) + 1];
-//        ThreadLocalRandom.current().nextBytes(input);
-//        logInput(input);
-//        {
-//            final var result = digest.digest(input);
-//            logResult(result);
-//        }
-//        // -------------------------------------------------------------------------------------------------------------
-//        final var index = ThreadLocalRandom.current().nextInt(input.length);
-//        log.debug("--------------- randomizing the byte at " + index + " (" + String.format("%2x", input[index]) + ')');
-//        input[index] = (byte) ThreadLocalRandom.current().nextInt();
-//        {
-//            logInput(input);
-//            digest.reset();
-//            final var result = digest.digest(input);
-//            logResult(result);
-//        }
-//    }
-
-//    // -----------------------------------------------------------------------------------------------------------------
-//    @DisplayName("other algorithms")
-//    @ValueSource(strings = {
-//            "RIPEMD128",
-//            "RIPEMD160",
-//            "RIPEMD256",
-//            "WHIRLPOOL"
-//    })
-//    @ParameterizedTest
-//    void __other(final String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
-//        final var digest = MessageDigest.getInstance(algorithm, BouncyCastleProvider.PROVIDER_NAME);
-//        final var input = new byte[ThreadLocalRandom.current().nextInt(32) + 1];
-//        ThreadLocalRandom.current().nextBytes(input);
-//        logInput(input);
-//        // -------------------------------------------------------------------------------------------------------------
-//        final var result = digest.digest(input);
-//        logResult(result);
-//    }
 }

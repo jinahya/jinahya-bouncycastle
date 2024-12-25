@@ -2,10 +2,18 @@ package _java.security;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.security.MessageDigest;
 import java.util.List;
 
 @Slf4j
 public final class _MessageDigest_Test_Constants {
+
+    public static final String SERVICE_TYPE = MessageDigest.class.getSimpleName();
+
+    public static final List<String> ALGORITHMS_REQUIRED_TO_BE_SUPPORTED = List.of(
+            "SHA-1",
+            "SHA-256"
+    );
 
     public static final List<String> STANDARD_ALGORITHMS = List.of(
             "MD2",
