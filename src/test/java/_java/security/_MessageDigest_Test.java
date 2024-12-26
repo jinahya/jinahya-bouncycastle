@@ -5,16 +5,24 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestReporter;
+import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
+import org.junit.jupiter.params.converter.ArgumentConversionException;
+import org.junit.jupiter.params.converter.ArgumentConverter;
+import org.junit.jupiter.params.converter.ConvertWith;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -22,9 +30,23 @@ import java.security.Security;
 import java.util.HexFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 class _MessageDigest_Test {
+
+    static class HexToBytesArgumentConverter
+            implements ArgumentConverter {
+
+        @Override
+        public Object convert(final Object source, final ParameterContext context) throws ArgumentConversionException {
+            if (source == null) {
+                return null;
+            }
+            return HexFormat.of().parseHex(String.valueOf(source));
+        }
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     static {
@@ -175,5 +197,32 @@ class _MessageDigest_Test {
         // -------------------------------------------------------------------------------------------------------------
         final var result = digest.digest(input);
         logResult(result);
+    }
+
+    // https://en.wikipedia.org/wiki/SHA-2#Test_vectors
+    @DisplayName("SHA-2")
+    @Nested
+    class SHA2Test {
+
+        @CsvSource("SHA224, d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f")
+        @CsvSource("SHA256, e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+        @ParameterizedTest
+        void __empty(final String algorithm, @ConvertWith(HexToBytesArgumentConverter.class) final byte[] expected)
+                throws NoSuchAlgorithmException {
+            final var instance = MessageDigest.getInstance(algorithm);
+            final var actual = instance.digest(new byte[0]);
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @ValueSource(strings = {
+                "The quick brown fox jumps over the lazy dog",
+                "The quick brown fox jumps over the lazy dog."
+        })
+        @ParameterizedTest
+        void avalanche_effect(final String input, final TestReporter reporter) throws NoSuchAlgorithmException {
+            final var instance = MessageDigest.getInstance("SHA224");
+            final var actual = instance.digest(input.getBytes(StandardCharsets.US_ASCII));
+            reporter.publishEntry(String.format("%-50s", input), HexFormat.of().formatHex(actual));
+        }
     }
 }
