@@ -2,6 +2,7 @@ package _javax.crypto;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.crypto.KeyGenerator;
 import java.util.List;
 
 @Slf4j
@@ -30,6 +31,12 @@ public final class _KeyGenerator_Test_Constants {
             "HmacSHA3-224", "HmacSHA3-256", "HmacSHA3-384", "HmacSHA3-512",
             "RC2"
     );
+
+    static final String SERVICE_TYPE = "KeyGenerator";
+
+    static {
+        assert SERVICE_TYPE.equals(KeyGenerator.class.getSimpleName());
+    }
 
     private _KeyGenerator_Test_Constants() {
         throw new AssertionError("instantiation is not allowed");

@@ -53,68 +53,87 @@ class _KeyGenerator_Test {
 
     // -----------------------------------------------------------------------------------------------------------------
     void generateKey__(final Provider provider, final String algorithm, final int... keysizes) {
-        final KeyGenerator instance;
+        final KeyGenerator generator;
         try {
-            instance = KeyGenerator.getInstance(algorithm, provider);
+            generator = KeyGenerator.getInstance(algorithm, provider);
         } catch (final NoSuchAlgorithmException nsae) {
             log.error("failed to get instance for {} with {}", algorithm, provider, nsae);
             return;
         }
+        log.debug("generator.algorithm: {}", generator.getAlgorithm());
+        log.debug("generator.provider: {}", generator.getProvider());
         for (final var keysize : keysizes) {
             log.debug("keysize: {}", keysize);
             try {
-                instance.init(keysize);
+                generator.init(keysize);
             } catch (final InvalidParameterException ipe) {
                 log.error("failed to init with keysize({})", keysize, ipe);
                 continue;
             }
             // -------------------------------------------------------------------------------------------------------------
-            final var key = instance.generateKey();
+            final var key = generator.generateKey();
+            log.debug("key.algorithm: {}", key.getAlgorithm());
             // -------------------------------------------------------------------------------------------------------------
-            log.debug("algorithm: {}", key.getAlgorithm());
             final var encoded = key.getEncoded();
-            log.debug("encoded({}): {}", encoded.length, HexFormat.of().formatHex(encoded));
+            log.debug("key.encoded({}): {}", encoded.length, HexFormat.of().formatHex(encoded));
         }
     }
 
     @DisplayName("generateKey(AES)")
-    @_KeyGenerator_Test_Utils.ParameterizedTestWithProvider
+    @_KeyGenerator_Test_Utils.ParameterizedTestWithProviders
     void generateKey__AES(final Provider provider) {
         generateKey__(provider, "AES", 128, 192, 256);
     }
 
     @DisplayName("generateKey(DESede)")
-    @_KeyGenerator_Test_Utils.ParameterizedTestWithProvider
-    void generateKey__DESede(final Provider provider, final TestReporter reporter) {
+    @_KeyGenerator_Test_Utils.ParameterizedTestWithProviders
+    void generateKey__DESede(final Provider provider) {
         generateKey__(provider, "DESede", 112, 168);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    void generateKey__(final Provider provider, final String algorithm, final TestReporter reporter) {
-        final KeyGenerator instance;
+
+    @DisplayName("generateKey(HmacSHA1)")
+    @_KeyGenerator_Test_Utils.ParameterizedTestWithProviders
+    void generateKey__HmacSHA1(final Provider provider) {
+        final String algorithm = "HmacSHA1";
+        final KeyGenerator generator;
         try {
-            instance = KeyGenerator.getInstance(algorithm, provider);
+            generator = KeyGenerator.getInstance(algorithm, provider);
         } catch (final NoSuchAlgorithmException nsae) {
             log.error("failed to get instance for {} with {}", algorithm, provider, nsae);
             return;
         }
+        log.debug("generator.algorithm: {}", generator.getAlgorithm());
+        log.debug("generator.provider: {}", generator.getProvider());
         // -------------------------------------------------------------------------------------------------------------
-        final var key = instance.generateKey();
+        final var key = generator.generateKey();
+        log.debug("key: {}", key);
+        log.debug("key.algorithm: {}", key.getAlgorithm());
         // -------------------------------------------------------------------------------------------------------------
-        reporter.publishEntry("algorithm", key.getAlgorithm());
         final var encoded = key.getEncoded();
-        reporter.publishEntry(String.format("encoded(%1$d)", encoded.length), HexFormat.of().formatHex(encoded));
-    }
-
-    @DisplayName("generateKey(HmacSHA1)")
-    @_KeyGenerator_Test_Utils.ParameterizedTestWithProvider
-    void generateKey__HmacSHA1(final Provider provider, final TestReporter reporter) {
-        generateKey__(provider, "HmacSHA1", reporter);
+        log.debug("key.encoded({}): {}", encoded.length, HexFormat.of().formatHex(encoded));
     }
 
     @DisplayName("generateKey(HmacSHA256)")
-    @_KeyGenerator_Test_Utils.ParameterizedTestWithProvider
-    void generateKey__HmacSHA256(final Provider provider, final TestReporter reporter) {
-        generateKey__(provider, "HmacSHA256", reporter);
+    @_KeyGenerator_Test_Utils.ParameterizedTestWithProviders
+    void generateKey__HmacSHA256(final Provider provider) {
+        final String algorithm = "HmacSHA256";
+        final KeyGenerator generator;
+        try {
+            generator = KeyGenerator.getInstance(algorithm, provider);
+        } catch (final NoSuchAlgorithmException nsae) {
+            log.error("failed to get instance for {} with {}", algorithm, provider, nsae);
+            return;
+        }
+        log.debug("generator.algorithm: {}", generator.getAlgorithm());
+        log.debug("generator.provider: {}", generator.getProvider());
+        // -------------------------------------------------------------------------------------------------------------
+        final var key = generator.generateKey();
+        log.debug("key: {}", key);
+        log.debug("key.algorithm: {}", key.getAlgorithm());
+        // -------------------------------------------------------------------------------------------------------------
+        final var encoded = key.getEncoded();
+        log.debug("key.encoded({}): {}", encoded.length, HexFormat.of().formatHex(encoded));
     }
 }

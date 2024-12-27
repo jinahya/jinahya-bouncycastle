@@ -1,7 +1,6 @@
 package _examples.cipher.AES;
 
 import _examples.cipher._Cipher____Test;
-import _examples.message_digest.MessageDigest_TestUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -142,6 +141,5 @@ class _Cipher_AES_CBC_NoPadding_Test
         }
         // -------------------------------------------------------------------------------------------------------- then
         assertThat(decrypted).hasSize(plain.length()).hasSameBinaryContentAs(plain);
-        MessageDigest_TestUtils.assertHaveSame(plain, decrypted);
     }
 }

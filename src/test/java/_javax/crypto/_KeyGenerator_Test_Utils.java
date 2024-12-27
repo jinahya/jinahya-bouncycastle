@@ -5,7 +5,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import javax.crypto.KeyGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -19,11 +18,17 @@ import java.util.stream.Stream;
 public final class _KeyGenerator_Test_Utils {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns a stream of {@link java.security.Provider.Service}s whose {@link Provider.Service#getType() type} equals
+     * to {@value _KeyGenerator_Test_Constants#SERVICE_TYPE}.
+     *
+     * @return a stream of {@link java.security.Provider.Service}s
+     */
     static Stream<Provider.Service> getServiceStream() {
-        final var type = KeyGenerator.class.getSimpleName();
         return Arrays.stream(Security.getProviders())
                 .flatMap(p -> p.getServices().stream())
-                .filter(s -> type.equalsIgnoreCase(s.getType()));
+                .filter(s -> _KeyGenerator_Test_Constants.SERVICE_TYPE.equalsIgnoreCase(s.getType()));
     }
 
     @Target(ElementType.METHOD)
@@ -44,7 +49,7 @@ public final class _KeyGenerator_Test_Utils {
     @Retention(RetentionPolicy.RUNTIME)
     @MethodSource("_javax.crypto._KeyGenerator_Test_Utils#getProviderStream()")
     @ParameterizedTest
-    public @interface ParameterizedTestWithProvider {
+    public @interface ParameterizedTestWithProviders {
 
     }
 
@@ -57,7 +62,7 @@ public final class _KeyGenerator_Test_Utils {
     @Retention(RetentionPolicy.RUNTIME)
     @MethodSource("_javax.crypto._KeyGenerator_Test_Utils#getStandardAlgorithmStream()")
     @ParameterizedTest
-    public @interface ParameterizedTestWithStandardKeyGeneratorAlgorithms {
+    public @interface ParameterizedTestWithStandardAlgorithms {
 
     }
 

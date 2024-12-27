@@ -1,21 +1,31 @@
 package _javax.crypto;
 
+import _java.security._Provider__Test_Utils;
 import _javax.security._Random_TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
 import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.security.Key;
+import java.security.Provider;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +36,56 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Standard Algorithm Names</a> (JDK 21 Documentation)
  */
 @Slf4j
-public final class _Cipher_TestUtils {
+public final class _Cipher_Test_Utils {
+
+    public static Stream<String> getStandardAlgorithms() {
+        return _Cipher_Test_Constants.STANDARD_ALGORITHMS.stream();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static Stream<Provider.Service> getServiceStream() {
+        return _Provider__Test_Utils.getServiceStream(_Cipher_Test_Constants.SERVICE_TYPE);
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @MethodSource("_javax.crypto._Cipher_Test_Utils#getServiceStream()")
+    @ParameterizedTest
+    public @interface ParameterizedTestWithServices {
+
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static Stream<Provider> getProviderStream() {
+        return getServiceStream()
+                .map(Provider.Service::getProvider)
+                .distinct();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static Stream<String> getSupportedTransformationStream() {
+        return _Cipher_Test_Constants.TRANSFORMATIONS_REQUIRED_TO_BE_SUPPORTED.keySet().stream();
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @MethodSource("_javax.crypto._Cipher_Test_Utils#getSupportedTransformationStream()")
+    @ParameterizedTest
+    public @interface ParameterizedTestWithTransformationsRequiredToBeSupported {
+
+    }
+
+    public static Stream<Arguments> getProviderAndSupportedTransformationArgumentsStream() {
+        return getProviderStream().flatMap(p -> getSupportedTransformationStream().map(t -> Arguments.of(p, t)));
+    }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @MethodSource("_javax.crypto._Cipher_Test_Utils#getProviderAndSupportedTransformationArgumentsStream()")
+    @ParameterizedTest
+    public @interface ParameterizedTestWithProvidersAndSupportedTransformations {
+
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     public static void __(final Cipher cipher, final Key key, final AlgorithmParameterSpec params, final byte[] aad,
@@ -203,7 +262,7 @@ public final class _Cipher_TestUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private _Cipher_TestUtils() {
+    private _Cipher_Test_Utils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

@@ -187,10 +187,11 @@
               <!--            <additionalOptions>-package</additionalOptions>-->
             </additionalOptions>
             <links>
-              <link>https://docs.oracle.com/en/java/javase/21/docs/api/</link>
-              <link>https://downloads.bouncycastle.org/java/docs/bcprov-jdk18on-javadoc/</link>
+<!--              <link>https://docs.oracle.com/en/java/javase/21/docs/api/</link>-->
+<!--              <link>https://downloads.bouncycastle.org/java/docs/bcprov-jdk18on-javadoc/</link>-->
             </links>
-            <release>${maven.compiler.release}</release>
+<!--            <source>${maven.compiler.targetRelease}</source>-->
+            <release>${maven.compiler.testRelease}</release>
             <!--            <source>${maven.compiler.target}</source>-->
             <tags>
               <tag>
@@ -436,8 +437,8 @@
             <link>https://docs.oracle.com/en/java/javase/21/docs/api/</link>
             <link>https://downloads.bouncycastle.org/java/docs/bcprov-jdk18on-javadoc/</link>
           </links>
-          <release>${maven.compiler.release}</release>
-          <source>${maven.compiler.release}</source>
+<!--          <release>${maven.compiler.release}</release>-->
+<!--          <source>${maven.compiler.release}</source>-->
         </configuration>
       </plugin>
       <plugin>
